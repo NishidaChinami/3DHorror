@@ -1,0 +1,6 @@
+ItemType,Itemsize,ItemIcon,ItemModel,ItemTexture,Explanation,Scale
+0,100,graphics/Icon_Floopy_Red.png,model/Floppy.mv1,texture/Floppy_Red.png,フロッピーディスク,0.3
+1,100,graphics/light.png,model/Flashlight.mv1,texture/LP_FlashLight_RFMorSP2.png,懐中電灯,4
+2,50,graphics/Battery.png,model/BatteryC.mv1,texture/Battery.png,懐中電灯用の電池,0.5
+3,50,graphics/Pills_Blue.png,model/PillsTube.mv1,texture/PillsTube_Blue.png,精神安定剤,0.5
+4,100,graphics/FirstAid.png,model/FirstAid.mv1,texture/FirstAid_Greent.png,回復薬,0.5
