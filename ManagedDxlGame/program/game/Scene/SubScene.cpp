@@ -22,9 +22,9 @@ void SubScene::Draw() {
 		m_factory->GetClassMessage()->MessageDraw();
 	}
 	else if(active_inventory)m_factory->GetClassInventory()->Draw();
-	else if (active_option) {
+	/*else if (active_option) {
 		DrawStringEx(200, 299, -1, "設定画面");
-	}
+	}*/
 	else {
 		DrawStringEx(640, 360, -1, "+");
 		if (tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) {
@@ -38,7 +38,7 @@ void SubScene::Draw() {
 }
 
 bool SubScene::seqIdle(float delta_time) {
-	if (active_option)sequence_.change(&SubScene::seqSettingUI);
+	//if (active_option)sequence_.change(&SubScene::seqSettingUI);
 	if (active_event)sequence_.change(&SubScene::seqEventUI);
 	if (active_inventory)sequence_.change(&SubScene::seqInventoryUI);
 	return true;
@@ -93,16 +93,16 @@ bool SubScene::seqTutorialUI(float delta_time) {
 }
 
 //Escapeを押されたら呼び出し、インベンとリーもTaｂ呼ばれたら呼び出し
-bool SubScene::seqSettingUI(float delta_time) {
-	//入力はマウスで移動距離を測定し、それにそった値に変化
-	// バーの数値実際の音量の数値に設定
-	//スタートへ戻るでブール値変化
-	
-	//シート２は
-	//操作説明
-	if (!active_option)sequence_.change(&SubScene::seqIdle);
-	return true;
-}
+//bool SubScene::seqSettingUI(float delta_time) {
+//	//入力はマウスで移動距離を測定し、それにそった値に変化
+//	// バーの数値実際の音量の数値に設定
+//	//スタートへ戻るでブール値変化
+//	
+//	//シート２は
+//	//操作説明
+//	if (!active_option)sequence_.change(&SubScene::seqIdle);
+//	return true;
+//}
 
 bool SubScene::seqEventUI(float delta_time) {
 	

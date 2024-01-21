@@ -18,6 +18,8 @@ public:
 	float screen_bright = 255;
 	//音の大きさ
 	float sound_volume = 255;
+	//マウスの感度
+	float mouse_sensitive = 0.1;
 private:
 
 };

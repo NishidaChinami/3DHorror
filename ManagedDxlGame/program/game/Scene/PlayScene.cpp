@@ -15,6 +15,7 @@
 #include"../Effect/Light/Fluorescent.h"
 #include"../UI/MainUI.h"
 #include"SubScene.h"
+#include"OptionScene.h"
 
 //画面の明るさをセピアカラーに追われてるときはBGM、画面を赤く　近いと光が揺れる
 
@@ -26,8 +27,10 @@ PlayScene::PlayScene() {
 	m_shadow = std::make_shared<dxe::ShadowMap>(dxe::ShadowMap::eSize::S2048);
 	m_player = m_factory->GetClassPlayer();
 	m_subscene = std::make_shared<SubScene>(m_factory, m_factory->GetClassMediator());
+	m_option = std::make_shared<OptionScene>();
 	m_sound = std::make_shared<Sound>();
 	AddChild(m_subscene);
+	AddChild(m_option);
 	CollitionFuc();
 }
 
@@ -38,7 +41,7 @@ PlayScene::~PlayScene() {
 void PlayScene::Update(float delta_time) {
 	PlayBGM();
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_ESCAPE)) {
-		m_subscene->SetBoolOption(true);
+		m_option->SetBoolOption(true);
 		sequence_.change(&PlayScene::seqOpenUI);
 	}
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_TAB)) {
@@ -148,7 +151,7 @@ bool PlayScene::seqMainGame(float delta_time) {
 
 bool PlayScene::seqOpenUI(float delta_time) {
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_ESCAPE)) {
-		m_subscene->SetBoolOption(false);
+		m_option->SetBoolOption(false);
 		sequence_.change(&PlayScene::seqMainGame);
 	}
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_TAB)) {
@@ -166,8 +169,6 @@ void PlayScene::CollitionFuc() {
 			std::shared_ptr<Player>pl = std::dynamic_pointer_cast<Player>(a);
 			std::shared_ptr<StageWall>wall = std::dynamic_pointer_cast<StageWall>(b);
 			pl->StageCorrection(wall);
-
-			DrawStringEx(0, 0, -1, "壁に衝突");
 		});
 	//Enemyとプレイヤー
 	m_collision->registIntersectedProcess<Player, Enemy>(
@@ -206,3 +207,7 @@ void PlayScene::TutorialCollision() {
 		w++;
 	}
 }
+
+//キーの数を取得
+//プレイヤーの生死
+//

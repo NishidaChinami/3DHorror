@@ -25,7 +25,7 @@ public:
 
 	void SetBoolInventory(bool active) { active_inventory = active; }
 	void SetBoolEvent(bool active) { active_event = active; }
-	void SetBoolOption(bool active) { active_option = active; }
+	//void SetBoolOption(bool active) { active_option = active; }
 
 
 private:
@@ -34,7 +34,7 @@ private:
 	//結果画面またはスタート画面に戻る
 	bool seqIdle(float delta_time);
 	bool seqTutorialUI(float delta_time);
-	bool seqSettingUI(float delta_time);
+	//bool seqSettingUI(float delta_time);
 	bool seqEventUI(float delta_time);
 	bool seqInventoryUI(float delta_time);
 
@@ -46,7 +46,7 @@ private:
 	const float EVENTUI_HEIGHT = 600;
 
 	bool active_inventory = false;
-	bool active_option = false;
+	//bool active_option = false;
 	bool active_event = false;
 	bool active_tutorial = true;
 

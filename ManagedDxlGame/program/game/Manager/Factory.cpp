@@ -174,7 +174,7 @@ void Factory::CreatMainGame() {
 		for (int c = 1; c < stage->m_col; c+=2) {
 			tnl::Vector3 pos;
 			pos.x = { -300.0f + c * StageWall::BLOCKSIZE };
-			pos.y = 800;
+			pos.y = 400;
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
 			fluorescent.emplace_back(std::make_shared<Fluorescent>(pos));
 		}

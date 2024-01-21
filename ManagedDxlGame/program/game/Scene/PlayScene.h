@@ -10,6 +10,7 @@ class Enemy;
 class StageWall;
 class MainUI;
 class SubScene;
+class OptionScene;
 class Sound;
 
 //-------------------------------------------------------------------------------------------------//
@@ -57,6 +58,7 @@ private:
 
 	//シーケンスでチェイスとかイベントごと
 	std::shared_ptr<SubScene>m_subscene;
+	std::shared_ptr<OptionScene>m_option;
 
 	std::shared_ptr<Factory>m_factory = nullptr;
 	std::shared_ptr<Collision>m_collision = nullptr;
