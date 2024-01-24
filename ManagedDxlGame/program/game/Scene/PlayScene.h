@@ -29,6 +29,7 @@ public:
 	void Draw()override;
 
 	void PlayBGM();
+	void ScreenEffect();
 	
 	void CollitionFuc();
 	void MainGameCollision();
@@ -45,7 +46,7 @@ private:
 	std::list<std::shared_ptr<BaseScene>>m_child_list;
 
 	//シーン遷移用のテンプレート
-	tnl::Sequence<PlayScene> sequence_ = tnl::Sequence<PlayScene>(this, &PlayScene::seqSetMainGame);
+	tnl::Sequence<PlayScene> sequence_ = tnl::Sequence<PlayScene>(this, &PlayScene::seqSetTutorial);
 	//結果画面またはスタート画面に戻る
 	bool seqResult(float delta_time) { return true; }
 
@@ -67,6 +68,8 @@ private:
 
 	std::shared_ptr<Player> m_player = nullptr;
 	std::shared_ptr<Enemy>m_enemy = nullptr;
+	
+
 	std::list<std::shared_ptr<StageWall>> m_stagewall;
 
 	Shared<dxe::Mesh> m_skybox = nullptr;

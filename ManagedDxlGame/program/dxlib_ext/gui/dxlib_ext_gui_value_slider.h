@@ -139,24 +139,27 @@ namespace dxe {
 		}
 
 		void draw() {
-			int color = (is_forcus_ || is_select_) ? -1 : 0x88888888;
+			// color = (is_forcus_ || is_select_) ? -1 : 0x88888888;
+			int color = -1;
 			int num_space = 80;
 			int text_space = 150;
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
-			DrawBox(pos_.x, pos_.y - TAB_SIZE_H2, pos_.x + slider_lenght_ + num_space + text_space, pos_.y + TAB_SIZE_H2, 0, true) ;
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-			DrawLine(pos_.x, pos_.y, pos_.x + slider_lenght_, pos_.y, color) ;
-			DrawLine(pos_.x, pos_.y - TAB_SIZE_H2, pos_.x, pos_.y + TAB_SIZE_H2, color) ;
-			DrawLine(pos_.x + slider_lenght_, pos_.y - TAB_SIZE_H2, pos_.x + slider_lenght_, pos_.y + TAB_SIZE_H2, color) ;
-			DrawBox(tab_pos_.x - TAB_SIZE_W2, tab_pos_.y - TAB_SIZE_H2, tab_pos_.x + TAB_SIZE_W2, pos_.y + TAB_SIZE_H2, color, false) ;
-			if constexpr (GuiValueSliderTraits<int>::Value == GuiValueSliderTraits<U>::Value) {
+			//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+			//DrawBox(pos_.x, pos_.y - TAB_SIZE_H2, pos_.x + slider_lenght_ + num_space + text_space, pos_.y + TAB_SIZE_H2, 0, true) ;
+			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+			//DrawLine(pos_.x, pos_.y, pos_.x + slider_lenght_, pos_.y, color) ;
+			DrawBox(pos_.x, pos_.y - BAR_H, pos_.x + slider_lenght_, pos_.y + BAR_H, color,true);
+			//DrawLine(pos_.x, pos_.y - TAB_SIZE_H2, pos_.x, pos_.y + TAB_SIZE_H2, color) ;
+			//DrawLine(pos_.x + slider_lenght_, pos_.y - TAB_SIZE_H2, pos_.x + slider_lenght_, pos_.y + TAB_SIZE_H2, color) ;
+			//DrawBox(tab_pos_.x - TAB_SIZE_W2, tab_pos_.y - TAB_SIZE_H2, tab_pos_.x + TAB_SIZE_W2, pos_.y + TAB_SIZE_H2, color, false) ;
+			DrawCircle(tab_pos_.x, tab_pos_.y, TAB_SIZE_H2, color);
+			/*if constexpr (GuiValueSliderTraits<int>::Value == GuiValueSliderTraits<U>::Value) {
 				DrawStringEx((float)pos_.x + (float)slider_lenght_ + TAB_SIZE_W2 + 5, (float)pos_.y - TAB_SIZE_H2 + 3, color, "%d", accessor_.get());
 			}
 			if constexpr (GuiValueSliderTraits<float>::Value == GuiValueSliderTraits<U>::Value) {
 				DrawStringEx((float)pos_.x + (float)slider_lenght_ + TAB_SIZE_W2 + 5, (float)pos_.y - TAB_SIZE_H2 + 3, color, "%.3f", accessor_.get());
 			}
 			if (is_description_ && description_function_) color = -1;
-			DrawStringEx((float)pos_.x + (float)slider_lenght_ + num_space, (float)pos_.y - TAB_SIZE_H2 + 3, color, "%s", label_.c_str());
+			DrawStringEx((float)pos_.x + (float)slider_lenght_ + num_space, (float)pos_.y - TAB_SIZE_H2 + 3, color, "%s", label_.c_str());*/
 		}
 
 		TNL_PROPERTY(std::function<void()>, Description, description_function_);
@@ -165,7 +168,9 @@ namespace dxe {
 
 	private :
 		static constexpr int TAB_SIZE_W2 = 5 ;
-		static constexpr int TAB_SIZE_H2 = 10 ;
+		static constexpr int TAB_SIZE_H2 = 5 ;
+		static constexpr int BAR_H = 2;
+
 		bool is_forcus_ = false;
 		bool is_select_ = false;
 		bool is_description_ = false;

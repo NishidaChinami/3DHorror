@@ -56,6 +56,20 @@ std::vector<tnl::Vector2i> Mediator::MGetItemPos() {
 	return itempos;
 }
 
+int Mediator::MGetItemFloopy()
+{
+	int count = 0;
+	auto it = m_item_list.begin();
+	while (it != m_item_list.end()) {
+		if ((*it)->GetType() == Item::ItemType::Floppy) {
+			count = (*it)->GetfloopyCount();
+			break;
+		}
+		it++;
+	}
+	return count;
+}
+
 bool Mediator::MSetMessage(int title, bool notify) {
 	m_message->ChangeStory(title);
 	if (notify) {

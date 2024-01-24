@@ -36,6 +36,8 @@ public:
 	maze::StageState MGetStageState(int r, int c);
 	//Itemの位置を取得
 	std::vector<tnl::Vector2i> MGetItemPos();
+	//フロッピーディスクの数
+	int MGetItemFloopy();
 	
 
 	//MainUIに通知を与える

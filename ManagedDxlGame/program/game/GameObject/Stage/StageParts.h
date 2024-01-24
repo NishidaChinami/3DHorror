@@ -4,12 +4,13 @@
 #include"../GameObject.h"
 
 class GameCamera;
+class Mediator;
 
 class StageWall : public GameObject
 {
 public:
 	StageWall() {};
-	StageWall(tnl::Vector3 pos, maze::StageState state, std::shared_ptr<dxe::Mesh> cloneBox);
+	StageWall(tnl::Vector3 pos, maze::StageState state, std::shared_ptr<dxe::Mesh> cloneBox, const std::shared_ptr<Mediator>mediator);
 	StageWall(tnl::Vector3 pos, std::shared_ptr<dxe::Mesh> cloneBox);
 	~StageWall() {};
 	void Update(float delta_time)override {}
@@ -25,4 +26,5 @@ public:
 private:
 	maze::StageState m_state;
 	tnl::Vector3 m_prev_pos;
+	std::shared_ptr<Mediator>m_mediator = nullptr;
 };

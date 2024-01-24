@@ -19,14 +19,17 @@ public:
 	
 	//マネージャーの更新関数
 	void Update(float delta_time);
+	//ゲームをクリアできたか
+	bool can_clear = false;
+	//シーンを切り替え中かのbool
+	bool is_switch = false;
 private:
 
 	GameManager(std::shared_ptr<BaseScene>start_scene);
 	//シーン切り替え用のポインタ変数
 	std::shared_ptr<BaseScene>now_scene_ = nullptr;
 	std::shared_ptr<BaseScene>next_scene_ = nullptr;
-
-
+	
 
 	
 	//フェードアウト用の黒画像のハンドル
@@ -43,5 +46,7 @@ private:
 	bool seqTransOut(const float delta_time);
 	//待機状態
 	bool seqRunScene(const float delta_time);
+
+	
 
 };

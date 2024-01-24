@@ -22,13 +22,11 @@ void SubScene::Draw() {
 		m_factory->GetClassMessage()->MessageDraw();
 	}
 	else if(active_inventory)m_factory->GetClassInventory()->Draw();
-	/*else if (active_option) {
-		DrawStringEx(200, 299, -1, "設定画面");
-	}*/
+	
 	else {
 		DrawStringEx(640, 360, -1, "+");
 		if (tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) {
-			DrawBoxEx(DASHGAUGE_POS, m_mediator->MGetPlayerStamina(), GAUGE_HEIGHT, true, -1);
+			DrawBoxEx(DASHGAUGE_POS, m_mediator->MGetPlayerStamina()/2, GAUGE_HEIGHT, true, -1);
 		}
 	}
 	//チュートリアル中の文字の描画
@@ -38,7 +36,6 @@ void SubScene::Draw() {
 }
 
 bool SubScene::seqIdle(float delta_time) {
-	//if (active_option)sequence_.change(&SubScene::seqSettingUI);
 	if (active_event)sequence_.change(&SubScene::seqEventUI);
 	if (active_inventory)sequence_.change(&SubScene::seqInventoryUI);
 	return true;
@@ -86,7 +83,7 @@ bool SubScene::seqTutorialUI(float delta_time) {
 		});
 		//チュートリアルの文字表示終了
 		sequence_.change(&SubScene::seqIdle);
-		
+		return true;
 	}
 	TNL_SEQ_CO_END;
 	return true;

@@ -39,6 +39,8 @@ public:
 	int GetUIHdl() { return m_item_hdl; }
 	bool GetItem() { return m_getitem; }
 
+	int GetfloopyCount() { return m_floppy_count; }
+
 private:
 	//何のアイテムか
 	ItemType m_itemtype = ItemType::Floppy;
@@ -58,7 +60,7 @@ private:
 	int m_article_type;
 
 	//プロッピーを集めた数
-	int keycount = 0;
+	int m_floppy_count = 0;
 
 	//UIへの通知用フラグ
 	//itemを持っているかどうか

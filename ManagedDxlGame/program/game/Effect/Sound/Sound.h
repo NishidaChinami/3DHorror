@@ -15,7 +15,9 @@ public:
 		LOCKER,
 		HEARTBEAT,
 		SOUNDLISTMAX
+
 	};
+	
 
 	enum class BGMList {
 		OPNING,
@@ -42,10 +44,12 @@ public:
 	//再生中かどうかを返す
 	bool SoundPlaying(std::string sound_name);
 
+
 	//再生中止
 	void SoundStop(std::string sound_name);
 
 	void Update(std::string sound_name,tnl::Vector3 pos);
+	void ChangeVolume();
 	//サウンドハンドルベクター
 	std::unordered_map<std::string, int>SS_SoundHandle;
 	std::unordered_map<std::string, int >BGM_SoundHandle;
@@ -55,8 +59,7 @@ private:
 	std::vector<std::vector<tnl::CsvCell>> ss_sound_csv;	
 	std::vector<std::vector<tnl::CsvCell>> bgm_sound_csv;
 
-	////サウンドハンドルベクター
-	//std::unordered_map<std::string,int>SS_SoundHandle;
-	//std::unordered_map<std::string,int >BGM_SoundHandle;
+	std::list<std::string> m_ss_list;
+	std::list<std::string>m_bgm_list;
 };
 

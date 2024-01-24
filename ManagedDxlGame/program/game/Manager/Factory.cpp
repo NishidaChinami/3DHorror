@@ -117,27 +117,27 @@ void Factory::CreatMainGame() {
 			{
 				//クローンを作るためにメッシュのコピー
 				copy_mesh.emplace_back(wallmesh->createClone());
-				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->GetStgaeState(r, c), copy_mesh[mesh_index]));
+				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->GetStgaeState(r, c), copy_mesh[mesh_index],mediator));
 				mesh_index++;
 			}
 			else if (stage->GetStgaeState(r, c) == maze::StageState::Goal) {
-				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->GetStgaeState(r, c), gaolmesh));
+				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->GetStgaeState(r, c), gaolmesh,mediator));
 			}
 		}
 	}
 	//Enemy生成
 	enemy = std::make_shared<Enemy>(cf::Coordinate(tnl::Vector2i(1, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 50), mediator, sound);
 
-		/*while (true)
-		{
-			tnl::Vector2i random;
-			random.x = rand() % (stage->m_row/2) + stage->m_row/2;
-			random.y = rand() % (stage->m_col/ 2) + stage->m_col / 2;
-			if (stage->GetStgaeState(random.x,random.y) == maze::StageState::Empty) {
-				enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::BLOCKSIZE), mediator);
-				break;
-			}
-		}*/
+	/*while (true)
+	{
+		tnl::Vector2i random;
+		random.x = rand() % (stage->m_col/ 2) + stage->m_col / 2;
+		random.y = rand() % (stage->m_row / 2) + stage->m_row / 2;
+		if (stage->GetStgaeState(random.y,random.x) == maze::StageState::Empty) {
+			enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 50), mediator, sound);
+			break;
+		}
+	}*/
 
 	int count = 0;
 	//Itemの生成

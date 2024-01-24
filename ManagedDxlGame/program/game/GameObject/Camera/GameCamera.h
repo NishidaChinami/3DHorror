@@ -11,6 +11,8 @@ public:
 	void GameCameraUpdate(const std::shared_ptr<Mediator>& mediator);
 	//ƒJƒƒ‰‚ÉÊ‚Á‚Ä‚¢‚é‚Ì‚©
 	bool OnCameraView(tnl::Vector3 target_pos);
+	//ƒJƒƒ‰‚ÌU“®
+	void CameraVibration();
 
 	inline tnl::Vector3 Up() {
 		up_ = tnl::Vector3::TransformCoord({ 0, 1, 0 }, m_camera_rot);
@@ -39,5 +41,7 @@ private:
 	tnl::Vector3 m_size;
 	tnl::Vector3 m_ray;
 	tnl::Vector3 m_prev_pos;
+
+	float m_sensitive = 0.1;
 };
 

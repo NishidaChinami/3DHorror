@@ -1,6 +1,7 @@
 #pragma once
 #include "../dxlib_ext/dxlib_ext.h"
 
+
 class GameCamera;
 
 class GameObject
@@ -8,7 +9,7 @@ class GameObject
 public:
 	GameObject() {};
 	virtual~GameObject() {};
-	virtual void Draw(std::shared_ptr<GameCamera>gamecamera) {};
+	virtual void Draw(std::shared_ptr<GameCamera>gamecamera) {}
 	virtual void Update(float delta_time) {}
 	//stageがセッターができない！
 	std::shared_ptr<dxe::Mesh>mesh = nullptr;

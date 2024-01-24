@@ -23,9 +23,8 @@ public:
 
 	TNL_CO_SEQUENCE(SubScene, &SubScene::seqIdle);
 
-	void SetBoolInventory(bool active) { active_inventory = active; }
-	void SetBoolEvent(bool active) { active_event = active; }
-	//void SetBoolOption(bool active) { active_option = active; }
+	TNL_PROPERTY(bool, BoolInventory, active_inventory);
+	TNL_PROPERTY(bool, BoolEvent, active_event);
 
 
 private:

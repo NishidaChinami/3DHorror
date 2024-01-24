@@ -20,7 +20,7 @@ Enemy::Enemy(tnl::Vector3 pos, const std::shared_ptr<Mediator>mediator,std::shar
 	
 	mesh = dxe::Mesh::CreateSphereMV(30);
 	mesh->pos_ = pos;
-	size = { 30,30,30 };
+	size = { 100,100,200 };
 	if (mediator)m_mediator = mediator;
 	if (sound)m_sound = sound;
 }
@@ -32,6 +32,7 @@ Enemy::~Enemy()
 }
 
 void Enemy::Update(float delta_time) {
+	m_prev_pos = mesh->pos_;
 	m_sound->Sound3DPlay(m_mediator->MGetPlayerPos(), tnl::Quaternion{ 0,0,1,0 }, mesh->pos_, "ENEMYAPPROACHING", 1000);
 	if (!m_sound->SoundPlaying("ENEMYAPPROACHING"))m_sound->SoundPlay("ENEMYAPPROACHING");
 	sequence_.Update(delta_time);
@@ -40,7 +41,7 @@ void Enemy::Update(float delta_time) {
 			sequence_.change(&Enemy::seqTrack);
 			chase_state = true;
 		}
-		debug = true;
+
 	}
 	if (Hearing()) {
 		if (!can_hear) {
@@ -48,7 +49,7 @@ void Enemy::Update(float delta_time) {
 			can_hear = true;
 		}
 	}
-	else { debug = false; }
+	
 }
 void Enemy::Draw(std::shared_ptr<GameCamera>gamecamera) {
 	//mesh->render(gamecamera);
@@ -62,18 +63,18 @@ void Enemy::Draw(std::shared_ptr<GameCamera>gamecamera) {
 
 void Enemy::CreatRay(std::shared_ptr<GameCamera>gamecamera) {
 	//弧状のレイを作成
-	float fov = DX_PI_F / 2;
-	float angle = 0;
-	tnl::Vector3 siya = mesh->rot_.getEuler();
-	float center = siya.y;
-	float left = center - fov / 2;
-	float right = center + fov / 2;
-	
-	for (angle = left; angle < right; angle += fov/10) {
-		ray =(sin(angle)*6000, 0,cos(angle)*6000);
-		//デバック用
-		DrawLine3DEx(gamecamera, mesh->pos_, tnl::Vector3(sin(angle)*500, 0, cos(angle)*500) + mesh->pos_, -1);
-	}
+	//float fov = DX_PI_F / 2;
+	//float angle = 0;
+	//tnl::Vector3 siya = mesh->rot_.getEuler();
+	//float center = siya.y;
+	//float left = center - fov / 2;
+	//float right = center + fov / 2;
+	//
+	//for (angle = left; angle < right; angle += fov/10) {
+	//	ray =(sin(angle)*6000, 0,cos(angle)*6000);
+	//	//デバック用
+	//	DrawLine3DEx(gamecamera, mesh->pos_, tnl::Vector3(sin(angle)*500, 0, cos(angle)*500) + mesh->pos_, -1);
+	//}
 }
 
 bool Enemy::WithinView() {
@@ -118,7 +119,20 @@ bool Enemy::Hearing() {
 	else return false;
 }
 
+void Enemy::StageCorrection(const std::shared_ptr<StageWall>& stagewall) {
 
+	/*tnl::CorrectPositionAABB(
+		m_prev_pos
+		, stagewall->GetStageWallPos()
+		, size
+		, tnl::Vector3(StageWall::BLOCKSIZE, StageWall::BLOCKHIGHT, StageWall::BLOCKSIZE)
+		, mesh->pos_
+		, stagewall->mesh->pos_
+		, tnl::eCorrTypeAABB::PWRFL_B
+		, tnl::eCorrTypeAABB::PWRFL_B
+		, tnl::eCorrTypeAABB::PWRFL_B, 0.1f);*/
+
+}
 bool Enemy::seqRotate(const float delta_time) {
 
 	//次の向き
@@ -140,7 +154,6 @@ bool Enemy::seqMovement(const float delta_time) {
 	
 	target = m_next_target - mesh->pos_;
 	if (fabs(target.x) < FLT_EPSILON && fabs(target.z) < FLT_EPSILON) {
-		//ここが通ってない
 		sequence_.change(&Enemy::seqUpdatePoint);
 		return true;
 	};
@@ -151,10 +164,14 @@ bool Enemy::seqMovement(const float delta_time) {
 bool Enemy::seqUpdatePoint(const float delta_time) {
 
 	m_index--;
+	if (chase_state)m_speed = CHASE_SPEED;
+	else m_speed = PATROL_SPEED;
 	if (m_index < 0) {
 		if (chase_state)sequence_.change(&Enemy::seqTrack);
 		else sequence_.change(&Enemy::seqPatrol);
 		if (!Hearing())can_hear = false;
+		//見えなくても一回再度経路探索する
+		if (WithinView() == false)chase_state = false;
 		return true;
 	}
 	m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);
@@ -164,8 +181,6 @@ bool Enemy::seqUpdatePoint(const float delta_time) {
 
 bool Enemy::seqTrack(const float delta_time) {
 //プレイヤーを終点として最短経路を求める
-	if (chase_state)m_speed = CHASE_SPEED;
-	else m_speed = PATROL_SPEED;
 
 	route.clear();
 	Routing(cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),
@@ -174,15 +189,12 @@ bool Enemy::seqTrack(const float delta_time) {
 		Stage::m_row, 
 		Stage::m_col);
 	m_index = route.size()-1;
-
-	//見えなくても一回再度経路探索する
-	if(WithinView() == false)chase_state = false;
-	sequence_.change(&Enemy::seqUpdatePoint);
+	sequence_.change(&Enemy::seqMovement);
 
 	return true;
 };
 bool Enemy::seqPatrol(const float delta_time) {
-	m_speed = PATROL_SPEED;
+	//m_speed = PATROL_SPEED;
 	route.clear();
 	int random = rand() % 5;
 	Routing(cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),

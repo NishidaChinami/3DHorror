@@ -1,6 +1,7 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
 #include"Sound.h"
+#include"../../UI/OptionParam.h"
 
 Sound::Sound()
 {
@@ -14,8 +15,15 @@ Sound::Sound()
 		int handle = LoadSoundMem(url.c_str());
 		SetCreate3DSoundFlag(FALSE);
 		SS_SoundHandle.try_emplace(name.c_str(), handle);
+		m_ss_list.emplace_back(name.c_str());
 	}
-
+	for (int i = 1; i < bgm_sound_csv.size(); i++) {
+		std::string name = bgm_sound_csv[i][0].getString().c_str();
+		std::string url = bgm_sound_csv[i][1].getString().c_str();
+		int handle = LoadSoundMem(url.c_str());
+		BGM_SoundHandle.try_emplace(name.c_str(), handle);
+		m_bgm_list.emplace_back(name.c_str());
+	}
 	
 }
 
@@ -52,11 +60,11 @@ void Sound::SoundPlay(std::string sound_name, int playtype) {
 	auto it = BGM_SoundHandle.find(sound_name.c_str());
 	int sound_handle = 0;
 	if (it != BGM_SoundHandle.end()) {
-		sound_handle = BGM_SoundHandle[sound_name];
+		sound_handle = BGM_SoundHandle[sound_name.c_str()];
 	}
 	auto itr = SS_SoundHandle.find(sound_name.c_str());
 	if (itr != SS_SoundHandle.end()) {
-		sound_handle = SS_SoundHandle[sound_name];
+		sound_handle = SS_SoundHandle[sound_name.c_str()];
 	}
 
 	PlaySoundMem(sound_handle, playtype);
@@ -67,13 +75,15 @@ bool Sound::SoundPlaying(std::string sound_name) {
 	auto it = BGM_SoundHandle.find(sound_name.c_str());
 	int sound_handle = 0;
 	if (it != BGM_SoundHandle.end()) {
-		sound_handle = BGM_SoundHandle[sound_name];
+		sound_handle = BGM_SoundHandle[sound_name.c_str()];
 	}
 	auto itr = SS_SoundHandle.find(sound_name.c_str());
 	if (itr != SS_SoundHandle.end()) {
-		sound_handle = SS_SoundHandle[sound_name];
+		sound_handle = SS_SoundHandle[sound_name.c_str()];
 	}
-	if (1 == CheckSoundMem(sound_handle))return true;
+	if (1 == CheckSoundMem(sound_handle)) {
+		return true;
+	}
 	else return false;
 }
 
@@ -82,11 +92,11 @@ void Sound::SoundStop(std::string sound_name) {
 	auto it = BGM_SoundHandle.find(sound_name.c_str());
 	int sound_handle = 0;
 	if (it != BGM_SoundHandle.end()) {
-		sound_handle = BGM_SoundHandle[sound_name];
+		sound_handle = BGM_SoundHandle[sound_name.c_str()];
 	}
 	auto itr = SS_SoundHandle.find(sound_name.c_str());
 	if (itr != SS_SoundHandle.end()) {
-		sound_handle = SS_SoundHandle[sound_name];
+		sound_handle = SS_SoundHandle[sound_name.c_str()];
 	}
 
 	StopSoundMem(sound_handle);
@@ -107,4 +117,16 @@ void Sound::Update(std::string sound_name,tnl::Vector3 pos) {
 
 	// ‰¹‚ÌÄ¶‚ðŠJŽn
 	PlaySoundMem(sound_handle, DX_PLAYTYPE_LOOP);
+}
+
+void Sound::ChangeVolume()
+{
+	auto param = OptionParam::GetInstance();
+	for (auto bgmhdl : m_bgm_list) {
+		ChangeVolumeSoundMem(param->sound_volume, BGM_SoundHandle[bgmhdl.c_str()]);
+	}
+	for (auto sshdl : m_ss_list) {
+		ChangeVolumeSoundMem(param->sound_volume, BGM_SoundHandle[sshdl.c_str()]);
+	}
+	
 }

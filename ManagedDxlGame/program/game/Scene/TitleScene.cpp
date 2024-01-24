@@ -19,6 +19,8 @@ TitleScene::TitleScene()
 	//動画と同サイズのスクリーンを作成(透明なピクセルを扱うため三つ目の引数はTRUE)
 	title_screen_hdl = MakeScreen(size_x, size_y, TRUE);
 	PlayMovieToGraph(title_movie_hdl, DX_MOVIEPLAYTYPE_NORMAL);
+	screen_efct = std::make_shared<dxe::ScreenEffect>(DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT);
+	screen_efct->loadStatus("screen_effect.bin");
 }
 
 TitleScene::~TitleScene()

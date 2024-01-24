@@ -64,7 +64,7 @@ void Item::PassInventory() {
 		//インベントリーに入れられるか
 		else if (m_mediator->MSetPassInventory(shared_from_this())) {
 			m_isvalid = false;
-			if(m_itemtype == ItemType::Floppy)keycount++;
+			if(m_itemtype == ItemType::Floppy)m_floppy_count++;
 			if (m_itemtype == ItemType::FrashLight)m_mediator->MSetLightParam(true);
 		}
 	}

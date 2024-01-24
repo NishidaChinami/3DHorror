@@ -25,6 +25,8 @@ public:
 	bool WithinView();
 	//プレイヤーの音が鳴ったかを判別
 	bool Hearing();
+	//壁との当たり判定
+	void StageCorrection(const std::shared_ptr<StageWall>& stagewall);
 
 	//ルート決め
 	void Routing(tnl::Vector2i start, tnl::Vector2i goal, std::vector<astar::Node*>* _route, int row, int col);
@@ -45,12 +47,14 @@ public:
 
 private:
 	float m_speed = 0.0f;
-	const float CHASE_SPEED = 8.0f;
+	const float CHASE_SPEED = 10.0f;
 	const float PATROL_SPEED = 5.0;
 	int m_model_enemy;
 	int m_texture_enmey;
 	//tnl::Vector3 m_pos;
 	std::shared_ptr<Mediator>m_mediator = nullptr;
+	//一フレーム前の位置
+	tnl::Vector3 m_prev_pos;
 
 	//サウンドのポインタ変数
 	std::shared_ptr<Sound>m_sound;
@@ -72,8 +76,8 @@ private:
 	tnl::Vector3 ray;
 
 	//音の聞こえる半径
-	const float RADIUS_RUN = 1000;
-	const float RADIUS_WALK = 600;
+	const float RADIUS_RUN = 2000;
+	const float RADIUS_WALK = 1000;
 	//デバック用
 	bool debug = false;
 };

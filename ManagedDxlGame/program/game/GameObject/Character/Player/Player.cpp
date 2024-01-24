@@ -15,7 +15,7 @@ Player::Player(std::shared_ptr<Sound>sound, std::shared_ptr<GameCamera>gamecamer
 	mesh->setTexture(texture);
 	size = { 100,400,100 };
 	m_flashlight = std::make_shared<Flashlight>();
-	m_sound = std::make_shared<Sound>();
+	m_sound = sound;
 	m_player_camera = gamecamera;
 	mesh->pos_ = m_player_camera->pos_;
 	mesh->rot_ = m_player_camera->GetCameraRot();
@@ -85,7 +85,7 @@ bool Player::seqWalk(const float delta_time) {
 
 bool Player::seqRun(const float delta_time) {
 	m_speed = m_dash_speed;
-	m_stamina -= 3;
+	m_stamina -= 2;
 	m_sound->SoundStop("WALK");
 	mesh->pos_ = m_player_camera->pos_;
 	mesh->rot_ = m_player_camera->GetCameraRot();
@@ -98,7 +98,8 @@ bool Player::seqRun(const float delta_time) {
 	
 	m_sound->Sound3DPlay(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), (mesh->pos_ - tnl::Vector3(0, size.y / 2, 0)), "RUN");
 	m_sound->Sound3DPlay(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), (mesh->pos_ - tnl::Vector3(0, size.y / 2, 0)), "BREATHLESSNESS");
-	if(!m_sound->SoundPlaying("RUN"))m_sound->SoundPlay("RUN");
+	if (!m_sound->SoundPlaying("RUN")) m_sound->SoundPlay("RUN");
+	
 	if (!tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) sequence_.change(&Player::seqWalk);
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) sequence_.change(&Player::seqSneek);
 
