@@ -2,7 +2,10 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"BaseScene.h"
 
-
+//-------------------------------------------------------------------------------------------------//
+//リザルトクラス
+// シーンのエンディング等の描画
+//-------------------------------------------------------------------------------------------------//
 class ResultScene : public BaseScene
 {
 public:
@@ -13,22 +16,28 @@ public:
 	//シーンの描画関数
 	void Draw()override;
 private:
+	//エンディングの背景と文字の保存する変数
 	int m_backgroud_hdl = 0;
 	std::string letter;
-
-
+	
+	//ゲームクリアとゲームオーバーの背景ハンドル
 	int m_deathgpc_hdl = 0;
 	int m_cleargpc_hdl = 0;
+
+	//----------------------定数------------------------//
 	static const int SELECT_NUM = 2;
-	//文字の読み込みに失敗する？
+	//リザルトで使う文字
 	const std::string DEATH = { "あなたは死んだ" };
-	const std::string SERECT[SELECT_NUM] = { "もう一度プレイ","タイトルへ戻る" };
+	const std::string SERECT[SELECT_NUM] = { "タイトルへ戻る","もう一度プレイ" };
 	const std::string CLEAR = { "ゲームクリア" };
-
-	const tnl::Vector3 CENTER_POS = { 300,360,0 };
-	const tnl::Vector3 TITLE_POS = { 200, 600,0 };
-	const tnl::Vector3 REPLAY_POS = { 500,600,0 };
-
+	//各文字の座標
+	const tnl::Vector3 CENTER_POS = { 640,360,0 };
+	const tnl::Vector3 TITLE_POS = { 540, 600,0 };
+	const tnl::Vector3 REPLAY_POS = { 740,600,0 };
+	//文字の当たり判定のサイズ
 	const tnl::Vector3 LETTER_SIZE = { 100,50,0 };
+	//文字のフォントサイズ
+	const float RESULT_FONT_SIZE = 40;
+	const float SELECT_FONT_SIZE = 20;
 };
 

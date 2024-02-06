@@ -32,13 +32,6 @@ namespace cf {
 		return position;
 	}
 
-	eKeys GetPushKey() {
-		if (tnl::Input::IsKeyDown(eKeys::KB_W))return eKeys::KB_W;
-		if (tnl::Input::IsKeyDown(eKeys::KB_A))return eKeys::KB_A;
-		if (tnl::Input::IsKeyDown(eKeys::KB_D))return eKeys::KB_D;
-		if (tnl::Input::IsKeyDown(eKeys::KB_S))return eKeys::KB_S;
-		return eKeys::KB_0;
-	}
 	//ƒ}ƒEƒX‚Æ‚Ì“–‚½‚è”»’è
 	bool IntersectMouse(const tnl::Vector3& pos, const tnl::Vector3& size) {
 		tnl::Vector3 mouse_pos = tnl::Input::GetMousePosition();
@@ -52,10 +45,9 @@ namespace cf {
 		return false;
 	}
 
-	void DrawCenterString(const std::string& letter, const tnl::Vector3& pos) {
+	void DrawCenterString(const std::string& letter, const tnl::Vector3& pos,int color) {
 		int width = GetDrawStringWidth(letter.c_str(), letter.length()) / 2;
-		DrawStringEx(pos.x - width, pos.y , -1, "%s", letter.c_str());
+		DrawStringEx(pos.x - width, pos.y , color, "%s", letter.c_str());
 	}
-
 
 }

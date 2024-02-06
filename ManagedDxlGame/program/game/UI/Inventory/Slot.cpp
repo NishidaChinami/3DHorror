@@ -5,15 +5,12 @@
 #include"Inventory.h"
 
 
-Slot::Slot(const tnl::Vector3 &pos)
-{
-	m_pos = pos;
-}
-
 Slot::~Slot()
 {
+	DeleteGraph(m_ui_hdl);
 }
-
+//------------------------------------------------------------------------------------------------------------
+//ï`âÊèàóù
 void Slot::Draw() {
 	//UIÇÃï`âÊ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
@@ -26,12 +23,12 @@ void Slot::Draw() {
 	}
 }
 
-
+//------------------------------------------------------------------------------------------------------------
 //ê‡ñæï∂ÇÃï\é¶
 void Slot::Explanation() {
 	if (m_is_valid) {
 		if (cf::IntersectMouse(m_pos, tnl::Vector3(SLOTSIZE, SLOTSIZE, 0))) {
-			DrawStringEx(m_pos.x, m_pos.y + 50, -1, "%s", m_explanation.c_str());
+			cf::DrawCenterString(m_explanation.c_str(),tnl::Vector3(m_pos.x,m_pos.y+50,0));
 		}
 	}
 }

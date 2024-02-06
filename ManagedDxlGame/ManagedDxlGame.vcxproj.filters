@@ -87,6 +87,9 @@
     <Filter Include="program\[003] game\[3]GameObject\Stage">
       <UniqueIdentifier>{6bdc29f4-56db-460a-a053-8e95437608af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="program\[003] game\[4]Effect\Particle">
+      <UniqueIdentifier>{46dc2fff-269a-4be2-8b84-f15f1cfdbeb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ManagedDxlGame.cpp">
@@ -281,15 +284,6 @@
     <ClCompile Include="program\game\Scene\TitleScene.cpp">
       <Filter>program\[003] game\[2]Scene</Filter>
     </ClCompile>
-    <ClCompile Include="program\game\Scene\TutorialScene.cpp">
-      <Filter>program\[003] game\[2]Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="program\game\UI\BaseUI.cpp">
-      <Filter>program\[003] game\[5]UI</Filter>
-    </ClCompile>
-    <ClCompile Include="program\game\UI\MainUI.cpp">
-      <Filter>program\[003] game\[5]UI</Filter>
-    </ClCompile>
     <ClCompile Include="program\game\UI\Message.cpp">
       <Filter>program\[003] game\[5]UI</Filter>
     </ClCompile>
@@ -337,6 +331,12 @@
     </ClCompile>
     <ClCompile Include="program\game\GameObject\GameObject.cpp">
       <Filter>program\[003] game\[3]GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="program\game\Scene\TutorialScene.cpp">
+      <Filter>program\[003] game\[2]Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="program\game\Effect\Particle\GameParticle.cpp">
+      <Filter>program\[003] game\[4]Effect\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,15 +581,6 @@
     <ClInclude Include="program\game\Scene\TitleScene.h">
       <Filter>program\[003] game\[2]Scene</Filter>
     </ClInclude>
-    <ClInclude Include="program\game\Scene\TurorialScene.h">
-      <Filter>program\[003] game\[2]Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="program\game\UI\BaseUI.h">
-      <Filter>program\[003] game\[5]UI</Filter>
-    </ClInclude>
-    <ClInclude Include="program\game\UI\MainUI.h">
-      <Filter>program\[003] game\[5]UI</Filter>
-    </ClInclude>
     <ClInclude Include="program\game\UI\Message.h">
       <Filter>program\[003] game\[5]UI</Filter>
     </ClInclude>
@@ -626,9 +617,6 @@
     <ClInclude Include="program\game\GameObject\Character\Player\Player.h">
       <Filter>program\[003] game\[3]GameObject\Character\Player</Filter>
     </ClInclude>
-    <ClInclude Include="program\game\GameObject\Collision\Collision.h">
-      <Filter>program\[003] game\[3]GameObject\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="program\game\Effect\Light\Fluorescent.h">
       <Filter>program\[003] game\[4]Effect\Light</Filter>
     </ClInclude>
@@ -637,6 +625,15 @@
     </ClInclude>
     <ClInclude Include="program\game\GameObject\GameObject.h">
       <Filter>program\[003] game\[3]GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="program\game\Scene\TurorialScene.h">
+      <Filter>program\[003] game\[2]Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="program\game\Effect\Particle\GameParticle.h">
+      <Filter>program\[003] game\[4]Effect\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="program\game\GameObject\Collision\Collision.h">
+      <Filter>program\[003] game\[3]GameObject\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

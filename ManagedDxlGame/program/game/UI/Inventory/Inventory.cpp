@@ -5,6 +5,7 @@
 
 Inventory::Inventory()
 {
+	//インベントリーのスロットの生成
 	for (int i = 0; i < 4; ++i) {
 		tnl::Vector3 s_pos = { 415 + i * 150.0f,DXE_WINDOW_HEIGHT/2,0 };
 		m_slot.emplace_back(std::make_shared<Slot>(s_pos));
@@ -14,32 +15,39 @@ Inventory::Inventory()
 Inventory::~Inventory()
 {
 }
-
+//------------------------------------------------------------------------------------------------------------
+//インベントリーの描画
 void Inventory::Draw() {
+	//インベントリーの外枠と文字の描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH/2,DXE_WINDOW_HEIGHT/2,0),INVENTORY_WIGHT,INVENTORY_HEIGHT,true,0);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-
+	DrawStringEx(370, 280, -1, "持ち物");
+	//スロットの描画
 	for (auto slot : m_slot) {
 		slot->Draw();
 		slot->Explanation();
 	}
 	
 }
+
+//------------------------------------------------------------------------------------------------------------
+//アイテムの情報をもらってインベントリーに反映させる処理
 bool Inventory::IsCanGetItem(const std::shared_ptr<Item>&item) {
 	//item情報を渡す
 	auto getitem = m_slot.begin();
 	while (getitem != m_slot.end()) {
-		if ((*getitem)->m_is_valid == false) {
-			(*getitem)->m_is_valid = true;
-			(*getitem)->m_ui_hdl = item->GetUIHdl();
-			(*getitem)->m_explanation = item->GetExplanation();
-			(*getitem)->m_itemtype = item->GetType();
+		if ((*getitem)->getSlotValid() == false) {
+			(*getitem)->setSlotValid(true);
+			(*getitem)->setSlotHandle(item->getUIHdl());
+			(*getitem)->setSlotExlanation(item->getExplanation());
+			(*getitem)->setSlotItemType(item->getType());
 			return true;
 		}
-		else if ((*getitem)->m_itemtype == item->GetType()) {
+		else if ((*getitem)->getSlotItemType() == item->getType()) {
 			//数字を増やす
-			(*getitem)->m_number++;
+			int num = (*getitem)->getSlotNum();
+			(*getitem)->setSlotNum(num++);
 			return true;
 		}
 
@@ -49,7 +57,3 @@ bool Inventory::IsCanGetItem(const std::shared_ptr<Item>&item) {
 }
 
 
-
-void Inventory::UseInventory() {
-	
-}

@@ -8,17 +8,21 @@
 #include"Manager/Manager.h"
 #include"Scene/PlayScene.h"
 #include"Scene/TitleScene.h"
-#include"UI/MainUI.h"
+#include"Scene/TurorialScene.h"
+#include"Scene/ResultScene.h"
 #include"UI/OptionParam.h"
+#include"GameObject/Stage/BackGroudStage.h"
+#include"Effect/Sound/Sound.h"
 
 
 //------------------------------------------------------------------------------------------------------------
 // ゲーム起動時に１度だけ実行されます
 void gameStart() {
 	srand(time(0));
-	
+	//シングルトンを実装したクラスのインスタンス生成
 	GameManager::GetInstance(std::make_shared<PlayScene>());
 	OptionParam::GetInstance();
+	Sound::GetInstance();
 	SetWindowText("うしろの正面…だあれ？");
 
 
@@ -29,7 +33,10 @@ void gameStart() {
 //------------------------------------------------------------------------------------------------------------
 // 毎フレーム実行されます
 void gameMain(float delta_time) {
+	//Managerの更新
 	GameManager::GetInstance()->Update(delta_time);
+	//音量調整
+	Sound::GetInstance()->ChangeVolume();
 	DrawFpsIndicator({ 10, DXE_WINDOW_HEIGHT - 10, 0 }, delta_time);
 }
 
@@ -37,4 +44,7 @@ void gameMain(float delta_time) {
 // ゲーム終了時に１度だけ実行されます
 void gameEnd() {
 	GameManager::Destroy();
+	OptionParam::Destroy();
+	Sound::Destroy();
+	
 }

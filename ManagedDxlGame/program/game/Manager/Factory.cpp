@@ -1,7 +1,9 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
 #include"Factory.h"
 #include"Mediator.h"
+//-------------------GameObject file------------------------//
 #include"../GameObject/Camera/GameCamera.h"
 #include"../GameObject/Character/Player/Player.h"
 #include"../GameObject/Character/Enemy/Enemy.h"
@@ -9,159 +11,118 @@
 #include"../GameObject/Stage/Stage.h"
 #include"../GameObject/GameObject.h"
 #include"../GameObject/Stage/BackGroudStage.h"
+#include"../GameObject/Stage/StageParts.h"
+//-------------------Effect file------------------------//
 #include"../Effect/Sound/Sound.h"
 #include"../Effect/Light/Fluorescent.h"
-#include"../GameObject/Stage/StageParts.h"
+//-------------------UI file------------------------//
 #include"../UI/Inventory/Inventory.h"
 #include"../UI/Message.h"
 
+
 Factory::Factory()
 {
-
-	sound = std::make_shared<Sound>();
+	//オブジェクトの生成
 	mediator = std::make_shared<Mediator>();
 	gamecamera = std::make_shared<GameCamera>();
-	player = std::make_shared<Player>(sound,gamecamera);
+	player = std::make_shared<Player>(gamecamera,mediator);
 	stage = std::make_shared<Stage>();
 	inventory = std::make_shared<Inventory>();
 	message = std::make_shared<Message>();
-	
-	CreatMesh();
+	backgroud = std::make_shared<BackGroudStage>(stage,mediator);
+
+
+	//チュートリアルで使うクラスのインスタンス生成
 	CreatTutorial();
+	//メインゲームで使うクラスのインスタンス生成
 	CreatMainGame();
-	
-	
+	//メディエターにオブジェクトを渡す
 	SetMediator();
 
-	//オブジェクトリストに代入
+	//プレイヤーをオブジェクトリストに代入
 	object.emplace_back(player);
-	
-
-	
+	object_tutorial.emplace_back(player);
 }
 
 Factory::~Factory()
 {
 }
-
+//------------------------------------------------------------------------------------------------------------
+//メディエターにオブジェクトを渡す
 void Factory::SetMediator() {
 	mediator->SetPlayerClass(player);
 	mediator->SetStageClass(stage);
 	mediator->SetStageWallClass(stagewall);
 	mediator->SetEnemyClass(enemy);
 	mediator->SetItemClass(item);
+	mediator->SetTutorialItemClass(item_tutorial);
 	mediator->SetInventoryClass(inventory);
 	mediator->SetMessageClass(message);
+	mediator->SetBackGroundClass(backgroud);
 }
-
-void Factory::CreatMesh() {
-	//メッシュの用意
-	groudmesh = dxe::Mesh::CreatePlaneMV(tnl::Vector3(BackGroudStage::SIZE, BackGroudStage::SIZE, 0));
-
-	wallmesh = dxe::Mesh::CreateBoxMV
-	(tnl::Vector3(StageWall::BLOCKSIZE, StageWall::BLOCKHIGHT, StageWall::BLOCKSIZE),
-		dxe::Texture::CreateFromFile("graphics/WallSample.jpg"),
-		dxe::Texture::CreateFromFile("graphics/WallSample.jpg"),
-		dxe::Texture::CreateFromFile("graphics/WallSample.jpg"),
-		dxe::Texture::CreateFromFile("graphics/WallSample.jpg"),
-		dxe::Texture::CreateFromFile("graphics/WallSample.jpg"),
-		dxe::Texture::CreateFromFile("graphics/WallSample.jpg"));
-	gaolmesh = dxe::Mesh::CreateBoxMV
-	(tnl::Vector3(StageWall::BLOCKSIZE, StageWall::BLOCKHIGHT, StageWall::BLOCKSIZE),
-		dxe::Texture::CreateFromFile("graphics/Goal1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/Goal1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/Goal1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/Goal1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/Goal1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/Goal1.jpg"));
-
-	soilmesh = dxe::Mesh::CreatePlaneMV(tnl::Vector3(StageWall::BLOCKSIZE, StageWall::BLOCKSIZE, 0));
-
-	tutorialmesh = dxe::Mesh::CreateBoxMV
-	(tnl::Vector3(StageWall::BLOCKSIZE, 1600, StageWall::BLOCKSIZE),
-		dxe::Texture::CreateFromFile("graphics/kabe1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/kabe1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/kabe1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/kabe1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/kabe1.jpg"),
-		dxe::Texture::CreateFromFile("graphics/kabe1.jpg"));
-}
-
-
-
+//------------------------------------------------------------------------------------------------------------
+//メインゲームで使うクラスのインスタンス生成
 void Factory::CreatMainGame() {
-	mesh_index = 0;
-	//チュートリアルステージの中身を一度クリア
-	copy_mesh.clear();
-
-	for (int row = -1; row < 4; row++) {
-		for (int col = -1; col < 4; col++) {
-			copy_groud_mesh.emplace_back(groudmesh->createClone());
-			copy_groud_mesh.emplace_back(groudmesh->createClone());
-			tnl::Vector3 groudpos;
-			groudpos.x = BackGroudStage::SIZE * col;
-			groudpos.y = 0;
-			groudpos.z = BackGroudStage::SIZE * row;
-			backgroud.emplace_back(std::make_shared<BackGroudStage>(groudpos, copy_groud_mesh[mesh_index], copy_groud_mesh[mesh_index + 1]));
-			mesh_index += 2;
-		}
-	}
-	mesh_index = 0;
-
-	for (int r = 0; r < stage->m_row; r++) {
-		for (int c = 0; c < stage->m_col; c++) {
+	//ステージクラス
+	for (int r = 0; r < Stage::STAGE_ROW; r++) {
+		for (int c = 0; c < Stage::STAGE_COL; c++) {
 			tnl::Vector3 pos;
 			pos.x = { -300.0f + c * StageWall::BLOCKSIZE };
+			pos.y = StageWall::BLOCKHIGHT / 2;
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
-			if (stage->GetStgaeState(r, c) == maze::StageState::Wall)
+			//Emptyだったら壁を配置
+			if (stage->getStgaeState(r, c) == maze::StageState::Wall)
 			{
-				//クローンを作るためにメッシュのコピー
-				copy_mesh.emplace_back(wallmesh->createClone());
-				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->GetStgaeState(r, c), copy_mesh[mesh_index],mediator));
-				mesh_index++;
+				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->getStgaeState(r, c),mediator));
 			}
-			else if (stage->GetStgaeState(r, c) == maze::StageState::Goal) {
-				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->GetStgaeState(r, c), gaolmesh,mediator));
+			//ゴールだったら、ゴールマスを配置
+			else if (stage->getStgaeState(r, c) == maze::StageState::Goal) {
+				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->getStgaeState(r, c),mediator));
 			}
 		}
 	}
 	//Enemy生成
-	enemy = std::make_shared<Enemy>(cf::Coordinate(tnl::Vector2i(1, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 50), mediator, sound);
+	/*tnl::Vector2i a;
+	if (stage->getStgaeState(1, 2) == maze::StageState::Empty) a = { 2,1 };
+	else if (stage->getStgaeState(2, 1) == maze::StageState::Empty) a = { 1,2 };*/
 
-	/*while (true)
+	//enemy = std::make_shared<Enemy>(cf::Coordinate(a, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), mediator);
+	
+	//Enemy生成 プレイヤーがスポーンする位置と対角のエリアにライダムな場所にスポーン
+	while (true)
 	{
 		tnl::Vector2i random;
-		random.x = rand() % (stage->m_col/ 2) + stage->m_col / 2;
-		random.y = rand() % (stage->m_row / 2) + stage->m_row / 2;
-		if (stage->GetStgaeState(random.y,random.x) == maze::StageState::Empty) {
-			enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 50), mediator, sound);
+		random.x = rand() % (Stage::STAGE_COL/ 2) + Stage::STAGE_COL / 2;
+		random.y = rand() % (Stage::STAGE_ROW / 2) + Stage::STAGE_ROW / 2;
+		if (stage->getStgaeState(random.y,random.x) == maze::StageState::Empty) {
+			enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), mediator);
 			break;
 		}
-	}*/
+	}
 
 	int count = 0;
 	//Itemの生成
 	while (count < 5)
 	{
 		tnl::Vector2i vec;
-
+		//マップを6分割してエリア分けする
 		switch (count)
 		{
-		case 0:vec = { stage->m_col / 3,stage->m_row / 2 }; break;
-		case 1:vec = { stage->m_col * 2 / 3, stage->m_row / 2 }; break;
-		case 2:vec = { 0,stage->m_row / 2 }; break;
-		case 3:vec = { stage->m_col / 3 ,0, }; break;
-		case 4:vec = { stage->m_col * 2 / 3,0 }; break;
+		case 0:vec = { Stage::STAGE_COL / 3,Stage::STAGE_ROW / 2 }; break;
+			case 1:vec = { Stage::STAGE_COL * 2 / 3, Stage::STAGE_ROW / 2 }; break;
+			case 2:vec = { 0,Stage::STAGE_ROW / 2 }; break;
+			case 3:vec = { Stage::STAGE_COL / 3 ,0, }; break;
+			case 4:vec = { Stage::STAGE_COL * 2 / 3,0 }; break;
 
-		default:vec = { 0,0 }; break;
+			default:vec = { 0,0 }; break;
 		}
 		while (true)
 		{
 			tnl::Vector2i random;
-			random.x = rand() % (stage->m_col / 3);
-			random.y = rand() % (stage->m_row / 2);
-			if (stage->GetStgaeState(random.y + vec.y, random.x + vec.x) == maze::StageState::Empty) {
-				item.emplace_back(std::make_shared<Item>(cf::Coordinate(random + vec, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), 0, mediator));
+			random.x = rand() % (Stage::STAGE_COL / 3);
+			random.y = rand() % (Stage::STAGE_ROW / 2);
+			if (stage->getStgaeState(random.y + vec.y, random.x + vec.x) == maze::StageState::Empty) {
+				item.emplace_back(std::make_shared<Item>(cf::Coordinate(random + vec, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), Item::ItemType::Floppy, mediator));
 				count++;
 				break;
 			}
@@ -169,23 +130,27 @@ void Factory::CreatMainGame() {
 		}
 
 	}
-	//ライト
-	for (int r = 1; r < stage->m_row; r+= 2) {
-		for (int c = 1; c < stage->m_col; c+=2) {
+	//ライトの生成
+	for (int r = 1; r < Stage::STAGE_ROW; r+= 2) {
+		for (int c = 1; c < Stage::STAGE_COL; c+=2) {
 			tnl::Vector3 pos;
 			pos.x = { -300.0f + c * StageWall::BLOCKSIZE };
-			pos.y = 400;
+			pos.y = 500;
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
-			fluorescent.emplace_back(std::make_shared<Fluorescent>(pos));
+			//通路だったらライトを配置
+			if(stage->getStgaeState(r, c) == maze::StageState::Empty)
+				fluorescent.emplace_back(std::make_shared<Fluorescent>(pos,mediator));
 		}
 	}
-	
+	//懐中電灯を追加
+	item.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(0, 0), StageWall::START_BLOCK_POS, 0), Item::ItemType::FrashLight, mediator));
 
 }
-
+//------------------------------------------------------------------------------------------------------------
+//チュートリアルで使うクラスのインスタンス生成
 void Factory::CreatTutorial() {
 	tutorial_csv = tnl::LoadCsv<int>("csv/TutorialStage.csv");
-
+	//チュートリアルマップの配置
 	for (int i = 0; i < tutorial_csv.size(); i++) {
 		for (int k = 0; k < tutorial_csv[i].size(); k++) {
 
@@ -193,36 +158,35 @@ void Factory::CreatTutorial() {
 			pos.x = { -300.0f + k * StageWall::BLOCKSIZE };
 			pos.y = StageWall::BLOCKSIZE / 2;
 			pos.z = { -300.0f + i * StageWall::BLOCKSIZE };
-			if (tutorial_csv[i][k] == 1) {
-				copy_mesh.emplace_back(tutorialmesh->createClone());
-				tutorialstage.emplace_back(std::make_shared<StageWall>(pos, copy_mesh[mesh_index]));
+			if (tutorial_csv[i][k] != 0) {
+				tutorialstage.emplace_back(std::make_shared<StageWall>(pos));
 			}
-			else if (tutorial_csv[i][k] == 0) {
-				copy_mesh.emplace_back(soilmesh->createClone());
-				soilgroud.emplace_back(std::make_shared<BackGroudStage>(pos, copy_mesh[mesh_index]));
-			}
-			mesh_index++;
 		}
 	}
-	item_tutorial.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(3,6), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), 1, mediator));
-	//予兆ストーリーの代入
-	item_tutorial.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(5, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),1));
+	//懐中電灯
+	item_tutorial.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(6,6), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),Item::ItemType::FrashLight, mediator));
+	//あらすじの説明アイテムの生成
+	item_tutorial.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(4, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE,400), 0, mediator));
+
 }
-
-
+//------------------------------------------------------------------------------------------------------------
+//メインゲームに使うオブジェクトクラスをオブジェクトリストに入れる
 void Factory::AddMainObject() {
+	//壁クラス
 	auto mazes = stagewall.begin();
 	while (mazes != stagewall.end()) {
 		object.emplace_back(*mazes);
 		mazes++;
 	}
+	//照明クラス
 	auto light = fluorescent.begin();
 	while (light != fluorescent.end()) {
 		object.emplace_back(*light);
 		light++;
 	}
+	//敵クラス
 	object.emplace_back(enemy);
-
+	//アイテムクラス
 	auto items = item.begin();
 	while (items != item.end())
 	{
@@ -230,20 +194,20 @@ void Factory::AddMainObject() {
 		items++;
 	}
 }
-
-
+//------------------------------------------------------------------------------------------------------------
+//チュートリアルゲームに使うオブジェクトクラスをオブジェクトリストに入れる
 void Factory::AddTutorialObject() {
+	//チュートリアルステージのクラス
 	auto mazes = tutorialstage.begin();
 	while (mazes != tutorialstage.end()) {
 		object_tutorial.emplace_back(*mazes);
 		mazes++;
 	}
+	//アイテムクラス
 	auto items = item_tutorial.begin();
 	while (items != item_tutorial.end())
 	{
-		object.emplace_back(*items);
 		object_tutorial.emplace_back(*items);
-		//item.emplace_back(item);
 		items++;
 	}
 }

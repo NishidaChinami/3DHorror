@@ -8,65 +8,72 @@ class StageWall;
 class Flashlight;
 class Sound;
 
-/// <summary>
-/// ユーザーが操作するプレイヤークラス
-/// </summary>
+//-------------------------------------------------------------------------------------------------//
+//プレイヤークラス
+// ユーザーが操作する
+//-------------------------------------------------------------------------------------------------//
 
 class Player : public GameObject
 {
 public:
 	Player() {};
-	Player(std::shared_ptr<Sound>sound, std::shared_ptr<GameCamera>gamecamera);
+	//描画用のカメラクラスとオブジェクトの参照先をもつメディエータークラスを引数にもつ
+	Player(std::shared_ptr<GameCamera>gamecamera, const std::shared_ptr<Mediator>&mediator);
 	~Player();
-
+	//更新処理
 	void Update(float delta_time)override;
-	void Draw(std::shared_ptr<GameCamera>gamecamera)override;
-
+	//描画処理
+	void Draw(std::shared_ptr<GameCamera>gamecamera) override {}
 	//死んだときの関数
-	void Death() {};
-	//ステージと当たったときの関数
+	void GameoverEvent();
+	//ステージと当たったときの処理
 	void StageCorrection(const std::shared_ptr<StageWall>& stagewall);
 
-	tnl::Vector3 GetPlayerPos()const { return mesh->pos_; }
-	void SetPlayerPos(tnl::Vector3& pos) { mesh->pos_; }
-	tnl::Quaternion GetPlayerRot() { return mesh->rot_; }
-	tnl::Vector3 GetPlayerSize() const { return size; }
-	float GetPlayerSpeed()const { return m_speed; }
-	float GetPlayerStamina() const { return m_stamina; }
+	//--------------------------Getter/Setter------------------------//
+	TNL_PROPERTY(tnl::Vector3, PlayerPos, mesh->pos_);
+	tnl::Quaternion getPlayerRot()const{ return mesh->rot_; }
+	tnl::Vector3 getPlayerSize() const { return size; }
+	float getPlayerSpeed()const { return m_speed; }
+	float getPlayerStamina() const { return m_stamina; }
+	bool getPlayerDash()const { return m_can_dash; }
 
+	static const int MAXSTAMINA = 1200;
 private:
 	//プレイヤーの移動状態を管理するシークエンス
 	tnl::Sequence<Player> sequence_ = tnl::Sequence<Player>(this, &Player::seqWalk);
 	//各移動状態
-	bool seqWalk(const float delta_time);
-	bool seqRun(const float delta_time);
-	bool seqEvent(const float delta_time);
-	bool seqSneek(const float delta_time);
-	//bool seqHide(const float delta_time);
-	// 
+	bool seqWalk(const float delta_time);	//歩き移動
+	bool seqRun(const float delta_time);	//走り移動
+	bool seqSneek(const float delta_time);	//しゃがみ移動
+	bool seqDeath(const float delta_time);	//死亡処理
+	
 	// プレイヤーの移動速度
 	float m_speed = 0;
-	//走る速度
-	const float m_dash_speed = 10;
-	//歩く速度
-	const float m_walk_speed = 3;
 	//一フレーム前の位置
 	tnl::Vector3 m_prev_pos;
 	//走るときのスタミナ
-	int m_stamina = 1000;
+	int m_stamina = 0;
+	//走れるかどうかのフラグ
 	bool m_can_dash = true;
-	//サウンドを管理するブール
-	bool m_play_sound = false;
-	bool m_switch_sound = false;
 
-	//懐中電灯のポインタ
+	//足音をチュートリアルとメインゲームで切り替えるための変数
+	std::string m_walk_sound;
+	std::string m_run_sound;
+
+
+	//------------他クラスの参照用ポインタ------------------------//
 	std::shared_ptr<Flashlight>m_flashlight = nullptr;
-	//サインドのポインタ
-	std::shared_ptr<Sound>m_sound = nullptr;
-	std::shared_ptr<GameCamera>m_player_camera = nullptr;
-
-	
-	
+	std::shared_ptr<GameCamera>m_gamecamera = nullptr;
+	std::shared_ptr<Mediator>m_mediator = nullptr;
+	//----------------------定数------------------------//
+	//走る速度
+	const float DASH_SPEED = 10;
+	//歩く速度
+	const float WALK_SPEED = 4;
+	//しゃがみ速度
+	const float WALK_SNEEK = 2;
+	//疲労状態のスタミナ数値
+	const float TIREDNESS = 10;
 	
 };
 

@@ -1,67 +1,74 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
+#include"../../Manager/Mediator.h"
 #include"Fluorescent.h"
 #include"../../GameObject/Camera/GameCamera.h"
-//カメラの描画内に入ったときライトハンドルを持たせる風にする
-//フラスタム
 
-Fluorescent::Fluorescent(tnl::Vector3 pos)
+Fluorescent::Fluorescent(const tnl::Vector3 &pos, const std::shared_ptr<Mediator>& mediator)
 {
-	mesh = dxe::Mesh::CreateCubeMV(10);
-	mesh->pos_ = pos;
-	fluorescent_hdl = CreatePointLightHandle(cf::ConvertToV3(mesh->pos_), Range, Atten0, Atten1, Atten2);
-	SetLightDifColorHandle(fluorescent_hdl, GetColorF(0.2f, 0.2f, 0.2f, 0));
-	SetLightSpcColorHandle(fluorescent_hdl, GetColorF(0, 0, 0, 0));
-
+	//見えないメッシュ生成
+	mesh = dxe::Mesh::CreateCubeMV(LIGHT_SIZE);
+	//座標を受け取る
+	mesh->pos_ = { pos.x,500,pos.z };
+	m_mediator = mediator;
+	//ライトハンドルの生成と初期設定
+	m_fluorescent_hdl = CreatePointLightHandle(cf::ConvertToV3(mesh->pos_), m_range, m_atten0, m_atten1, m_atten2);
+	SetLightDifColorHandle(m_fluorescent_hdl, GetColorF(0.2f, 0.2f, 0.2f, 0));
+	SetLightSpcColorHandle(m_fluorescent_hdl, GetColorF(0, 0, 0, 0));
+	SetLightEnableHandle(m_fluorescent_hdl, false);
 }
+
+
 
 Fluorescent::~Fluorescent()
 {
-	DeleteLightHandle(fluorescent_hdl);
+	DeleteLightHandle(m_fluorescent_hdl);
 }
-
+//------------------------------------------------------------------------------------------------------------
+//更新処理
 void Fluorescent::Update(float delta_time) {
-	SetLightEnableHandle(fluorescent_hdl, is_alive);
-	sequence_.Update(delta_time);
+	//SetLightDifColorHandle(m_fluorescent_hdl, GetColorF(1.0f, 0, 0, 0));
+	//SetLightPositionHandle(m_fluorescent_hdl, cf::ConvertToV3( tnl::Vector3(m_mediator->MGetEnemyPos().x,500, m_mediator->MGetEnemyPos().z)));
+	//敵との距離によって有効にするライトハンドルを決める
+	if (tnl::IsIntersectSphere(mesh->pos_ - tnl::Vector3(0,250,0), LIGHT_SIZE, m_mediator->MGetEnemyPos(), RANGE)) {
+		is_valid = true;
+		//減衰率を下げて明るく
+		m_atten1 = 0.0006;
+		Blink(delta_time);
+	}
+	else {
+		//減衰率を上げて暗くなったら無効にする
+		m_atten1 *= 1.01f;
+		if (m_atten1 > 0.9) {
+			is_valid = false;
+			m_atten1 = 0.9;
+		}
+	}
+	SetLightRangeAttenHandle(m_fluorescent_hdl, m_range, m_atten0, m_atten1, m_atten2);
+	SetLightEnableHandle(m_fluorescent_hdl, is_valid);
 }
+//------------------------------------------------------------------------------------------------------------
+//描画処理
 void Fluorescent::Draw(std::shared_ptr<GameCamera>gamecamera) {
 	//カメラに写ってたら
-	if (gamecamera->OnCameraView(mesh->pos_)) {
-		is_alive = true;
-	}
-	else is_alive = false;
+	//if (gamecamera->OnCameraView(mesh->pos_)) {}
 }
 
+//------------------------------------------------------------------------------------------------------------
+//点滅処理
+void Fluorescent::Blink(const float delta_time) {
 
-
-
-bool Fluorescent::seqNormal(const float delta_time) {
-	SetLightDifColorHandle(fluorescent_hdl, GetColorF(0.2f, 0.2f, 0.2f, 0));
-	return true;
-}
-
-bool Fluorescent::seqRed(const float delta_time) {
-	//だんだん位置に向かうようにする赤の色だけ
-	float alpha = (sequence_.getProgressTime() / trans_time * 1.0f);
-	if (alpha >= 1) {
-		SetLightDifColorHandle(fluorescent_hdl, GetColorF(1.0f, 0.0f, 0.0f, 0));
+	float bright = 0;
+	m_blink_count += delta_time;
+	//0～１の間を行ったり来たりする
+	bright = fabs(sin(DX_PI_F / 180 * m_blink_count));
+	//半周期立つと点滅速度を変更
+	if (m_blink_count >= tnl::ToDegree(DX_PI_F)) {
+		bright = fabs(sin(DX_PI_F / 180 * m_blink_count * m_trans_time));
+		//一回点滅すると速度が戻る
+		if (m_blink_count >= (tnl::ToDegree(DX_PI_F)+ SECONDS))m_blink_count = 0;
 	}
-	SetLightDifColorHandle(fluorescent_hdl, GetColorF(alpha, 0.0f, 0.0f, 0));
-	return true;
-}
+	//Difカラーで赤い点滅に指定
+	SetLightDifColorHandle(m_fluorescent_hdl,GetColorF(bright, 0, 0, 1));
 
-bool Fluorescent::seqBlink(const float delta_time) {
-	 //点滅処理
-	/*static float time = 0;
-	static float bright = 0;
-	time++;
-	bright = fabs(sin(DX_PI_F / 180 * time));
-	if (time >= 360) {
-		bright = fabs(sin(DX_PI_F / 180 * time * 4));
-		if (time >= 450)time = 0;
-	}
-	SetLightDifColor(GetColorF(bright / 4, bright / 4, bright / 4, 1));
-	SetLightSpcColor(GetColorF(bright / 4, bright / 4, bright / 4, 1));*/
-
-	return true;
 }

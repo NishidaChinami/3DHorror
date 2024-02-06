@@ -1,122 +1,131 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"SubScene.h"
+#include"PlayScene.h"
 #include"../Mylibrary/Conversion.h"
+#include"../Manager/Manager.h"
 #include"../Manager/Factory.h"
 #include"../Manager/Mediator.h"
 #include"../UI/Inventory/Inventory.h"
 #include"../UI/Message.h"
+#include"../GameObject/Character/Player/Player.h"
+#include"../Effect/Sound/Sound.h"
+
+SubScene::SubScene(std::shared_ptr<Factory> factory, std::shared_ptr<Mediator> mediator) :m_factory(factory), m_mediator(mediator)
+{
+	//チュートリアルで使うデータのインスタンス生成
+	m_tutorial_date.emplace_back("WASDキーで移動", eKeys::KB_W, false);
+	m_tutorial_date.emplace_back("Shiftで走る", eKeys::KB_LSHIFT, false);
+	m_tutorial_date.emplace_back("Ctrlでしゃがみ", eKeys::KB_LCONTROL, true);
+	m_tutorial_date.emplace_back("TABで持ち物をみる", eKeys::KB_TAB, true);
+	m_tutorial_date.emplace_back("SPACEでライトをつける", eKeys::KB_SPACE, true);
+
+}
 
 SubScene::~SubScene()
 {
 }
-
+//------------------------------------------------------------------------------------------------------------
+//更新処理
 void SubScene::Update(float delta_time) {
 	sequence_.Update(delta_time);
 }
-
+//------------------------------------------------------------------------------------------------------------
+//描画関数
 void SubScene::Draw() {
-	if (active_event) {
+	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
+	auto manager = GameManager::GetInstance();
+	//イベントUIの描画
+	if (m_active_event) {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-		DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT, 0), EVENTUI_WIGHT, EVENTUI_HEIGHT, true, 0);
+		DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH/2, DXE_WINDOW_HEIGHT/2, 0), EVENTUI_WIGHT, EVENTUI_HEIGHT, true, 0);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		m_factory->GetClassMessage()->MessageDraw();
 	}
-	else if(active_inventory)m_factory->GetClassInventory()->Draw();
-	
+	//インベントリーUIの描画
+	else if(m_active_inventory)m_factory->GetClassInventory()->Draw();
+	//イベントUIが開いてないときのUI描画
 	else {
+		//画面の中心
 		DrawStringEx(640, 360, -1, "+");
-		if (tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) {
+		//走るときのスタミナゲージ
+		if (m_mediator->MGetPlayerStamina() < Player::MAXSTAMINA) {
 			DrawBoxEx(DASHGAUGE_POS, m_mediator->MGetPlayerStamina()/2, GAUGE_HEIGHT, true, -1);
 		}
 	}
 	//チュートリアル中の文字の描画
-	if (active_tutorial) {
+	if (m_active_tutorial) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_alpha);
 		cf::DrawCenterString(m_tutorial_message.c_str(),TUTORIAL_MESSEAGE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
 }
-
+//------------------------------------------------------------------------------------------------------------
+//UIの待機状態
 bool SubScene::seqIdle(float delta_time) {
-	if (active_event)sequence_.change(&SubScene::seqEventUI);
-	if (active_inventory)sequence_.change(&SubScene::seqInventoryUI);
+	if (m_active_event)sequence_.change(&SubScene::seqEventUI);
+	if (m_active_inventory)sequence_.change(&SubScene::seqInventoryUI);
+	if (GameManager::GetInstance()->is_tutorial && m_active_tutorial)sequence_.change(&SubScene::seqTutorialUI);
 	return true;
+
 }
-//勝手に一回呼び出し
+//------------------------------------------------------------------------------------------------------------
+//操作チュートリアルのアップデート
 bool SubScene::seqTutorialUI(float delta_time) {
-	//コルーチン用
-	while (1) {
+	auto sound = Sound::GetInstance();
+	m_time_count++;
+	//操作説明の情報をコルーチンで一つづつ描画
+	auto  date_index = m_tutorial_date.begin();
+	while (date_index != m_tutorial_date.end()) {
 		TNL_SEQ_CO_TIM_YIELD_RETURN(20, delta_time, [&]() {
-			m_tutorial_message = { "WASDキーで移動　Shiftで走る" };
-
-			if (tnl::Input::IsKeyDown(eKeys::KB_W) ||
-				tnl::Input::IsKeyDown(eKeys::KB_S) ||
-				tnl::Input::IsKeyDown(eKeys::KB_A) ||
-				tnl::Input::IsKeyDown(eKeys::KB_D))TNL_SEQ_CO_BREAK;
-			});
-
-		TNL_SEQ_CO_TIM_YIELD_RETURN(20, delta_time, [&]() {
-			m_tutorial_message = { "Ctrlでしゃがみ" };
-			if (tnl::Input::IsKeyDown(eKeys::KB_LCONTROL))TNL_SEQ_CO_BREAK;
-		});
-
-		TNL_SEQ_CO_TIM_YIELD_RETURN(50, delta_time, [&]() {
-			m_tutorial_message = { "物をひろう" };
-			if (m_mediator->MGetLightParam())TNL_SEQ_CO_BREAK;
-		});
-
-
-		//ライトをGetしたかどうか
-		
-		TNL_SEQ_CO_TIM_YIELD_RETURN(20, delta_time, [&]() {
-			m_tutorial_message = { "TABで持ち物をみる" };
-			if (tnl::Input::IsKeyDown(eKeys::KB_TAB))TNL_SEQ_CO_BREAK;
-			});
-
-		TNL_SEQ_CO_TIM_YIELD_RETURN(20, delta_time, [&]() {
-			m_tutorial_message = { "Spaceでライトをつける" };
-			if (tnl::Input::IsKeyDown(eKeys::KB_SPACE))TNL_SEQ_CO_BREAK;
-			});
-
-		TNL_SEQ_CO_TIM_YIELD_RETURN(10, delta_time, [&]() {
-			m_tutorial_message = { "" };
+			//20秒間指示を表示
+			m_tutorial_message = date_index->s_mess.c_str();
+			//文字のフェードイン
+			if (m_time_count >= 255)m_time_count = 255;
+			m_alpha = m_time_count;
+			//指示のキーが押されたら次の指示へ
+			if (tnl::Input::IsKeyDownTrigger(date_index->s_key)) {
+				m_time_count = 0;
 				TNL_SEQ_CO_BREAK;
-			
-		});
-		//チュートリアルの文字表示終了
-		sequence_.change(&SubScene::seqIdle);
-		return true;
+			}
+			});
+		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {
+			//文字のフェードアウト
+			m_alpha = 255 - m_time_count * 2;
+			if (m_time_count >= 255)m_time_count = 255;
+			if (m_mediator->MGetLightParam() == date_index->s_light_flug) TNL_SEQ_CO_BREAK;
+			});
+		date_index++;
+		if (date_index == m_tutorial_date.end()) {
+			m_tutorial_message = { "" };
+			m_active_tutorial = false;
+			//チュートリアルの文字表示終了
+			sequence_.change(&SubScene::seqIdle);
+			return true;
+		}
 	}
 	TNL_SEQ_CO_END;
 	return true;
 }
-
-//Escapeを押されたら呼び出し、インベンとリーもTaｂ呼ばれたら呼び出し
-//bool SubScene::seqSettingUI(float delta_time) {
-//	//入力はマウスで移動距離を測定し、それにそった値に変化
-//	// バーの数値実際の音量の数値に設定
-//	//スタートへ戻るでブール値変化
-//	
-//	//シート２は
-//	//操作説明
-//	if (!active_option)sequence_.change(&SubScene::seqIdle);
-//	return true;
-//}
-
+//------------------------------------------------------------------------------------------------------------
+//イベントUIの更新
 bool SubScene::seqEventUI(float delta_time) {
-	
-	//itemからの通知により、描画
-	if (tnl::Input::IsMouseDown(eMouse::LEFT))sequence_.change(&SubScene::seqIdle);
+	auto manager = GameManager::GetInstance();
+	//右クリックすると待機状態に戻る
+	if (tnl::Input::IsMouseDown(eMouse::LEFT)) {
+		m_active_event = false;
+		sequence_.change(&SubScene::seqIdle);
+		if (m_mediator->MGetTitleType() == 0) {
+			manager->ChangeScene(std::make_shared<PlayScene>());
+			manager->is_tutorial = false;
+		}
+	}
 	return true;
 }
-
+//------------------------------------------------------------------------------------------------------------
+//インベントリーの更新
 bool SubScene::seqInventoryUI(float delta_time) {
-	if (!active_inventory)sequence_.change(&SubScene::seqIdle);
+	if (!m_active_inventory)sequence_.change(&SubScene::seqIdle);
 	return true;
 }
 
-//eventUIを呼び出すフラグ（Messageもここでいいかな）
-//itemとかで呼び出し
-//void SubScene::SetEvnetNotify(bool notice, int title) {
-//	m_event_notify = notice;
-//	m_message->ChangeStory(title);
-//
-//}
+

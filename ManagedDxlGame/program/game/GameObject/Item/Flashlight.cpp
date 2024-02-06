@@ -1,27 +1,34 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
 #include"Flashlight.h"
+#include"../../Manager/Mediator.h"
+#include"../../Effect/Sound/Sound.h"
 
 Flashlight::Flashlight()
 {
-	falshlight_hdl = CreateSpotLightHandle(VGet(0,0,0), VGet(0.0f, 0.0f, 1.0f), DX_PI_F / 4.0f, DX_PI_F / 6.0, Range, Atten0, Atten1, Atten2);
-	SetLightDifColorHandle(falshlight_hdl, GetColorF(0.2f, 0.2f, 0.37f,0));
-	SetLightAmbColorHandle(falshlight_hdl, GetColorF(0.2f, 0.2f, 0.2f, 0));
+	//ポイントライトの生成をする
+	m_falshlight_hdl = CreateSpotLightHandle(VGet(0,0,0), VGet(0.0f, 0.0f, 1.0f), tnl::ToRadian(m_outangle), tnl::ToRadian(m_inangle), m_range, m_atten0, m_atten1, m_atten2);
+	SetLightDifColorHandle(m_falshlight_hdl, GetColorF(0.2f, 0.2f, 0.37f,0));
+	SetLightAmbColorHandle(m_falshlight_hdl, GetColorF(0.2f, 0.2f, 0.2f, 0));
+	SetLightEnableHandle(m_falshlight_hdl, m_isvalid);
+	
 }
 
 Flashlight::~Flashlight()
 {
-	DeleteLightHandle(falshlight_hdl);
+	DeleteLightHandle(m_falshlight_hdl);
 }
-
+//------------------------------------------------------------------------------------------------------------
 //懐中電灯のONとOFF
 void Flashlight::Update(tnl::Vector3 pos ,tnl::Quaternion rot) {
-	//SetDrawBright(200, 200, 200);
+	//Spaceでライトハンドルを有効にしたり無効にしたりする
 	if(tnl::Input::IsKeyDownTrigger(eKeys::KB_SPACE)) {
-
-		lightActive == true ? lightActive = false : lightActive = true;
+		Sound::GetInstance()->Sound2DPlay("FLASHLIGHT", DX_PLAYTYPE_BACK);
+		m_isvalid == true ? m_isvalid = false : m_isvalid = true;
 	}
-	SetLightEnableHandle(falshlight_hdl, lightActive);
-	SetLightPositionHandle(falshlight_hdl, cf::ConvertToV3(pos));
-	SetLightDirectionHandle(falshlight_hdl, cf::ConvertToV3(tnl::Vector3::TransformCoord({ 0,0,1 }, rot)));
+	SetLightEnableHandle(m_falshlight_hdl, m_isvalid);
+	//ライトの照らす方向をプレイヤ―の正面の向きにする
+	SetLightPositionHandle(m_falshlight_hdl, cf::ConvertToV3(pos));
+	SetLightDirectionHandle(m_falshlight_hdl, cf::ConvertToV3(tnl::Vector3::TransformCoord({ 0,0,1 }, rot)));
 }
+

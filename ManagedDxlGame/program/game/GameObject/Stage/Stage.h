@@ -5,26 +5,24 @@
 
 class GameCamera;
 
-
+//-------------------------------------------------------------------------------------------------//
+//ステージの自動生成を実行するクラス
+//-------------------------------------------------------------------------------------------------//
 class Stage
 {
 public:
 	Stage();
 	~Stage();
+	
+	//自動生成マップの列数・行数
+	const static int STAGE_ROW = 15;
+	const static int STAGE_COL = 15;
 
-	void Draw(std::shared_ptr<GameCamera>gamecamera);
-
-	const static int m_row = 15;
-	const static int  m_col = 15;
-
-
-	const maze::StageState GetStgaeState(int r,int c) { return m_state[r][c]; }
+	//-----------------------------------------Getter/Setter-----------------------------------------------------//
+	const maze::StageState getStgaeState(int r,int c) { return m_state[r][c]; }
 private:
-	int m_map[m_row][m_col];
-	maze::StageState m_state[m_row][m_col];
-	
-	
-	
+	//ステージのステート配列
+	maze::StageState m_state[STAGE_ROW][STAGE_COL];
 };
 
 

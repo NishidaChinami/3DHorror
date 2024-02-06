@@ -6,8 +6,11 @@ class BaseScene {
 public:
 	BaseScene() {};
 	virtual~BaseScene() {};
-	virtual void Update(float delta_time) {};//シーンの更新
-	virtual void Draw() {};//シーンの描画関数
+	//シーンの更新
+	virtual void Update(float delta_time) {};
+	//シーンの描画関数
+	virtual void Draw() {};
 protected:
+	//スクリーンエフェクトのポインタ
 	Shared<dxe::ScreenEffect> screen_efct = nullptr;
 };

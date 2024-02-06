@@ -4,8 +4,7 @@
 
 namespace astar {
 
-
-	// 指定座標が有効な( OPEN 可能な )マップ位置かどうか判定
+	// 指定座標がOPEN可能なマップステートかどうか判定
 	bool Path::IsEnableMapPosition(tnl::Vector2i pos, Node** _nodes, int row, int col) {
 		if (pos.x < 0) return false;
 		if (pos.y < 0) return false;
@@ -17,7 +16,7 @@ namespace astar {
 		return false;
 	}
 
-
+	// 現在オープンになっているノードで一番スコアの小さいものを取得
 	Node* Path::GetSmallScoreNodeFromOpenNodes(Node** _nodes, int row, int col) {
 		Node* p = nullptr;
 		for (int i = 0; i < row; ++i) {
@@ -33,16 +32,14 @@ namespace astar {
 		return p;
 	}
 
-	
+	// 経路探索 Aスター
 	bool Path::Aster(Node** _nodes, Node* _now, std::vector<Node*>* _route, int row, int col) {
-	
-
 		// スタート地点のスコア計算
 		if (TrackState::OPEN == _now->status) {
 			_now->score = _now->cost_real + _now->cost_guess;
 		}
 
-		// ４方向の座標
+		//４方向の座標
 		tnl::Vector2i dir[4] = { tnl::Vector2i(0, 1), tnl::Vector2i(1, 0), tnl::Vector2i(0, -1), tnl::Vector2i(-1, 0) };
 
 		// 周り４方向を調べて可能ならオープン

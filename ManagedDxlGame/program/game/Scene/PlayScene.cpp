@@ -1,9 +1,15 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"PlayScene.h"
+#include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
 #include"../Manager/Factory.h"
 #include"../Manager/Mediator.h"
 #include"../Manager/Manager.h"
+//-------------------Scene file------------------------//
+#include"PlayScene.h"
 #include"ResultScene.h"
+#include"SubScene.h"
+#include"OptionScene.h"
+//-------------------GameObject file------------------------//
 #include"../GameObject/Camera/GameCamera.h"
 #include"../GameObject/GameObject.h"
 #include"../GameObject/Collision/Collision.h"
@@ -13,47 +19,71 @@
 #include"../GameObject/Stage/Stage.h"
 #include"../GameObject/Stage/StageParts.h"
 #include"../GameObject/Stage/BackGroudStage.h"
+//-------------------UI file------------------------//
+#include"../UI/OptionParam.h"
+//-------------------Effect file------------------------//
 #include"../Effect/Sound/Sound.h"
 #include"../Effect/Light/Fluorescent.h"
-#include"../UI/MainUI.h"
-#include"SubScene.h"
-#include"OptionScene.h"
-#include"../UI/OptionParam.h"]
 
 
 PlayScene::PlayScene() {
-	ChangeLightTypeDir(VGet(0.2f, -1.5f, 0.0f));
-	SetBackgroundColor(32, 32, 32);
+	//空間の初期設定
+	SetFogEnable(true);
+	SetFogColor(0, 0, 0);
+	SetBackgroundColor(0, 0, 0);
+	SetFogStartEnd(500.0f, 1500.0f);
+	SetLightDifColor(GetColorF(0.0f, 0.0f, 0.0f, 0));
+
+	//画像の読み込み
+	m_gameover_gpc_hdl = LoadGraph("graphics/death.png");
+	//インスタンス生成
 	m_factory = std::make_shared<Factory>();
-	m_collision = std::make_shared<Collision>(m_factory);
-	m_shadow = std::make_shared<dxe::ShadowMap>(dxe::ShadowMap::eSize::S2048);
+	m_collision = std::make_shared<Collision>();
 	m_player = m_factory->GetClassPlayer();
 	m_subscene = std::make_shared<SubScene>(m_factory, m_factory->GetClassMediator());
-	screen_efct = std::make_shared<dxe::ScreenEffect>(DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT);
 	m_option = std::make_shared<OptionScene>(screen_efct);
-	m_sound = std::make_shared<Sound>();
-	screen_efct->setAdoption(dxe::ScreenEffect::fAdoption::LEVEL);
-	//screen_efct->setAdoption(dxe::ScreenEffect::fAdoption::LEVEL | dxe::ScreenEffect::fAdoption::BLOOM);
+	screen_efct = std::make_shared<dxe::ScreenEffect>(DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT);
+
+	m_factory->AddMainObject();
+	//スクリーンエフェクトのレベルとぼかしの機能をオンにする
+	screen_efct->setAdoption(dxe::ScreenEffect::fAdoption::LEVEL | dxe::ScreenEffect::fAdoption::BLUR);
+	//サブシーンと設定シーンを子クラスに追加
 	AddChild(m_subscene);
 	AddChild(m_option);
-	CollitionFuc();
+	//当たり判定の関数呼び出し
+	CollisionFuc();
+	//BGM再生
+	Sound::GetInstance()->Sound2DPlay("NEXT", DX_PLAYTYPE_BACK);
+	Sound::GetInstance()->SoundStop("TUTORIAL");
+
 }
 
 PlayScene::~PlayScene() {
-
+	DeleteGraph(m_gameover_gpc_hdl);
+	Sound::GetInstance()->SoundStop("GAMEBGM");
+	Sound::GetInstance()->SoundStop("CHASE");
 }
-
+//------------------------------------------------------------------------------------------------------------
+//更新処理
 void PlayScene::Update(float delta_time) {
-	ScreenEffect();
+	//画面の明るさを変更
+	screen_efct->setLevelAfterMax(OptionParam::GetInstance()->screen_bright);
 	PlayBGM();
 	sequence_.Update(delta_time);
+	
+	//設定画面開いたとき
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_ESCAPE)) {
-		m_option->SetBoolOption(true);
+		m_option->setShowOption(true);
 		sequence_.change(&PlayScene::seqOpenUI);
 	}
-	//これでいけるのか？
-	//if(m_factory->GetClassMediator()->MSetMessage(1))sequence_.change(&PlayScene::seqSetMainGame);
-
+	//カメラが有効かどうか
+	m_factory->GetClassCamera()->setCameraActive(m_subscene->getBoolInventory());
+	//インベントリーを開く
+	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_TAB)) {
+		Sound::GetInstance()->Sound2DPlay("INVENTORY", DX_PLAYTYPE_BACK);
+		m_subscene->getBoolInventory() == false ? m_subscene->setBoolInventory(true) : m_subscene->setBoolInventory(false);
+	}
+	//子クラスアップデート
 	for (auto child : m_child_list) {
 		child->Update(delta_time);
 	}
@@ -63,185 +93,117 @@ void PlayScene::Update(float delta_time) {
 			li.intersected_call_(li.a_, li.b_);
 		}
 	}
-	m_sound->ChangeVolume();
+	
 	
 }
-
+//------------------------------------------------------------------------------------------------------------
+//描画処理
 void PlayScene::Draw() {
-	
-	if (m_alive_tutorial) {
-		m_shadow->reserveBegin();
-		for (auto obj_t : m_factory->GetClassObj_Tutorial()) {
-			obj_t->mesh->reserveShadow();
-		}
-		m_shadow->reserveEnd();
+	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
+	//メインゲームの描画
+	screen_efct->renderBegin();
+	m_factory->GetClassBackGroudStage()->MainStageDraw(m_factory->GetClassCamera());
 
-		//m_shadow->renderBegin();
-		screen_efct->renderBegin();
-		m_skybox->rot_ *= tnl::Quaternion::RotationAxis({ 0, 1, 0 }, tnl::ToRadian(0.01f));
-		m_skybox->render(m_factory->GetClassCamera());
-
-		for (auto soil : m_factory->GetClassSoilGroudStage()) {
-			soil->Draw(m_factory->GetClassCamera());
-		}
-		for (auto obj_t : m_factory->GetClassObj_Tutorial()) {
-			obj_t->Draw(m_factory->GetClassCamera());
-		}
-		screen_efct->renderEnd();
-		//m_shadow->renderEnd();
+	for (auto obj : m_factory->GetClassObj()) {
+		obj->Draw(m_factory->GetClassCamera());
 	}
-	else {
-		screen_efct->renderBegin();
-		for (auto groud : m_factory->GetClassBackGroudStage()) {
-			groud->Draw(m_factory->GetClassCamera());
-		}
-
-		for (auto obj : m_factory->GetClassObj()) {
-			obj->Draw(m_factory->GetClassCamera());
-		}
-		screen_efct->renderEnd();
-	}
-
 	for (auto child : m_child_list) {
 		child->Draw();
 	}
+	auto manager = GameManager::GetInstance();
+	if (manager->is_switch) {
+		//ゲームオーバーの描画
+		DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, 1, 0, m_gameover_gpc_hdl, true);
+		//カメラの回転を切る
+		m_factory->GetClassCamera()->setCameraActive(true);
+	}
+	screen_efct->renderEnd();
 	
 }
 
+//------------------------------------------------------------------------------------------------------------
+//BGMの再生
 void PlayScene::PlayBGM() {
-	//if (m_factory->GetClassMediator()->MGetChaseState()) {
-	//	if (!m_sound->SoundPlaying("CHASE")) {
-	//		m_sound->Sound2DPlay("CHASE");
-	//		//m_sound->SoundStop("GAMEBGM");
-	//	}
-	//}
-	//else if (!m_sound->SoundPlaying("GAMEBGM")) {
-	//	//m_sound->Sound2DPlay("GAMEBGM");
-	//	m_sound->SoundStop("CHASE");
-	//}
-	if (!m_sound->SoundPlaying("GAMEBGM"))m_sound->Sound2DPlay("GAMEBGM");
-}
+	auto sound = Sound::GetInstance();
 
-void PlayScene::ScreenEffect()
-{
-	auto param = OptionParam::GetInstance();
-	screen_efct->setLevelAfterMax(param->screen_bright);
-}
-
-bool PlayScene::seqSetTutorial(float delta_time) {
-	m_alive_tutorial = true;
-	m_factory->AddTutorialObject();
-	TutorialCollision();
-	m_skybox = dxe::Mesh::CreateCubeMV(30000, 20, 20);
-	m_skybox->setTexture(dxe::Texture::CreateFromFile("graphics/skybox/_skybox_c.png"));
-	m_skybox->loadMaterial("material.bin");
-	sequence_.change(&PlayScene::seqMainGame);
-	return true;
-}
-
-bool PlayScene::seqSetMainGame(float delta_time) {
-	m_alive_tutorial = false;
-	m_skybox = nullptr;
-	m_factory->AddMainObject();
-	MainGameCollision();
-	SetFogEnable(true);
-	SetFogColor(0, 0, 0);
-	SetLightDifColor(GetColorF(0.0f, 0.0f, 0.0f, 0));
-	SetLightSpcColor(GetColorF(0.0f, 0.0f, 0.0f, 0));
-	sequence_.change(&PlayScene::seqMainGame);
-	return true;
-}
-
-
-bool PlayScene::seqMainGame(float delta_time) {
-	m_factory->GetClassCamera()->GameCameraUpdate(m_factory->GetClassMediator());
-	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_TAB)) {
-		m_subscene->setBoolInventory(true);
-		sequence_.change(&PlayScene::seqOpenUI);
-	}
-	if (m_alive_tutorial) {
-		for (auto obj_t : m_factory->GetClassObj_Tutorial()) {
-			obj_t->Update(delta_time);
+	if (m_factory->GetClassMediator()->MGetChaseState()) {
+		if (!sound->SoundPlaying("CHASE")) {
+			sound->Sound2DPlay("CHASE");
+			sound->SoundStop("GAMEBGM");
 		}
 	}
+	else if (!sound->SoundPlaying("GAMEBGM")) {
+		sound->Sound2DPlay("GAMEBGM");
+		sound->SoundStop("CHASE");
+	}
+	
+}
+
+//------------------------------------------------------------------------------------------------------------
+//ゲームプレイ状態
+bool PlayScene::seqMainGame(float delta_time) {
+	m_factory->GetClassCamera()->GameCameraUpdate(m_factory->GetClassMediator());
+	if (m_factory->GetClassMediator()->MGetReadArticle()) {
+		sequence_.change(&PlayScene::seqOpenUI);
+		m_subscene->setBoolEvent(true);
+	}
+	
 	for (auto obj : m_factory->GetClassObj()) {
 		obj->Update(delta_time);
 	}
-	
-	
 	return true;
 }
 
+//------------------------------------------------------------------------------------------------------------
+//設定やインベントリーを開いた状態
 bool PlayScene::seqOpenUI(float delta_time) {
-	if (!m_option->GetBoolOption()&& !m_subscene->getBoolInventory()) {
+	if (!m_option->getShowOption()&& !m_subscene->getBoolEvent()) {
 		sequence_.change(&PlayScene::seqMainGame);
+		//記事フラグをオフにしておく
+		m_factory->GetClassMediator()->MSetReadArticle(false);
 	}
-	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_TAB)) {
-		m_subscene->setBoolInventory(false);
-		sequence_.change(&PlayScene::seqMainGame);
-	}
-	//マウスのゲットベロシティをオフにするべし！
 	return true;
 }
 
-void PlayScene::CollitionFuc() {
+//------------------------------------------------------------------------------------------------------------
+//当たり判定のペア設定と判定後の処理を決める関数
+void PlayScene::CollisionFuc() {
 	//プレイヤーと壁
 	m_collision->registIntersectedProcess<Player, StageWall>(
 		[](std::shared_ptr<GameObject>a, std::shared_ptr<GameObject>b) {
-
 			std::shared_ptr<Player>pl = std::dynamic_pointer_cast<Player>(a);
 			std::shared_ptr<StageWall>wall = std::dynamic_pointer_cast<StageWall>(b);
+			//補正処理
 			pl->StageCorrection(wall);
 		});
 	//Enemyとプレイヤー
 	m_collision->registIntersectedProcess<Player, Enemy>(
 		[](std::shared_ptr<GameObject>a, std::shared_ptr<GameObject>b) {
-
 			std::shared_ptr<Player>pl = std::dynamic_pointer_cast<Player>(a);
 			std::shared_ptr<Enemy>enm = std::dynamic_pointer_cast<Enemy>(b);
-
-			/*auto manager = GameManager::GetInstance();
+			auto manager = GameManager::GetInstance();
+			auto sound = Sound::GetInstance();
+			//ゲームクリアのフラグをオフ
 			manager->can_clear = false;
-			if(!manager->is_switch)manager->ChangeScene(std::make_shared<ResultScene>());
-			manager->is_switch = true;*/
-		});
-	//Enemyと壁
-	m_collision->registIntersectedProcess<Enemy, StageWall>(
-		[](std::shared_ptr<GameObject>a, std::shared_ptr<GameObject>b) {
-
-			
-			std::shared_ptr<Enemy>enm = std::dynamic_pointer_cast<Enemy>(a);
-			std::shared_ptr<StageWall>wall = std::dynamic_pointer_cast<StageWall>(b);
-
-			enm->StageCorrection(wall);
+			if (!manager->is_switch) {
+				//各ゲームオーバーの処理へ
+				pl->GameoverEvent();
+				enm->GameoverEvent();
+				sound->Sound2DPlay("DEATH", DX_PLAYTYPE_BACK);
+				//リザルトシーンに切り替える
+				manager->ChangeScene(std::make_shared<ResultScene>());
+			}
+			manager->is_switch = true;
 		});
 
-}
-void PlayScene::MainGameCollision() {
-	
 	//ペアを代入
-	
 	m_enemy = m_factory->GetClassEnemy();
 	m_collision->registPairObject<Player, Enemy>(m_player, m_enemy);
-
 	m_stagewall = m_factory->GetClassStageWall();
-	auto w = m_stagewall.begin();
-	while (w != m_stagewall.end()) {
-		m_collision->registPairObject<Player, StageWall>(m_player, *w);
-		m_collision->registPairObject <Enemy, StageWall>(m_enemy, *w);
-			w++; 
-	}
-
-}
-
-
-void PlayScene::TutorialCollision() {
-	
-	m_stagewall = m_factory->GetClassStageTutorial();
 	auto w = m_stagewall.begin();
 	while (w != m_stagewall.end()) {
 		m_collision->registPairObject<Player, StageWall>(m_player, *w);
 		w++;
 	}
-}
 
+}

@@ -1,0 +1,11 @@
+MainStage/TutorialStage,PlaneType(0 = Cube 1 = Plane),meshsize.x,meshsize.y,meshsize.z,MeshTexture
+0,1,1600,1600,0,graphics/Floor.jpg
+0,0,400,800,400,graphics/WallSample.jpg
+0,0,400,800,400,graphics/Goal1.jpg
+1,1,400,400,0,graphics/soil.jpg
+1,0,400,1600,400,graphics/kabe1.jpg
+1,0,400,1600,400,graphics/22714653.jpg
+1,1,3600,1600,0,graphics/back1.jpg
+1,1,3600,1600,0,graphics/back2.jpg
+1,1,3600,1600,0,graphics/back3.jpg
+1,1,3600,1600,0,graphics/back4.jpg

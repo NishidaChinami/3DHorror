@@ -4,72 +4,92 @@
 #include"OptionScene.h"
 #include"../UI/OptionParam.h"
 #include"TitleScene.h"
+#include"../Effect/Sound/Sound.h"
 
 OptionScene::OptionScene(Shared<dxe::ScreenEffect> m_screen_efct)
 {
+	//画像の読み込み
 	m_option_back_gpc = LoadGraph("graphics/PanelFrame.png");
 	m_keybind_hdl = LoadGraph("graphics/keybind.png");
+
 	screen_efct = m_screen_efct;
 }
 
 OptionScene::~OptionScene()
 {
 	DeleteGraph(m_option_back_gpc);
+	DeleteGraph(m_keybind_hdl);
 }
-
+//------------------------------------------------------------------------------------------------------------
+//更新処理
 void OptionScene::Update(float delta_time) {
 	if (!m_active_option)return;
 	auto param = OptionParam::GetInstance();
-	
+	auto sound = Sound::GetInstance();
 	for (int i = 0; i < MENU_NUM; i++) {
 		tnl::Vector3 pos = { MENU_POS.x, MENU_POS.y + i * 50, 0 };
+		color_index[i] = cf::IntersectMouse(pos, MENU_SIZE) ? -1 : 0x88888888;
 		if (cf::IntersectMouse(pos, MENU_SIZE)) {
 			if (tnl::Input::IsMouseTrigger(eMouseTrigger::IN_LEFT)) {
-				//case分のほうがよくない？
-				if (i == 0)m_menu = true;
-				if (i == 1)m_menu = false;
-				if (i == 2) m_active_option = false;
-				if (i == 3) {
-					auto manager = GameManager::GetInstance();
-					manager->ChangeScene(std::make_shared<TitleScene>());
+				sound->Sound2DPlay("SELECT", DX_PLAYTYPE_BACK);
+				//メニューの選択時の処理
+				switch (i)
+				{
+					//設定画面
+					case 0:m_menu = true; break;
+					//遊び方
+					case 1:m_menu = false; break;
+					//ゲームを再開
+					case 2:m_active_option = false; break;
+					//タイトルに戻る
+					case 3:
+						auto manager = GameManager::GetInstance();
+						manager->ChangeScene(std::make_shared<TitleScene>());
+						break;
 				}
 			}
 		}		
 	}
 
 	if (!m_menu) {
-	
+	//オプションパラメーターに代入
 		param->sound_volume = m_volume;
 		param->screen_bright = m_bright;
 		param->mouse_sensitive = m_sensitivity;
 
 	}
 }
-
+//------------------------------------------------------------------------------------------------------------
+//描画処理
 void OptionScene::Draw() {
 	if (!m_active_option)return;
+	//オプション画面の背景
 	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, 0.5, 0, m_option_back_gpc, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH	/2+100, DXE_WINDOW_HEIGHT / 2, 0), OPTION_WIDTH, OPTION_HEIGHT, true, 0);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-	//文字の描画
+	//メニュー項目の文字の描画
+	SetFontSize(20);
+	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	for (int i = 0; i < MENU_NUM; i++) {
-		DrawStringEx(MENU_POS.x, MENU_POS.y + i * 50, -1, "%s", MENU_LETTER[i].c_str());
+		tnl::Vector3 pos = { MENU_POS.x, MENU_POS.y + i * 50,0 };
+		cf::DrawCenterString(MENU_LETTER[i].c_str(), pos, color_index[i]);
 	}
 	if (m_menu) {
 		//操作説明
 		DrawRotaGraph(DXE_WINDOW_WIDTH / 2 + 100, DXE_WINDOW_HEIGHT / 2, 1, 0, m_keybind_hdl, true);
 	}
 	else {
-		//設定
+		//スライダーの描画
 		BarDraw();
-		//文字
+		//設定画面の選択項目の文字の描画
 		for (int i = 0; i < SELECT_NUM; i++) {
 			DrawStringEx(SELECT_POS.x, SELECT_POS.y + i * 100, -1, "%s", MENU_SELECT[i].c_str());
 		}
 	}
 }
-
+//------------------------------------------------------------------------------------------------------------
+//スライダーの描画の処理
 void OptionScene::BarDraw()
 {
 	

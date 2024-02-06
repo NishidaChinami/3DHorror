@@ -1,9 +1,13 @@
 #pragma once
 #include "../dxlib_ext/dxlib_ext.h"
 
+
+//-------------------------------------------------------------------------------------------------//
+//穴掘り法のアルゴリズム
+//-------------------------------------------------------------------------------------------------//
 namespace maze
 {
-
+	//ステージのステートEnumクラス
 	enum class StageState {
 		Empty,
 		Wall,
@@ -47,7 +51,16 @@ namespace maze
 	//第３引数　マップのステートの２次元配列のポインタ
 	void MazeCreate(int row, int col, StageState** state);
 
+	//迷路にスタートとゴール決める関数
+	//第1引数  マップの横列数
+	//第２引数　マップの縦列数
+	//第３引数　マップのステートの２次元配列のポインタ
 	void MakeGoal(int row, int col, StageState** state);
+
+	//迷路の壁を一部道に変える関数
+	//第1引数  マップの横列数
+	//第２引数　マップの縦列数
+	//第３引数　マップのステートの２次元配列のポインタ
 	void BreakMaze(int row, int col, StageState** state);
 
 };

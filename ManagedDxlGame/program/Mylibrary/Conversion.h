@@ -1,9 +1,11 @@
 #pragma once
 #include "../dxlib_ext/dxlib_ext.h"
 
+
+//-------------------------------------------------------------------------------------------------//
+//いろいろな切り替え機能
+//-------------------------------------------------------------------------------------------------//
 namespace cf {
-
-
 	//QuaternionからDxlibの3D関数に使えるVector3型に変換
 	//第1引数　Quaternion
 	VECTOR  ConvertV4ToV3(tnl::Quaternion rot);
@@ -21,9 +23,6 @@ namespace cf {
 	//第3引数　床の高さ
 	tnl::Vector3 Coordinate(tnl::Vector2i gridpos, const tnl::Vector3& startpos, int size, float hight = 0);
 
-	//何キーが押されているか
-	eKeys GetPushKey();
-
 	//マウスカーソルとの当たり判定
 	//第1引数　当たり判定の対象の座標
 	//第2引数　当たり判定の対象のサイズ
@@ -33,5 +32,7 @@ namespace cf {
 	//文字を中央に表示する
 	//第1引数　文字列
 	//第2引数　文字の位置
-	void DrawCenterString(const std::string &letter, const tnl::Vector3 &pos);
+	void DrawCenterString(const std::string &letter, const tnl::Vector3 &pos, int color = -1);
+
+
 }

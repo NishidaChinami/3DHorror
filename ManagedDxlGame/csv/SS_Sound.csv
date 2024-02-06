@@ -1,7 +1,6 @@
 Handle–¼,URL
 WALK,sound/walk.wav
 RUN,sound/run.mp3
-ENEMYAPPROACHING,sound/kioku.wav
-BREATHLESSNESS,sound/breathless.wav
+ENEMYAPPROACHING,sound/headache.mp3
+BREATHLESSNESS,sound/breathless.mp3
 HEARTBEAT,sound/kodou.wav
-CHASE,sound/7_kane.wav

@@ -101,7 +101,7 @@ namespace dxe {
         bool success = true;
         if (textures) {
             uint32_t w = (*textures)[0]->getWidth();
-            uint32_t h = (*textures)[0]->getWidth();
+            uint32_t h = (*textures)[0]->getHeight();
             for (size_t i = 0; i < textures->size(); ++i) {
                 if ((*textures)[i]->getWidth() != w) { success = false; break; }
                 if ((*textures)[i]->getHeight() != h) { success = false; break; }

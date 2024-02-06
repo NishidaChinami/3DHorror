@@ -4,21 +4,25 @@
 
 class Slot;
 class Item;
+//-------------------------------------------------------------------------------------------------//
+//プレイヤーのインベントリー
+//-------------------------------------------------------------------------------------------------//
 class Inventory
 {
 public:
 	Inventory();
 	~Inventory();
-
-	//void PassItemInfo(std::shared_ptr<Item>item);
-	void UseInventory();
-
+	//アイテムの情報をもらってインベントリーに反映させる処理
 	bool IsCanGetItem(const std::shared_ptr<Item>&item);
+	//インベントリーの描画
 	void Draw();
 private:
+	//スロットのポインタ
 	std::vector<std::shared_ptr<Slot>>m_slot;
 
+	//------------------------------定数------------------------------------------//
+	//インベントリーの外枠のサイズ
 	const float INVENTORY_WIGHT = 600;
-	const float INVENTORY_HEIGHT = 200;
+	const float INVENTORY_HEIGHT = 220;
 };
 

@@ -186,6 +186,7 @@
     <ClCompile Include="program\dxlib_ext\mesh\dxlib_ext_mesh_mtrl_gui_controller.cpp" />
     <ClCompile Include="program\dxlib_ext\OBJLoader.cpp" />
     <ClCompile Include="program\game\Effect\Light\Fluorescent.cpp" />
+    <ClCompile Include="program\game\Effect\Particle\GameParticle.cpp" />
     <ClCompile Include="program\game\Effect\Sound\Sound.cpp" />
     <ClCompile Include="program\game\GameObject\Camera\GameCamera.cpp" />
     <ClCompile Include="program\game\GameObject\Character\Enemy\Enemy.cpp" />
@@ -208,10 +209,8 @@
     <ClCompile Include="program\game\Scene\SubScene.cpp" />
     <ClCompile Include="program\game\Scene\TitleScene.cpp" />
     <ClCompile Include="program\game\Scene\TutorialScene.cpp" />
-    <ClCompile Include="program\game\UI\BaseUI.cpp" />
     <ClCompile Include="program\game\UI\Inventory\Inventory.cpp" />
     <ClCompile Include="program\game\UI\Inventory\Slot.cpp" />
-    <ClCompile Include="program\game\UI\MainUI.cpp" />
     <ClCompile Include="program\game\UI\Message.cpp" />
     <ClCompile Include="program\game\UI\OptionParam.cpp" />
     <ClCompile Include="program\library\json11.cpp" />
@@ -283,6 +282,7 @@
     <ClInclude Include="program\dxlib_ext\mesh\dxlib_ext_mesh_mtrl_gui_controller.h" />
     <ClInclude Include="program\dxlib_ext\OBJLoader.h" />
     <ClInclude Include="program\game\Effect\Light\Fluorescent.h" />
+    <ClInclude Include="program\game\Effect\Particle\GameParticle.h" />
     <ClInclude Include="program\game\Effect\Sound\Sound.h" />
     <ClInclude Include="program\game\GameObject\Camera\GameCamera.h" />
     <ClInclude Include="program\game\GameObject\Character\Enemy\Enemy.h" />
@@ -305,10 +305,8 @@
     <ClInclude Include="program\game\Scene\SubScene.h" />
     <ClInclude Include="program\game\Scene\TitleScene.h" />
     <ClInclude Include="program\game\Scene\TurorialScene.h" />
-    <ClInclude Include="program\game\UI\BaseUI.h" />
     <ClInclude Include="program\game\UI\Inventory\Inventory.h" />
     <ClInclude Include="program\game\UI\Inventory\Slot.h" />
-    <ClInclude Include="program\game\UI\MainUI.h" />
     <ClInclude Include="program\game\UI\Message.h" />
     <ClInclude Include="program\game\UI\OptionParam.h" />
     <ClInclude Include="program\library\json11.hpp" />
