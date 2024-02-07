@@ -11,7 +11,7 @@
 #include"Scene/TurorialScene.h"
 #include"Scene/ResultScene.h"
 #include"UI/OptionParam.h"
-#include"GameObject/Stage/BackGroudStage.h"
+#include"GameObject/Stage/BackGroundStage.h"
 #include"Effect/Sound/Sound.h"
 
 
@@ -37,7 +37,6 @@ void gameMain(float delta_time) {
 	GameManager::GetInstance()->Update(delta_time);
 	//‰¹—Ê’²®
 	Sound::GetInstance()->ChangeVolume();
-	OptionParam::GetInstance()->Update();
 	DrawFpsIndicator({ 10, DXE_WINDOW_HEIGHT - 10, 0 }, delta_time);
 }
 

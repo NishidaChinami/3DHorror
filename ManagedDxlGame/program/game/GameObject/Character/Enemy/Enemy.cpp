@@ -28,6 +28,7 @@ Enemy::Enemy(tnl::Vector3 pos, const std::shared_ptr<Mediator>&mediator)
 
 Enemy::~Enemy()
 {
+	Sound::GetInstance()->SoundStop("ENEMYAPPROACHING");
 	MV1DeleteModel(m_model_enemy);
 	DeleteGraph(m_texture_enmey);
 }
@@ -39,7 +40,6 @@ void Enemy::Update(float delta_time) {
 	sound->Sound3DUpdate(m_mediator->MGetPlayerPos(), tnl::Quaternion{ 0,0,1,0 }, mesh->pos_, "ENEMYAPPROACHING", HEAR_RANGE);
 	if (!sound->SoundPlaying("ENEMYAPPROACHING"))sound->SoundPlay("ENEMYAPPROACHING");
 	sequence_.Update(delta_time);
-	
 }
 //------------------------------------------------------------------------------------------------------------
 //•`‰æˆ—

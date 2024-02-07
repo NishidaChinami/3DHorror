@@ -19,17 +19,16 @@ ResultScene::ResultScene()
 	//クリアかゲームオーバーかで表示する文字と背景を変更
 	if (mgr->can_clear) {
 		letter = CLEAR;
-		m_backgroud_hdl = m_cleargpc_hdl;
+		m_background_hdl = m_cleargpc_hdl;
 		//クリア音の再生
 		Sound::GetInstance()->Sound2DPlay("CLEAR", DX_PLAYTYPE_BACK);
 	}
 	else {
 		letter = DEATH;
-		m_backgroud_hdl = m_deathgpc_hdl;
+		m_background_hdl = m_deathgpc_hdl;
 	}
 	//BGMの再生
 	Sound::GetInstance()->Sound2DPlay("END");
-	Sound::GetInstance()->SoundStop("ENEMYAPPROACHING");
 	//フォント
 	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 }
@@ -74,7 +73,7 @@ void ResultScene::Draw()
 	color_restart = (cf::IntersectMouse(REPLAY_POS, LETTER_SIZE))? -1: 0x88888888;
 	SetFontSize(RESULT_FONT_SIZE);
 	//文字と背景の描画
-	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, 1, 1, m_backgroud_hdl, true);
+	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, 1, 1, m_background_hdl, true);
 	cf::DrawCenterString(letter.c_str(), CENTER_POS);
 	SetFontSize(SELECT_FONT_SIZE);
 	cf::DrawCenterString(SERECT[0].c_str(), TITLE_POS, color_title);

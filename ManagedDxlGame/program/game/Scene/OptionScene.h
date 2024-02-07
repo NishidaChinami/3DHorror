@@ -25,6 +25,7 @@ public:
 	TNL_PROPERTY(float, Volume, m_volume);
 	TNL_PROPERTY(float, Bright, m_bright);
 	TNL_PROPERTY(float, Sensitive, m_sensitivity);
+	TNL_PROPERTY(bool, TitleIsValid, m_title_isvalid);
 
 	//オプション画面の文字
 	const static int MENU_NUM = 4;
@@ -32,6 +33,8 @@ public:
 private:
 	//オプション画面が開かれているかどうか
 	bool m_active_option = false;
+	//タイトル画面かどうか
+	bool m_title_isvalid = false;
 	//遊び方か設定画面かを分けるフラグ
 	//trueの時操作説明　falseのときは設定
 	bool m_menu = false;

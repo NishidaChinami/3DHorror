@@ -17,8 +17,8 @@
 #include"../GameObject/Character/Enemy/Enemy.h"
 #include"../GameObject/Item/Item.h"
 #include"../GameObject/Stage/Stage.h"
-#include"../GameObject/Stage/StageParts.h"
-#include"../GameObject/Stage/BackGroudStage.h"
+#include"../GameObject/Stage/StageWall.h"
+#include"../GameObject/Stage/BackGroundStage.h"
 //-------------------UI file------------------------//
 #include"../UI/OptionParam.h"
 //-------------------Effect file------------------------//
@@ -99,11 +99,11 @@ void PlayScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //•`‰æˆ—
 void PlayScene::Draw() {
-	SetFontSize(16);
+	SetFontSize(18);
 	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	//ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
 	screen_efct->renderBegin();
-	m_factory->GetClassBackGroudStage()->MainStageDraw(m_factory->GetClassCamera());
+	m_factory->GetClassBackGroundStage()->MainStageDraw(m_factory->GetClassCamera());
 
 	for (auto obj : m_factory->GetClassObj()) {
 		obj->Draw(m_factory->GetClassCamera());
@@ -119,7 +119,7 @@ void PlayScene::Draw() {
 		m_factory->GetClassCamera()->setCameraActive(true);
 	}
 	screen_efct->renderEnd();
-	
+
 }
 
 //------------------------------------------------------------------------------------------------------------

@@ -12,11 +12,11 @@ class MainUI;
 class SubScene;
 class OptionScene;
 class Sound;
-
+//public std::enable_shared_from_this<PlayScene>
 //-------------------------------------------------------------------------------------------------//
 // メインプレイ画面のクラス
 //-------------------------------------------------------------------------------------------------//
-class PlayScene final : public BaseScene, public std::enable_shared_from_this<PlayScene> {
+class PlayScene final : public BaseScene{
 public:
 
 	PlayScene();
@@ -57,5 +57,4 @@ private:
 	std::shared_ptr<Enemy>m_enemy = nullptr;
 	std::list<std::shared_ptr<StageWall>> m_stagewall;
 
-	//bool m_alive_tutorial = false;
 };

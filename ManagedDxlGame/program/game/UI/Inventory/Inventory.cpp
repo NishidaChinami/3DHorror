@@ -12,9 +12,6 @@ Inventory::Inventory()
 	}
 }
 
-Inventory::~Inventory()
-{
-}
 //------------------------------------------------------------------------------------------------------------
 //インベントリーの描画
 void Inventory::Draw() {
@@ -47,7 +44,8 @@ bool Inventory::IsCanGetItem(const std::shared_ptr<Item>&item) {
 		else if ((*getitem)->getSlotItemType() == item->getType()) {
 			//数字を増やす
 			int num = (*getitem)->getSlotNum();
-			(*getitem)->setSlotNum(num++);
+			num++;
+			(*getitem)->setSlotNum(num);
 			return true;
 		}
 

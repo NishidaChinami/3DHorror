@@ -296,13 +296,13 @@
     <ClCompile Include="program\game\UI\Inventory\Slot.cpp">
       <Filter>program\[003] game\[5]UI\Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="program\game\GameObject\Stage\BackGroudStage.cpp">
+    <ClCompile Include="program\game\GameObject\Stage\BackGroundStage.cpp">
       <Filter>program\[003] game\[3]GameObject\Stage</Filter>
     </ClCompile>
     <ClCompile Include="program\game\GameObject\Stage\Stage.cpp">
       <Filter>program\[003] game\[3]GameObject\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="program\game\GameObject\Stage\StageParts.cpp">
+    <ClCompile Include="program\game\GameObject\Stage\StageWall.cpp">
       <Filter>program\[003] game\[3]GameObject\Stage</Filter>
     </ClCompile>
     <ClCompile Include="program\game\GameObject\Item\Flashlight.cpp">
@@ -593,13 +593,13 @@
     <ClInclude Include="program\game\UI\Inventory\Slot.h">
       <Filter>program\[003] game\[5]UI\Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="program\game\GameObject\Stage\BackGroudStage.h">
+    <ClInclude Include="program\game\GameObject\Stage\BackGroundStage.h">
       <Filter>program\[003] game\[3]GameObject\Stage</Filter>
     </ClInclude>
     <ClInclude Include="program\game\GameObject\Stage\Stage.h">
       <Filter>program\[003] game\[3]GameObject\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="program\game\GameObject\Stage\StageParts.h">
+    <ClInclude Include="program\game\GameObject\Stage\StageWall.h">
       <Filter>program\[003] game\[3]GameObject\Stage</Filter>
     </ClInclude>
     <ClInclude Include="program\game\GameObject\Item\Flashlight.h">

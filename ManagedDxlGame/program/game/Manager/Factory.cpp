@@ -10,8 +10,8 @@
 #include"../GameObject/Item/Item.h"
 #include"../GameObject/Stage/Stage.h"
 #include"../GameObject/GameObject.h"
-#include"../GameObject/Stage/BackGroudStage.h"
-#include"../GameObject/Stage/StageParts.h"
+#include"../GameObject/Stage/BackGroundStage.h"
+#include"../GameObject/Stage/StageWall.h"
 //-------------------Effect file------------------------//
 #include"../Effect/Sound/Sound.h"
 #include"../Effect/Light/Fluorescent.h"
@@ -29,7 +29,7 @@ Factory::Factory()
 	stage = std::make_shared<Stage>();
 	inventory = std::make_shared<Inventory>();
 	message = std::make_shared<Message>();
-	backgroud = std::make_shared<BackGroudStage>(stage,mediator);
+	background = std::make_shared<BackGroundStage>(stage,mediator);
 
 
 	//チュートリアルで使うクラスのインスタンス生成
@@ -46,19 +46,19 @@ Factory::Factory()
 
 Factory::~Factory()
 {
+
 }
 //------------------------------------------------------------------------------------------------------------
 //メディエターにオブジェクトを渡す
 void Factory::SetMediator() {
 	mediator->SetPlayerClass(player);
 	mediator->SetStageClass(stage);
-	mediator->SetStageWallClass(stagewall);
 	mediator->SetEnemyClass(enemy);
 	mediator->SetItemClass(item);
 	mediator->SetTutorialItemClass(item_tutorial);
 	mediator->SetInventoryClass(inventory);
 	mediator->SetMessageClass(message);
-	mediator->SetBackGroundClass(backgroud);
+	mediator->SetBackGroundClass(background);
 }
 //------------------------------------------------------------------------------------------------------------
 //メインゲームで使うクラスのインスタンス生成

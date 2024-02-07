@@ -195,9 +195,9 @@
     <ClCompile Include="program\game\GameObject\GameObject.cpp" />
     <ClCompile Include="program\game\GameObject\Item\Flashlight.cpp" />
     <ClCompile Include="program\game\GameObject\Item\Item.cpp" />
-    <ClCompile Include="program\game\GameObject\Stage\BackGroudStage.cpp" />
+    <ClCompile Include="program\game\GameObject\Stage\BackGroundStage.cpp" />
     <ClCompile Include="program\game\GameObject\Stage\Stage.cpp" />
-    <ClCompile Include="program\game\GameObject\Stage\StageParts.cpp" />
+    <ClCompile Include="program\game\GameObject\Stage\StageWall.cpp" />
     <ClCompile Include="program\game\gm_main.cpp" />
     <ClCompile Include="program\game\Manager\Factory.cpp" />
     <ClCompile Include="program\game\Manager\Manager.cpp" />
@@ -291,9 +291,9 @@
     <ClInclude Include="program\game\GameObject\GameObject.h" />
     <ClInclude Include="program\game\GameObject\Item\Flashlight.h" />
     <ClInclude Include="program\game\GameObject\Item\Item.h" />
-    <ClInclude Include="program\game\GameObject\Stage\BackGroudStage.h" />
+    <ClInclude Include="program\game\GameObject\Stage\BackGroundStage.h" />
     <ClInclude Include="program\game\GameObject\Stage\Stage.h" />
-    <ClInclude Include="program\game\GameObject\Stage\StageParts.h" />
+    <ClInclude Include="program\game\GameObject\Stage\StageWall.h" />
     <ClInclude Include="program\game\gm_main.h" />
     <ClInclude Include="program\game\Manager\Factory.h" />
     <ClInclude Include="program\game\Manager\Manager.h" />

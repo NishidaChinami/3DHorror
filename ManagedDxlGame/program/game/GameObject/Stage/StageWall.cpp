@@ -1,5 +1,5 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"StageParts.h"
+#include"StageWall.h"
 #include"../Camera/GameCamera.h"
 #include"../../Manager/Manager.h"
 #include"../../Manager/Mediator.h"
@@ -37,7 +37,7 @@ void StageWall::Draw(std::shared_ptr<GameCamera>gamecamera) {
 			, tnl::ToMinAABB(mesh->pos_ + tnl::Vector3(size.x / 2, -size.y / 2, -size.z / 2), size))) {
 			//フロッピーディスクがすべて取られていたらゴールできる
 			if (m_mediator->MGetItemFloopy()) {
-				DrawStringEx(MESS_POS.x, MESS_POS.y, -1, "外へ出る");
+				DrawStringEx(MESS_POS.x, MESS_POS.y, -1, "E 外へ出る");
 				if (tnl::Input::IsKeyDownTrigger(eKeys::KB_E)) {
 					Goal();
 				}
@@ -47,7 +47,6 @@ void StageWall::Draw(std::shared_ptr<GameCamera>gamecamera) {
 				
 		}
 	}
-
 }
 //------------------------------------------------------------------------------------------------------------
 //ゴールした時のシーン切り替えを呼ぶ関数

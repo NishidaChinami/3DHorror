@@ -11,11 +11,12 @@ class Enemy;
 class Item;
 class Inventory;
 class Message;
-class BackGroudStage;
+class BackGroundStage;
 
 //-------------------------------------------------------------------------------------------------//
 //メディエータークラス
 // オブジェクトの参照先を一つに集約する役割
+// メディエターパターンを実装したかったが、実際はデーターマネージャのような働きをしている
 //-------------------------------------------------------------------------------------------------//
 class Mediator
 {
@@ -79,33 +80,31 @@ public:
 	tnl::Vector3 MGetSkyEmissive();
 
 	//-------------------メディエータークラスに必要なクラスのポインタ------------------------------------------------//
-	void SetPlayerClass(const std::shared_ptr<Player>&player) { m_player = player; }
-	void SetStageClass(const std::shared_ptr<Stage>&stage) { m_stage = stage; }
-	void SetStageWallClass(const std::list<std::shared_ptr<StageWall>>& stagewall) { m_stagewall_list= stagewall; }
+	void SetPlayerClass(std::shared_ptr<Player>&player) { m_player = player; }
+	void SetStageClass(std::shared_ptr<Stage>&stage) { m_stage = stage; }
 	void SetEnemyClass(std::shared_ptr<Enemy>&enemy) { m_enemy = enemy; }
-	void SetItemClass(const std::list<std::shared_ptr<Item>>& item) { m_item_list = item; }
-	void SetTutorialItemClass(const std::list<std::shared_ptr<Item>>& tutorial_item) { m_tutorialitem_list = tutorial_item; }
-	void SetMessageClass(const std::shared_ptr<Message>& message) { m_message = message; }
-	void SetInventoryClass(const std::shared_ptr<Inventory>& inventory) { m_inventory = inventory; }
-	void SetBackGroundClass(const std::shared_ptr<BackGroudStage>& background) { m_backgroundstage = background; }
+	void SetItemClass(std::list<std::shared_ptr<Item>>& item) { for (auto list : item) { m_item_list.emplace_back(list); } }
+	void SetTutorialItemClass(std::list<std::shared_ptr<Item>>& tutorial_item) { for (auto list : tutorial_item) { m_tutorialitem_list.emplace_back(list); } }
+	void SetMessageClass(std::shared_ptr<Message>& message) { m_message = message; }
+	void SetInventoryClass(std::shared_ptr<Inventory>& inventory) { m_inventory = inventory; }
+	void SetBackGroundClass(std::shared_ptr<BackGroundStage>& background) { m_backgroundstage = background; }
 
 	void MSetLightParam(bool light) { m_getlight = light; }
 	bool MGetLightParam() { return m_getlight; }
 private:
 	//------------他クラスの参照用ポインタ------------------------//
-	std::shared_ptr<Player>m_player = nullptr;
-	std::list<std::shared_ptr<StageWall>>m_stagewall_list;
-	std::shared_ptr<GameCamera>m_camera = nullptr;
-	std::shared_ptr<Stage>m_stage = nullptr;
-	std::shared_ptr<Enemy>m_enemy = nullptr;
-	std::list<std::shared_ptr<Item>>m_item_list;
-	std::list<std::shared_ptr<Item>>m_tutorialitem_list;
-	std::shared_ptr<Message>m_message = nullptr;
-	std::shared_ptr<Inventory>m_inventory = nullptr;
-	std::shared_ptr<BackGroudStage>m_backgroundstage = nullptr;
-
+	//相互参照を防ぐためにweak_ptrを使用
+	std::weak_ptr<Player>m_player;
+	std::weak_ptr<GameCamera>m_camera;
+	std::weak_ptr<Stage>m_stage;
+	std::weak_ptr<Enemy>m_enemy;
+	std::list<std::weak_ptr<Item>>m_item_list;
+	std::list<std::weak_ptr<Item>>m_tutorialitem_list;
+	std::weak_ptr<Message>m_message;
+	std::weak_ptr<Inventory>m_inventory;
+	std::weak_ptr<BackGroundStage>m_backgroundstage;
 	//ライトをゲットしたかどうか
 	bool m_getlight = false;
 
-
+	
 };

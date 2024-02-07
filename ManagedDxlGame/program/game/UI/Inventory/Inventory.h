@@ -11,7 +11,7 @@ class Inventory
 {
 public:
 	Inventory();
-	~Inventory();
+	~Inventory(){}
 	//アイテムの情報をもらってインベントリーに反映させる処理
 	bool IsCanGetItem(const std::shared_ptr<Item>&item);
 	//インベントリーの描画

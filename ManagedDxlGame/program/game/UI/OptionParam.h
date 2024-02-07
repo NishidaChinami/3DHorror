@@ -14,7 +14,7 @@ public:
 	//デストラクタ関数
 	static void Destroy();
 	//更新処理
-	void Update();
+	//void Update();
 	//フォントの種類
 	enum class FontName {
 		NORMAL,
@@ -29,14 +29,14 @@ public:
 	//マウスの感度(0.2~0.05)の範囲
 	float mouse_sensitive = 0.1;
 	//文字の大きさ
-	int font_size = 0;
+	//int font_size = 0;
 	//フォントタイプ
-	FontName font = FontName::NONE;
+	//FontName font = FontName::NONE;
 private:
 	OptionParam(){}
 	//一フレーム前のフォントサイズ
-	int prev_font_size = 0;
+	//int prev_font_size = 0;
 	//一フレーム前のフォントタイプ
-	FontName prev_font = FontName::NONE;
+	//FontName prev_font = FontName::NONE;
 };
 

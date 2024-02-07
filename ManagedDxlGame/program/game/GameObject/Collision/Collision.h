@@ -21,6 +21,7 @@ public:
 		,b_(b)
 		,intersected_call_(call)
 	{}
+	~PairObject(){}
 	//オブジャクトクラスポインタ
 	std::shared_ptr<GameObject>a_;
 	std::shared_ptr<GameObject>b_;

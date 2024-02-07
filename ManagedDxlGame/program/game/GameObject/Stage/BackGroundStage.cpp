@@ -1,11 +1,11 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"BackGroudStage.h"
+#include"BackGroundStage.h"
 #include"Stage.h"
-#include"StageParts.h"
+#include"StageWall.h"
 #include"../Camera/GameCamera.h"
 #include"../../Manager/Mediator.h"
 
-BackGroudStage::BackGroudStage(const std::shared_ptr<Stage>& stage, const std::shared_ptr<Mediator>& mediator)
+BackGroundStage::BackGroundStage(const std::shared_ptr<Stage>& stage, const std::shared_ptr<Mediator>& mediator)
 {
 	//参照を受け取る
 	m_stage = stage;
@@ -68,14 +68,14 @@ BackGroudStage::BackGroudStage(const std::shared_ptr<Stage>& stage, const std::s
 	
 }
 
-BackGroudStage::~BackGroudStage()
+BackGroundStage::~BackGroundStage()
 {
 	
 }
 
 //------------------------------------------------------------------------------------------------------------
 //オリジナルメッシュからコピーメッシュして壁のメッシュを生成する関数
-void BackGroudStage::MeshCreate()
+void BackGroundStage::MeshCreate()
 {
 	//地面と天井
 	for (int row = -1; row < 4; row++) {
@@ -84,7 +84,7 @@ void BackGroudStage::MeshCreate()
 			Shared<dxe::Mesh>copy_mesh_a = nullptr;
 			Shared<dxe::Mesh>copy_mesh_b = nullptr;
 		//座標を決める
-			groudpos = { 0.0f + BackGroudStage::SIZE * col,StageWall::BLOCKHIGHT,0.0f+BackGroudStage::SIZE * row };
+			groudpos = { 0.0f + BackGroundStage::SIZE * col,StageWall::BLOCKHIGHT,0.0f+BackGroundStage::SIZE * row };
 		
 			//クローンの作成
 			copy_mesh_a = m_main_original_mesh[0]->createClone();
@@ -172,7 +172,7 @@ void BackGroudStage::MeshCreate()
 }
 //------------------------------------------------------------------------------------------------------------
 //メインステージの描画
-void BackGroudStage::MainStageDraw(std::shared_ptr<GameCamera> gamecamera)
+void BackGroundStage::MainStageDraw(std::shared_ptr<GameCamera> gamecamera)
 {
 	for (auto mesh : m_main_mesh_vector) {
 		mesh->setMtrlEmissive({ 0.1f,0.1f,0.1f });
@@ -183,7 +183,7 @@ void BackGroudStage::MainStageDraw(std::shared_ptr<GameCamera> gamecamera)
 }
 //------------------------------------------------------------------------------------------------------------
 //チュートリアルステージの描画
-void BackGroudStage::TutorialStageDraw(std::shared_ptr<GameCamera> gamecamera)
+void BackGroundStage::TutorialStageDraw(std::shared_ptr<GameCamera> gamecamera)
 {
 	//スカイボックスの描画
 	m_skybox->rot_ *= tnl::Quaternion::RotationAxis({ 0, 1, 0 }, tnl::ToRadian(0.01f));

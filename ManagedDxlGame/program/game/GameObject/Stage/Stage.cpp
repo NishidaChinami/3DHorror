@@ -13,5 +13,7 @@ Stage::Stage() {
 	maze::MakeGoal(STAGE_ROW, STAGE_COL, tmp_state);
 	maze::BreakMaze(STAGE_ROW, STAGE_COL, tmp_state);	
 };
-Stage::~Stage() {};
+Stage::~Stage() {
+
+};
 

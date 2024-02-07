@@ -8,12 +8,12 @@ class Mediator;
 //ステージの描画クラス
 //ステージのメッシュを描画する
 //-------------------------------------------------------------------------------------------------//
-class BackGroudStage
+class BackGroundStage
 {
 public:
 	//ステージの当たり判定クラスとメディエータークラスをコンストラクタの引数に持つ
-	BackGroudStage(const std::shared_ptr<Stage>&stage, const std::shared_ptr<Mediator>& mediator);
-	~BackGroudStage();
+	BackGroundStage(const std::shared_ptr<Stage>&stage, const std::shared_ptr<Mediator>& mediator);
+	~BackGroundStage();
 
 	//オリジナルメッシュからコピーメッシュして壁のメッシュを生成する関数
 	void MeshCreate();

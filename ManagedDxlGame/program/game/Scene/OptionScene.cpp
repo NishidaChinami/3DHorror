@@ -43,8 +43,11 @@ void OptionScene::Update(float delta_time) {
 					case 2:m_active_option = false; break;
 					//ƒ^ƒCƒgƒ‹‚É–ß‚é
 					case 3:
-						auto manager = GameManager::GetInstance();
-						manager->ChangeScene(std::make_shared<TitleScene>());
+						if(m_title_isvalid)m_active_option = false;
+						else {
+							auto manager = GameManager::GetInstance();
+							manager->ChangeScene(std::make_shared<TitleScene>());
+						}
 						break;
 				}
 			}

@@ -28,7 +28,7 @@ Fluorescent::~Fluorescent()
 //更新処理
 void Fluorescent::Update(float delta_time) {
 	//SetLightDifColorHandle(m_fluorescent_hdl, GetColorF(1.0f, 0, 0, 0));
-	//SetLightPositionHandle(m_fluorescent_hdl, cf::ConvertToV3( tnl::Vector3(m_mediator->MGetEnemyPos().x,500, m_mediator->MGetEnemyPos().z)));
+	SetLightPositionHandle(m_fluorescent_hdl, cf::ConvertToV3( tnl::Vector3(m_mediator->MGetEnemyPos().x,500, m_mediator->MGetEnemyPos().z)));
 	//敵との距離によって有効にするライトハンドルを決める
 	if (tnl::IsIntersectSphere(mesh->pos_ - tnl::Vector3(0,250,0), LIGHT_SIZE, m_mediator->MGetEnemyPos(), RANGE)) {
 		is_valid = true;

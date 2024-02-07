@@ -29,6 +29,7 @@ SubScene::SubScene(std::shared_ptr<Factory> factory, std::shared_ptr<Mediator> m
 
 SubScene::~SubScene()
 {
+
 }
 //------------------------------------------------------------------------------------------------------------
 //更新処理
@@ -76,11 +77,7 @@ void SubScene::Draw() {
 //------------------------------------------------------------------------------------------------------------
 //UIの待機状態
 bool SubScene::seqIdle(float delta_time) {
-	if (m_active_event) { 
-		sequence_.change(&SubScene::seqEventUI); 
-		m_active_tutorial = false;
-		return true; 
-	}
+	if (m_active_event)sequence_.change(&SubScene::seqEventUI); 
 	if (m_active_inventory)sequence_.change(&SubScene::seqInventoryUI);
 	if (GameManager::GetInstance()->is_tutorial && m_active_tutorial)sequence_.change(&SubScene::seqTutorialUI);
 	return true;
@@ -90,6 +87,11 @@ bool SubScene::seqIdle(float delta_time) {
 //操作チュートリアルのアップデート
 bool SubScene::seqTutorialUI(float delta_time) {
 	auto sound = Sound::GetInstance();
+	if (m_active_event) {
+		sequence_.change(&SubScene::seqEventUI);
+		m_active_tutorial = false;
+		return true;
+	}
 	m_time_count++;
 	//操作説明の情報をコルーチンで一つづつ描画
 	auto  date_index = m_tutorial_date.begin();
@@ -106,9 +108,9 @@ bool SubScene::seqTutorialUI(float delta_time) {
 				TNL_SEQ_CO_BREAK;
 			}
 		});
-		TNL_SEQ_CO_TIM_YIELD_RETURN(3, delta_time, [&]() {
+		TNL_SEQ_CO_TIM_YIELD_RETURN(2, delta_time, [&]() {
 			//文字のフェードアウト
-			m_alpha = 255 - m_time_count * 2;
+			m_alpha = 255 - m_time_count * 3;
 			if (m_time_count >= 255)m_time_count = 255;
 		});
 		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {

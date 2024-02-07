@@ -7,7 +7,7 @@
 #include"../Player/Player.h"
 #include"../../Camera/GameCamera.h"
 #include"../../Stage/Stage.h"
-#include"../../Stage/StageParts.h"
+#include"../../Stage/StageWall.h"
 #include"../../Item/Flashlight.h"
 //-------------------Effect file------------------------//
 #include"../../../Effect/Sound/Sound.h"
@@ -33,6 +33,7 @@ Player::Player(std::shared_ptr<GameCamera>gamecamera, const std::shared_ptr<Medi
 
 Player::~Player()
 {
+
 }
 //------------------------------------------------------------------------------------------------------------
 //XVˆ—

@@ -1,7 +1,7 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
 //-------------------Manager file------------------------//
-
+#include"../gm_main.h"
 #include"../Manager/Manager.h"
 //-------------------Scene file------------------------//
 #include"TitleScene.h"
@@ -34,6 +34,7 @@ TitleScene::TitleScene()
 	//オプションシーンを子クラスに設定
 	m_option = std::make_shared<OptionScene>(screen_efct);
 	AddChild(m_option);
+	m_option->setTitleIsValid(true);
 	//Opサウンド再生
 	auto sound = Sound::GetInstance();
 	sound->Sound2DPlay("OP");
@@ -46,7 +47,6 @@ TitleScene::~TitleScene()
 	DeleteGraph(m_title_gpc_hdl);
 	DeleteGraph(m_title_screen_hdl);
 	DeleteGraph(m_title_movie_hdl);
-
 }
 //------------------------------------------------------------------------------------------------------------
 //更新処理
@@ -69,19 +69,22 @@ void TitleScene::Update(float delta_time) {
 					case 0: {
 						manager->ChangeScene(std::make_shared<PlayScene>());
 						manager->is_tutorial = false;
+						m_option->setTitleIsValid(false);
 						break;
 					}
 					//メインゲームから
 					case 1: {
 						manager->ChangeScene(std::make_shared<TutorialScene>());
 						manager->is_tutorial = true;
+						m_option->setTitleIsValid(false);
 						break;
 					}
 					//オプション画面の表示
 					case 2: {m_option->setShowOption(true); break; }
 					//ゲームをやめる
 					case 3: {
-						DxLib_End();
+						gameEnd();
+						exit(0);
 						break;
 					}
 
@@ -131,12 +134,10 @@ bool TitleScene::seqTitle(float delta_time) {
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	// 動画再生　コルーチンで無限再生
-	while (1) {
+	while (true) {
 		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {
-
 			GraphFilterBlt(m_title_movie_hdl, m_title_screen_hdl, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, 50, true, GetColor(0, 0, 0), 0);
 			DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_WIDTH, m_title_screen_hdl, TRUE);
-
 		});
 	}
 	TNL_SEQ_CO_END;

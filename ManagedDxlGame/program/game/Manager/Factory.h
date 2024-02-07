@@ -9,7 +9,7 @@ class Stage;
 class StageWall;
 class Enemy;
 class Item;
-class BackGroudStage;
+class BackGroundStage;
 class Sound;
 class Fluorescent;
 class Inventory;
@@ -48,7 +48,7 @@ public:
 	std::list<std::shared_ptr<Item>>GetClassTutorialItemList() { return item_tutorial; }
 	std::list<std::shared_ptr<StageWall>>GetClassStageWall() { return stagewall; }
 	std::list<std::shared_ptr<StageWall>>GetClassStageTutorial() { return tutorialstage; }
-	std::shared_ptr<BackGroudStage>GetClassBackGroudStage() { return backgroud; }
+	std::shared_ptr<BackGroundStage>GetClassBackGroundStage() { return background; }
 	std::shared_ptr<Inventory>GetClassInventory() { return inventory; }
 	std::shared_ptr<Message>GetClassMessage() { return message; }
 	
@@ -79,7 +79,7 @@ private:
 	std::list<std::shared_ptr<StageWall>>stagewall;
 	std::list<std::shared_ptr<StageWall>>tutorialstage;
 	//ステージの描画クラス
-	std::shared_ptr<BackGroudStage>backgroud = nullptr;
+	std::shared_ptr<BackGroundStage>background = nullptr;
 	//照明クラスリスト
 	std::list<std::shared_ptr<Fluorescent>>fluorescent;
 	//文章のデータクラスポインタ

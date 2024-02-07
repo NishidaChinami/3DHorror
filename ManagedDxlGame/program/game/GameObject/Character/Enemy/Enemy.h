@@ -3,7 +3,7 @@
 #include"../../GameObject.h"
 #include"../Mylibrary/maze.h"
 #include"../Mylibrary/astar.h"
-#include"../../Stage/StageParts.h"
+#include"../../Stage/StageWall.h"
 #include"../../Stage/Stage.h"
 
 class GameCamera;

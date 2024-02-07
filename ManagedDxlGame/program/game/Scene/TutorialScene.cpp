@@ -12,8 +12,8 @@
 #include"../GameObject/Collision/Collision.h"
 #include"../GameObject/Character/Player/Player.h"
 #include"../GameObject/Item/Item.h"
-#include"../GameObject/Stage/StageParts.h"
-#include"../GameObject/Stage/BackGroudStage.h"
+#include"../GameObject/Stage/StageWall.h"
+#include"../GameObject/Stage/BackGroundStage.h"
 //-------------------UI file------------------------//
 #include"../UI/OptionParam.h"
 //-------------------Effect file------------------------//
@@ -50,11 +50,13 @@ TutorialScene::TutorialScene()
 	CollisionFunc();
 	//BGM再生
 	Sound::GetInstance()->Sound2DPlay("RAIN");
+
 }
 
 TutorialScene::~TutorialScene()
 {
 	Sound::GetInstance()->SoundStop("RAIN");
+	Sound::GetInstance()->SoundStop("TUTORIAL");
 }
 //------------------------------------------------------------------------------------------------------------
 //更新処理
@@ -87,12 +89,14 @@ void TutorialScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //描画処理
 void TutorialScene::Draw() {
+	SetFontSize(18);
+	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	//シャドウマップの準備
 	m_shadow->reserveBegin();
 	for (auto obj_t : m_factory->GetClassObj_Tutorial()) {
 		obj_t->mesh->reserveShadow();
 	}
-	for (auto stage_mesh : m_factory->GetClassBackGroudStage()->getMesh()) {
+	for (auto stage_mesh : m_factory->GetClassBackGroundStage()->getMesh()) {
 		stage_mesh->reserveShadow();
 	}
 	m_shadow->reserveEnd();
@@ -100,7 +104,7 @@ void TutorialScene::Draw() {
 	screen_efct->renderBegin();
 	m_shadow->renderBegin();
 
-	m_factory->GetClassBackGroudStage()->TutorialStageDraw(m_factory->GetClassCamera());
+	m_factory->GetClassBackGroundStage()->TutorialStageDraw(m_factory->GetClassCamera());
 	particle->Draw(m_factory->GetClassCamera());
 	for (auto obj_t : m_factory->GetClassObj_Tutorial()) {
 		obj_t->Draw(m_factory->GetClassCamera());
@@ -112,6 +116,7 @@ void TutorialScene::Draw() {
 		child->Draw();
 	}
 	screen_efct->renderEnd();
+
 }
 
 //------------------------------------------------------------------------------------------------------------

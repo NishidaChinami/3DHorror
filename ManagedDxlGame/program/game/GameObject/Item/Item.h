@@ -3,7 +3,7 @@
 #include"../Mylibrary/Conversion.h"
 #include"../GameObject.h"
 #include"../../GameObject/Stage/Stage.h"
-#include"../Stage/StageParts.h"
+#include"../Stage/StageWall.h"
 
 class GameCamera;
 class Inventory;

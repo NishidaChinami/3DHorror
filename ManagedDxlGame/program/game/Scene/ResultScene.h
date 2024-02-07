@@ -17,7 +17,7 @@ public:
 	void Draw()override;
 private:
 	//エンディングの背景と文字の保存する変数
-	int m_backgroud_hdl = 0;
+	int m_background_hdl = 0;
 	std::string letter;
 	
 	//ゲームクリアとゲームオーバーの背景ハンドル
