@@ -20,7 +20,7 @@
 void gameStart() {
 	srand(time(0));
 	//シングルトンを実装したクラスのインスタンス生成
-	GameManager::GetInstance(std::make_shared<PlayScene>());
+	GameManager::GetInstance(std::make_shared<TitleScene>());
 	OptionParam::GetInstance();
 	Sound::GetInstance();
 	SetWindowText("うしろの正面…だあれ？");
@@ -37,6 +37,7 @@ void gameMain(float delta_time) {
 	GameManager::GetInstance()->Update(delta_time);
 	//音量調整
 	Sound::GetInstance()->ChangeVolume();
+	OptionParam::GetInstance()->Update();
 	DrawFpsIndicator({ 10, DXE_WINDOW_HEIGHT - 10, 0 }, delta_time);
 }
 

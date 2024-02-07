@@ -22,7 +22,7 @@ void Inventory::Draw() {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH/2,DXE_WINDOW_HEIGHT/2,0),INVENTORY_WIGHT,INVENTORY_HEIGHT,true,0);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-	DrawStringEx(370, 280, -1, "Ž‚¿•¨");
+	DrawStringEx(INVENTORY_POS.x, INVENTORY_POS.y, -1, "Ž‚¿•¨");
 	//ƒXƒƒbƒg‚Ì•`‰æ
 	for (auto slot : m_slot) {
 		slot->Draw();

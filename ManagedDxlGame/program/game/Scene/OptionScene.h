@@ -76,5 +76,7 @@ private:
 
 	//文字の当たり判定のサイズ
 	const tnl::Vector3 MENU_SIZE = { 200,50,0 };
+	//フォントサイズ
+	const int MENU_FONT = 18;
 };
 

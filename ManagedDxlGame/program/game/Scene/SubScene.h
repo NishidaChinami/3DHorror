@@ -69,11 +69,14 @@ private:
 	const float EVENTUI_WIGHT = 800;
 	const float EVENTUI_HEIGHT = 600;
 	//各文字の座標
-	const tnl::Vector3 TUTORIAL_MESSEAGE = { 640,400,0 };
+	const tnl::Vector3 TUTORIAL_MESSEAGE = { 640,450,0 };
 	const tnl::Vector3 DASHGAUGE_POS = { 640,620,0 };
 	//体力ゲージの高さ
 	const float GAUGE_HEIGHT = 5;
-
+	//文字のサイズ
+	const int TUTORIAL_FONT = 25;
+	const int EVENT_FONT = 18;
+	const int INVENTORY_FONT = 20;
 
 };
 

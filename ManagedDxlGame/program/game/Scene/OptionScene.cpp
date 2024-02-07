@@ -69,8 +69,8 @@ void OptionScene::Draw() {
 	DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH	/2+100, DXE_WINDOW_HEIGHT / 2, 0), OPTION_WIDTH, OPTION_HEIGHT, true, 0);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	//ÉÅÉjÉÖÅ[çÄñ⁄ÇÃï∂éöÇÃï`âÊ
-	SetFontSize(20);
-	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
+	SetFontSize(MENU_FONT);
+	ChangeFont("Shippori Mincho B1", DX_CHARSET_DEFAULT);
 	for (int i = 0; i < MENU_NUM; i++) {
 		tnl::Vector3 pos = { MENU_POS.x, MENU_POS.y + i * 50,0 };
 		cf::DrawCenterString(MENU_LETTER[i].c_str(), pos, color_index[i]);

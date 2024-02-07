@@ -26,7 +26,7 @@ public:
 	//------------Getter/Setter------------------------//
 	tnl::Vector3 getSkyEmissive() {return m_skybox->getMtrlEmissive();}
 	void setSkyEmissive(tnl::Vector3 param) { m_skybox->setMtrlEmissive({ param.x,param.y,param.z }); }
-	const std::vector<Shared<dxe::Mesh>>& getMesh()const { m_tutorial_mesh_vector; }
+	const std::vector<Shared<dxe::Mesh>>& getMesh()const { return m_tutorial_mesh_vector; }
 private:
 
 	//メッシュを保存するベクター

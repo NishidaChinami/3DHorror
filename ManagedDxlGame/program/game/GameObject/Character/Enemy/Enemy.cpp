@@ -30,7 +30,6 @@ Enemy::~Enemy()
 {
 	MV1DeleteModel(m_model_enemy);
 	DeleteGraph(m_texture_enmey);
-	Sound::GetInstance()->SoundStop("ENEMYAPPROACHING");
 }
 //------------------------------------------------------------------------------------------------------------
 //çXêVèàóù

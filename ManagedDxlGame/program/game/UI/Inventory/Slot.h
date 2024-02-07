@@ -35,7 +35,10 @@ private:
 	Item::ItemType m_itemtype;
 	//取得したアイテムのUI画像の２D座標
 	tnl::Vector3 m_pos;
+	//------------------------------定数------------------------------------------//
 	//スロットの枠のサイズ
 	const float SLOTSIZE = 100;
+	//フォントサイズ
+	const int SLIOT_FONT = 16;
 };
 

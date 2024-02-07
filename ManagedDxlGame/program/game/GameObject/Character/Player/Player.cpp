@@ -80,7 +80,7 @@ bool Player::seqWalk(const float delta_time) {
 	mesh->rot_ = m_gamecamera->getCameraRot();
 
 	//スタミナ管理
-	if (m_stamina < MAXSTAMINA) m_stamina++;
+	if (m_stamina < MAXSTAMINA) m_stamina += 2;
 	if (m_stamina >= MAXSTAMINA/2)m_can_dash = true;
 
 	//サウンド再生と停止

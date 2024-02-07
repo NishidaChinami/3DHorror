@@ -37,7 +37,7 @@ private:
 	//文字の当たり判定のサイズ
 	const tnl::Vector3 LETTER_SIZE = { 100,50,0 };
 	//文字のフォントサイズ
-	const float RESULT_FONT_SIZE = 40;
+	const float RESULT_FONT_SIZE = 50;
 	const float SELECT_FONT_SIZE = 20;
 };
 

@@ -99,6 +99,7 @@ void PlayScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //•`‰æˆ—
 void PlayScene::Draw() {
+	SetFontSize(16);
 	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	//ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
 	screen_efct->renderBegin();

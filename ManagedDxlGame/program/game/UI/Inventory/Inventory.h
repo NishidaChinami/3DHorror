@@ -24,5 +24,6 @@ private:
 	//インベントリーの外枠のサイズ
 	const float INVENTORY_WIGHT = 600;
 	const float INVENTORY_HEIGHT = 220;
+	tnl::Vector3 INVENTORY_POS = { 370,280,0 };
 };
 

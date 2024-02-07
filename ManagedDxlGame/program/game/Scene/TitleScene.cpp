@@ -1,12 +1,17 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
+
+#include"../Manager/Manager.h"
+//-------------------Scene file------------------------//
 #include"TitleScene.h"
 #include"PlayScene.h"
 #include"OptionScene.h";
 #include"TurorialScene.h"
-#include"../Manager/Manager.h"
+//-------------------UI file------------------------//
+#include"../UI/OptionParam.h"
+//-------------------Effect file------------------------//
 #include"../Effect/Sound/Sound.h"
-
 
 TitleScene::TitleScene()
 {
@@ -75,7 +80,10 @@ void TitleScene::Update(float delta_time) {
 					//オプション画面の表示
 					case 2: {m_option->setShowOption(true); break; }
 					//ゲームをやめる
-					case 3:break;
+					case 3: {
+						DxLib_End();
+						break;
+					}
 
 				}
 			}
@@ -93,6 +101,8 @@ void TitleScene::Draw() {
 	//透過の値を時間経過で変化
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	SetFontSize(TITLE_FONT_SIZE);
+	ChangeFont("g_コミックホラー恐怖-教漢", DX_CHARSET_DEFAULT);
 	//タイトル文字の描画
 	for (int i = 0; i < TITLE_NUM; i++) {
 		DrawStringEx(1100 - i * 10, 100 + i * 50, -1, "%s", TITLE[i].c_str());
@@ -101,7 +111,7 @@ void TitleScene::Draw() {
 	//タイトルの文字が描画されたらタイトルの選択項目の表示
 	if (alpha >= 200) {
 		SetFontSize(MENU_FONT_SIZE);
-		ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
+		ChangeFont("Shippori Mincho B1", DX_CHARSET_DEFAULT);
 		for (int i = 0; i < BUTTON_NUM; i++) {
 			cf::DrawCenterString(START_BUTTON[i].c_str(), tnl::Vector3(TITLE_SELECT_POS.x, TITLE_SELECT_POS.y + i * 50, 0), color_index[i]);
 		}
@@ -114,15 +124,12 @@ void TitleScene::Draw() {
 //------------------------------------------------------------------------------------------------------------
 //動画再生
 bool TitleScene::seqTitle(float delta_time) {
-	SetFontSize(TITLE_FONT_SIZE);
-	ChangeFont("g_コミックホラー恐怖-教漢", DX_CHARSET_DEFAULT);
 	//背景の描画
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-
 	// 動画再生　コルーチンで無限再生
 	while (1) {
 		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {

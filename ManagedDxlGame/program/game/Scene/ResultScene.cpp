@@ -1,9 +1,12 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"ResultScene.h"
-#include"../Manager/Manager.h"
 #include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
+#include"../Manager/Manager.h"
+//-------------------Scene file------------------------//
+#include"ResultScene.h"
 #include"PlayScene.h"
 #include"TitleScene.h"
+//-------------------Effect file------------------------//
 #include"../Effect/Sound/Sound.h"
 
 
@@ -26,6 +29,9 @@ ResultScene::ResultScene()
 	}
 	//BGMの再生
 	Sound::GetInstance()->Sound2DPlay("END");
+	Sound::GetInstance()->SoundStop("ENEMYAPPROACHING");
+	//フォント
+	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 }
 
 ResultScene::~ResultScene()
@@ -66,9 +72,7 @@ void ResultScene::Draw()
 	//文字とカーソルが当たっているときに色を変更する
 	color_title = (cf::IntersectMouse(TITLE_POS, LETTER_SIZE)) ? -1 : 0x88888888;
 	color_restart = (cf::IntersectMouse(REPLAY_POS, LETTER_SIZE))? -1: 0x88888888;
-	
 	SetFontSize(RESULT_FONT_SIZE);
-	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	//文字と背景の描画
 	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, 1, 1, m_backgroud_hdl, true);
 	cf::DrawCenterString(letter.c_str(), CENTER_POS);

@@ -3,6 +3,7 @@
 #include"../Mylibrary/Conversion.h"
 #include"Slot.h"
 #include"Inventory.h"
+#include"../../UI/OptionParam.h"
 
 
 Slot::~Slot()
@@ -28,6 +29,7 @@ void Slot::Draw() {
 void Slot::Explanation() {
 	if (m_is_valid) {
 		if (cf::IntersectMouse(m_pos, tnl::Vector3(SLOTSIZE, SLOTSIZE, 0))) {
+			SetFontSize(SLIOT_FONT);
 			cf::DrawCenterString(m_explanation.c_str(),tnl::Vector3(m_pos.x,m_pos.y+50,0));
 		}
 	}

@@ -1,13 +1,19 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"SubScene.h"
-#include"PlayScene.h"
 #include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
 #include"../Manager/Manager.h"
 #include"../Manager/Factory.h"
 #include"../Manager/Mediator.h"
+//-------------------Scene file------------------------//
+#include"SubScene.h"
+//-------------------GameObject file------------------------//
+#include"PlayScene.h"
+#include"../GameObject/Character/Player/Player.h"
+//-------------------UI file------------------------//
 #include"../UI/Inventory/Inventory.h"
 #include"../UI/Message.h"
-#include"../GameObject/Character/Player/Player.h"
+#include"../UI/OptionParam.h"
+//-------------------Effect file------------------------//
 #include"../Effect/Sound/Sound.h"
 
 SubScene::SubScene(std::shared_ptr<Factory> factory, std::shared_ptr<Mediator> mediator) :m_factory(factory), m_mediator(mediator)
@@ -32,37 +38,49 @@ void SubScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //描画関数
 void SubScene::Draw() {
-	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	auto manager = GameManager::GetInstance();
+	ChangeFont("Shippori Mincho B1", DX_CHARSET_DEFAULT);
 	//イベントUIの描画
 	if (m_active_event) {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 		DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH/2, DXE_WINDOW_HEIGHT/2, 0), EVENTUI_WIGHT, EVENTUI_HEIGHT, true, 0);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		SetFontSize(EVENT_FONT);
 		m_factory->GetClassMessage()->MessageDraw();
 	}
 	//インベントリーUIの描画
-	else if(m_active_inventory)m_factory->GetClassInventory()->Draw();
+	else if (m_active_inventory) {
+		SetFontSize(INVENTORY_FONT);
+		m_factory->GetClassInventory()->Draw();
+	}
 	//イベントUIが開いてないときのUI描画
 	else {
 		//画面の中心
-		DrawStringEx(640, 360, -1, "+");
+		//SetFontSize(10);
+		DrawStringEx(640, 360, -1, "・");
 		//走るときのスタミナゲージ
 		if (m_mediator->MGetPlayerStamina() < Player::MAXSTAMINA) {
-			DrawBoxEx(DASHGAUGE_POS, m_mediator->MGetPlayerStamina()/2, GAUGE_HEIGHT, true, -1);
+			DrawBoxEx(DASHGAUGE_POS, m_mediator->MGetPlayerStamina() / 2, GAUGE_HEIGHT, true, -1);
 		}
+		
 	}
 	//チュートリアル中の文字の描画
 	if (m_active_tutorial) {
+		SetFontSize(TUTORIAL_FONT);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_alpha);
 		cf::DrawCenterString(m_tutorial_message.c_str(),TUTORIAL_MESSEAGE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
+	
 }
 //------------------------------------------------------------------------------------------------------------
 //UIの待機状態
 bool SubScene::seqIdle(float delta_time) {
-	if (m_active_event)sequence_.change(&SubScene::seqEventUI);
+	if (m_active_event) { 
+		sequence_.change(&SubScene::seqEventUI); 
+		m_active_tutorial = false;
+		return true; 
+	}
 	if (m_active_inventory)sequence_.change(&SubScene::seqInventoryUI);
 	if (GameManager::GetInstance()->is_tutorial && m_active_tutorial)sequence_.change(&SubScene::seqTutorialUI);
 	return true;
@@ -87,13 +105,15 @@ bool SubScene::seqTutorialUI(float delta_time) {
 				m_time_count = 0;
 				TNL_SEQ_CO_BREAK;
 			}
-			});
-		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {
+		});
+		TNL_SEQ_CO_TIM_YIELD_RETURN(3, delta_time, [&]() {
 			//文字のフェードアウト
 			m_alpha = 255 - m_time_count * 2;
 			if (m_time_count >= 255)m_time_count = 255;
+		});
+		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {
 			if (m_mediator->MGetLightParam() == date_index->s_light_flug) TNL_SEQ_CO_BREAK;
-			});
+		});
 		date_index++;
 		if (date_index == m_tutorial_date.end()) {
 			m_tutorial_message = { "" };
