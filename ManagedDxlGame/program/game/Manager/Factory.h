@@ -81,7 +81,7 @@ private:
 	//ステージの描画クラス
 	std::shared_ptr<BackGroundStage>m_background = nullptr;
 	//照明クラスリスト
-	std::list<std::shared_ptr<Fluorescent>>m_fluorescent;
+	std::list<std::shared_ptr<Fluorescent>>m_fluorescent_list;
 	//文章のデータクラスポインタ
 	std::shared_ptr<Message>m_message = nullptr;
 	//インベントリー

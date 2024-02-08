@@ -27,7 +27,9 @@ void gameStart() {
 	OptionParam::GetInstance();
 	Sound::GetInstance();
 	SetWindowText("‚¤‚µ‚ë‚Ì³–Êc‚¾‚ ‚êH");
-
+	tnl::AddFontTTF("font/g_comichorrorR_freeR.ttf");
+	tnl::AddFontTTF("font/HinaMincho-Regular.ttf");
+	tnl::AddFontTTF("font/ShipporiMinchoB1-Regular.ttf");
 
 
 }
@@ -40,7 +42,7 @@ void gameMain(float delta_time) {
 	GameManager::GetInstance()->Update(delta_time);
 	//‰¹—Ê’²®
 	Sound::GetInstance()->ChangeVolume();
-	DrawFpsIndicator({ 10, DXE_WINDOW_HEIGHT - 10, 0 }, delta_time);
+	//DrawFpsIndicator({ 10, DXE_WINDOW_HEIGHT - 10, 0 }, delta_time);
 }
 
 //------------------------------------------------------------------------------------------------------------

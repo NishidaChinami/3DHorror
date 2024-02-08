@@ -33,7 +33,11 @@ Player::Player(std::shared_ptr<GameCamera>gamecamera, const std::shared_ptr<Medi
 
 Player::~Player()
 {
-
+	Sound::GetInstance()->SoundStop("WALK");
+	Sound::GetInstance()->SoundStop("RUN");
+	Sound::GetInstance()->SoundStop("GROUNDWALK");
+	Sound::GetInstance()->SoundStop("GROUNDRUN");
+	Sound::GetInstance()->SoundStop("BREATHLESSNESS");
 }
 //------------------------------------------------------------------------------------------------------------
 //更新処理
@@ -88,6 +92,7 @@ bool Player::seqWalk(const float delta_time) {
 	auto sound = Sound::GetInstance();
 	sound->SoundStop(m_run_sound.c_str());
 	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), (mesh->pos_ - tnl::Vector3(0, 200, 0)), "WALK");
+	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ + tnl::Vector3(0, 200, 0), "BREATHLESSNESS");
 	if (!sound->SoundPlaying(m_walk_sound.c_str()))sound->SoundPlay(m_walk_sound.c_str());
 	if(m_can_dash)sound->SoundStop("BREATHLESSNESS");
 	
@@ -110,7 +115,7 @@ bool Player::seqRun(const float delta_time) {
 	//速度を走る設定
 	m_speed = DASH_SPEED;
 	//スタミナの減少
-	m_stamina -= 2;
+	m_stamina -= 3;
 	//カメラから移動と回転を取得
 	mesh->pos_ = m_gamecamera->pos_;
 	mesh->rot_ = m_gamecamera->getCameraRot();
@@ -124,9 +129,9 @@ bool Player::seqRun(const float delta_time) {
 	auto sound = Sound::GetInstance();
 	sound->SoundStop(m_walk_sound.c_str());
 	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_- tnl::Vector3(0,200,0), "RUN");
-	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ - tnl::Vector3(0, 200, 0), "BREATHLESSNESS");
+	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ + tnl::Vector3(0, 200, 0), "BREATHLESSNESS");
 	if (!sound->SoundPlaying(m_run_sound.c_str())) sound->SoundPlay(m_run_sound.c_str());
-	if(m_can_dash)sound->SoundPlay("BREATHLESSNESS");
+	if(!m_can_dash)sound->SoundPlay("BREATHLESSNESS");
 	//シーケンスの切り替え処理
 	if (!tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) sequence_.change(&Player::seqWalk);
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) sequence_.change(&Player::seqSneek);

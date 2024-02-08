@@ -45,4 +45,8 @@ private:
 
 	//----------------------’è”------------------------//
 	const tnl::Vector3 MESSAGE_POS = { 640,200,0 };
+	const tnl::Vector3 CLOSE_POS = { 900,600,0 };
+	const std::string CLOSE_MESS = { "¶ƒNƒŠƒbƒN‚Å•Â‚¶‚é" };
+	int FONT_SIZE = 14;
+
 };

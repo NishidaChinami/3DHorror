@@ -159,16 +159,17 @@ bool Enemy::seqMovement(const float delta_time) {
 //目的地のアップデート
 bool Enemy::seqUpdatePoint(const float delta_time) {
 	m_index--;
-
-	if (WithinSight()) {
-		sequence_.change(&Enemy::seqTrack); 
-		chase_state = true;
-		return true;
-	}
-	if (Hearing()) {
-		sequence_.change(&Enemy::seqTrack); 
-		chase_state = true;
-		return true;
+	if (!chase_state) {
+		if (WithinSight()) {
+			sequence_.change(&Enemy::seqTrack);
+			chase_state = true;
+			return true;
+		}
+		if (Hearing()) {
+			sequence_.change(&Enemy::seqTrack);
+			chase_state = true;
+			return true;
+		}
 	}
 	if (m_index < 0) {
 		if (chase_state)sequence_.change(&Enemy::seqTrack);

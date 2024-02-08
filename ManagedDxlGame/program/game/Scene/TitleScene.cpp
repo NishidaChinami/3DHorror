@@ -38,6 +38,8 @@ TitleScene::TitleScene()
 	//Opサウンド再生
 	auto sound = Sound::GetInstance();
 	sound->Sound2DPlay("OP");
+	//カーソル表示
+	SetMouseDispFlag(true);
 }
 
 TitleScene::~TitleScene()
@@ -133,13 +135,13 @@ bool TitleScene::seqTitle(float delta_time) {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	GraphFilterBlt(m_title_movie_hdl, m_title_screen_hdl, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, 50, true, GetColor(0, 0, 0), 0);
+	DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_WIDTH, m_title_screen_hdl, TRUE);
 	// 動画再生　コルーチンで無限再生
-	while (true) {
-		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {
-			GraphFilterBlt(m_title_movie_hdl, m_title_screen_hdl, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, 50, true, GetColor(0, 0, 0), 0);
-			DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_WIDTH, m_title_screen_hdl, TRUE);
-		});
-	}
+	TNL_SEQ_CO_FRM_YIELD_RETURN(-1, delta_time, [&]() {
+		//PlayMovieToGraph(m_title_movie_hdl, DX_MOVIEPLAYTYPE_NORMAL);
+		
+	});
 	TNL_SEQ_CO_END;
 	
 	return true;

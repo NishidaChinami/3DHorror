@@ -58,7 +58,7 @@ private:
 	//選択項目の文字の色の配列
 	int color_index[BUTTON_NUM] = { 0 };
 	//タイトルの選択項目
-	const std::string START_BUTTON[BUTTON_NUM] = { "ゲームを始める","シナリオ","オプション","ゲームをやめる"};	
+	const std::string START_BUTTON[BUTTON_NUM] = { "ゲームを始める","チュートリアル","オプション","ゲームをやめる"};	
 	//全角の１文字の大きさ
 	const int FULLWIGHT = 2;
 	//フェードの速度変数

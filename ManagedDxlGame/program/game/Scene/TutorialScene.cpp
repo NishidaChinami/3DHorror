@@ -116,6 +116,9 @@ void TutorialScene::Draw() {
 	for (auto child : m_child_list) {
 		child->Draw();
 	}
+	//カーソル表示
+	if (m_subscene->getBoolEvent() || m_subscene->getBoolInventory() || m_option->getShowOption())	SetMouseDispFlag(true);
+	else SetMouseDispFlag(false);
 	screen_efct->renderEnd();
 
 }

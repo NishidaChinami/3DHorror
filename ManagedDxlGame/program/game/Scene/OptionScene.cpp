@@ -41,7 +41,10 @@ void OptionScene::Update(float delta_time) {
 					//遊び方
 					case 1:m_menu = false; break;
 					//ゲームを再開
-					case 2:m_active_option = false; break;
+					case 2: {
+						m_active_option = false; 
+						break;
+					}
 					//タイトルに戻る
 					case 3:
 						if(m_title_isvalid)m_active_option = false;

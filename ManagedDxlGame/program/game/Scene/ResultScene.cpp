@@ -20,7 +20,7 @@ ResultScene::ResultScene()
 	if (mgr->can_clear) {
 		letter = CLEAR;
 		m_background_hdl = m_cleargpc_hdl;
-		//クリア音の再生
+		////BGMとクリア音の再生
 		Sound::GetInstance()->Sound2DPlay("CLEAR", DX_PLAYTYPE_BACK);
 	}
 	else {
@@ -66,6 +66,8 @@ void ResultScene::Update(float delta_time)
 //描画処理
 void ResultScene::Draw()
 {
+	//カーソル表示
+	SetMouseDispFlag(true);
 	int color_title = 0;
 	int color_restart = 0;
 	//文字とカーソルが当たっているときに色を変更する

@@ -39,4 +39,6 @@ void Message::MessageDraw() {
 		tnl::Vector3 pos = { MESSAGE_POS.x,MESSAGE_POS.y + i * 50.0f,0 };
 		cf::DrawCenterString(m_message_string_vector[i], pos);
 	}
+	SetFontSize(FONT_SIZE);
+	cf::DrawCenterString(CLOSE_MESS, CLOSE_POS);
 }

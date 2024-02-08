@@ -139,7 +139,7 @@ void Factory::CreatMainGame() {
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
 			//通路だったらライトを配置
 			if(m_stage->getStgaeState(r, c) == maze::StageState::Empty)
-				m_fluorescent.emplace_back(std::make_shared<Fluorescent>(pos,m_mediator));
+				m_fluorescent_list.emplace_back(std::make_shared<Fluorescent>(pos,m_mediator));
 		}
 	}
 	//懐中電灯を追加
@@ -179,11 +179,12 @@ void Factory::AddMainObject() {
 		mazes++;
 	}
 	//照明クラス
-	auto light = m_fluorescent.begin();
-	while (light != m_fluorescent.end()) {
+	auto light = m_fluorescent_list.begin();
+	while (light != m_fluorescent_list.end()) {
 		m_object_list.emplace_back(*light);
 		light++;
 	}
+	
 	//敵クラス
 	m_object_list.emplace_back(m_enemy);
 	//アイテムクラス

@@ -57,7 +57,7 @@ private:
 	Shared<dxe::GuiValueSlider< OptionScene, float >>gui_sensitive;
 	//----------------------定数------------------------//
 	//オプション画面の文字
-	const std::string MENU_LETTER[MENU_NUM] = { "操作説明","設定","ゲームに戻る","ゲームをやめる" };
+	const std::string MENU_LETTER[MENU_NUM] = { "操作説明","設定","ゲームに戻る","タイトルへ戻る" };
 	const std::string MENU_SELECT[SELECT_NUM] = { "音量","画面の明るさ","マウス感度" };
 	//オプション画面のボックスのサイズ
 	const float OPTION_WIDTH = 720;

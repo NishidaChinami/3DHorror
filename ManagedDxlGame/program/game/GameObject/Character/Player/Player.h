@@ -37,7 +37,7 @@ public:
 	float getPlayerStamina() const { return m_stamina; }
 	bool getPlayerDash()const { return m_can_dash; }
 
-	static const int MAXSTAMINA = 1200;
+	static const int MAXSTAMINA = 1000;
 private:
 	//プレイヤーの移動状態を管理するシークエンス
 	tnl::Sequence<Player> sequence_ = tnl::Sequence<Player>(this, &Player::seqWalk);
