@@ -7,7 +7,7 @@
 #include"TitleScene.h"
 #include"PlayScene.h"
 #include"OptionScene.h";
-#include"TurorialScene.h"
+#include"TutorialScene.h"
 //-------------------UI file------------------------//
 #include"../UI/OptionParam.h"
 //-------------------Effect file------------------------//
@@ -16,7 +16,7 @@
 TitleScene::TitleScene()
 {
 	//画像ハンドルの読み込み
-	m_title_gpc_hdl = LoadGraph("graphics/nc296749.jpg");
+	m_title_gpc_hdl = LoadGraph("graphics/title.jpg");
 	//タイトル動画読み込み
 	m_title_movie_hdl = LoadGraph("movie/ホラー風ノイズ_無料版.mp4");
 	//動画の画像サイズを取得

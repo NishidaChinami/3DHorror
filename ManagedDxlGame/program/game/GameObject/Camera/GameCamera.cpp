@@ -1,6 +1,6 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"GameCamera.h"
 #include"../../Manager/Mediator.h"
+#include"GameCamera.h"
 #include"../../UI/OptionParam.h"
 
 

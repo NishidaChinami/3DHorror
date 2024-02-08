@@ -3,7 +3,7 @@
 #include"../Manager/Factory.h"
 #include"../Manager/Mediator.h"
 //-------------------Scene file------------------------//
-#include"TurorialScene.h"
+#include"TutorialScene.h"
 #include"SubScene.h"
 #include"OptionScene.h"
 //-------------------GameObject file------------------------//
@@ -28,6 +28,7 @@ TutorialScene::TutorialScene()
 	SetFogEnable(false);
 	ChangeLightTypeDir(VGet(-1.0f, -0.5f, 0.0f));
 	SetLightPosition(cf::ConvertToV3(tnl::Vector3(0,1800,0)));
+	SetLightDifColor(GetColorF(0.2f, 0.2f, 0.2f, 0));
 	SetBackgroundColor(32, 32, 32);
 
 	//インスタンス生成
@@ -80,9 +81,9 @@ void TutorialScene::Update(float delta_time) {
 	}
 	
 	//全当たり判定を検知
-	for (auto li : m_collision->intersect_list_) {
+	for (auto li : m_collision->m_intersect_list) {
 		if (tnl::IsIntersectAABB(li.a_->mesh->pos_, li.a_->GetObjectSize(), li.b_->mesh->pos_, li.b_->GetObjectSize())) {
-			li.intersected_call_(li.a_, li.b_);
+			li.m_intersected_call(li.a_, li.b_);
 		}
 	}
 }

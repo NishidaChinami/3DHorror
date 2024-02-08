@@ -18,7 +18,7 @@ public:
 	void Draw();
 private:
 	//スロットのポインタ
-	std::vector<std::shared_ptr<Slot>>m_slot;
+	std::vector<std::shared_ptr<Slot>>m_slot_vector;
 
 	//------------------------------定数------------------------------------------//
 	//インベントリーの外枠のサイズ

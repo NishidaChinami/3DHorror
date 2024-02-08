@@ -2,18 +2,19 @@
 #include"Conversion.h"
 
 namespace cf {
+	//------------------------------------------------------------------------------------------------------------
 	//QuaternionからDxlibの3D関数に使えるVector3型に変換
 	VECTOR  ConvertV4ToV3(tnl::Quaternion rot) {
 		tnl::Vector3 v3_rot = rot.getEuler();
 		return { TNL_DEP_V3(v3_rot) };
 	}
-
+	//------------------------------------------------------------------------------------------------------------
 	//tnl::Vector3をVECTORに変換する
 	VECTOR ConvertToV3(const tnl::Vector3& tnl_pos)
 	{
 		return VGet(tnl_pos.x, tnl_pos.y, tnl_pos.z);
 	}
-
+	//------------------------------------------------------------------------------------------------------------
 	//２次元配列の位置をPosから求める
 	tnl::Vector2i GridPos(const tnl::Vector3& pos, const tnl::Vector3& startpos, int size) {
 		int x = 0;
@@ -22,7 +23,7 @@ namespace cf {
 		y = (pos.z - startpos.z + size/2) / size;
 		return tnl::Vector2i(x, y); 
 	}
-
+	//------------------------------------------------------------------------------------------------------------
 	//マップの配列から座標を求める
 	tnl::Vector3 Coordinate(tnl::Vector2i gridpos, const tnl::Vector3& startpos, int size, float hight) {
 		tnl::Vector3 position;
@@ -31,7 +32,7 @@ namespace cf {
 		position.z = gridpos.y * size + startpos.z;
 		return position;
 	}
-
+	//------------------------------------------------------------------------------------------------------------
 	//マウスとの当たり判定
 	bool IntersectMouse(const tnl::Vector3& pos, const tnl::Vector3& size) {
 		tnl::Vector3 mouse_pos = tnl::Input::GetMousePosition();
@@ -44,7 +45,8 @@ namespace cf {
 	
 		return false;
 	}
-
+	//------------------------------------------------------------------------------------------------------------
+	//文字を中央に描画する
 	void DrawCenterString(const std::string& letter, const tnl::Vector3& pos,int color) {
 		int width = GetDrawStringWidth(letter.c_str(), letter.length()) / 2;
 		DrawStringEx(pos.x - width, pos.y , color, "%s", letter.c_str());

@@ -8,7 +8,7 @@ Inventory::Inventory()
 	//インベントリーのスロットの生成
 	for (int i = 0; i < 4; ++i) {
 		tnl::Vector3 s_pos = { 415 + i * 150.0f,DXE_WINDOW_HEIGHT/2,0 };
-		m_slot.emplace_back(std::make_shared<Slot>(s_pos));
+		m_slot_vector.emplace_back(std::make_shared<Slot>(s_pos));
 	}
 }
 
@@ -21,7 +21,7 @@ void Inventory::Draw() {
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	DrawStringEx(INVENTORY_POS.x, INVENTORY_POS.y, -1, "持ち物");
 	//スロットの描画
-	for (auto slot : m_slot) {
+	for (auto slot : m_slot_vector) {
 		slot->Draw();
 		slot->Explanation();
 	}
@@ -32,8 +32,8 @@ void Inventory::Draw() {
 //アイテムの情報をもらってインベントリーに反映させる処理
 bool Inventory::IsCanGetItem(const std::shared_ptr<Item>&item) {
 	//item情報を渡す
-	auto getitem = m_slot.begin();
-	while (getitem != m_slot.end()) {
+	auto getitem = m_slot_vector.begin();
+	while (getitem != m_slot_vector.end()) {
 		if ((*getitem)->getSlotValid() == false) {
 			(*getitem)->setSlotValid(true);
 			(*getitem)->setSlotHandle(item->getUIHdl());

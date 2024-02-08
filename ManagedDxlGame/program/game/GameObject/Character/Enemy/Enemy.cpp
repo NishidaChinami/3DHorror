@@ -1,9 +1,12 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/maze.h"
 #include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
+#include"../../../Manager/Mediator.h"
+//-------------------GameObject file------------------------//
 #include"Enemy.h"
 #include"../../Camera/GameCamera.h"
-#include"../../../Manager/Mediator.h"
+//-------------------Effect file------------------------//
 #include"../../../Effect/Sound/Sound.h"
 
 
@@ -45,16 +48,14 @@ void Enemy::Update(float delta_time) {
 //描画処理
 void Enemy::Draw(std::shared_ptr<GameCamera>gamecamera) {
 	//MV1modelのポジションを設定
-	//VECTOR pos_vec = VGet(mesh->pos_.x, mesh->pos_.y, mesh->pos_.z);
 	MV1SetPosition(m_model_enemy, cf::ConvertToV3(mesh->pos_));
 	//modelの描画
 	MV1DrawModel(m_model_enemy);
-	//if (!tnl::IsIntersectSphere(mesh->pos_, size.x, tnl::Vector3(2500, 0, 2500), 3000))DrawStringEx(100, 100, -1, "脱走");
 }
 
 //------------------------------------------------------------------------------------------------------------
 //視野に入っているかどうか
-bool Enemy::WithinView() {
+bool Enemy::WithinSight() {
 	//プレイヤーとEnemyの視野角のRayの当たり判定をとるために左奥上座標と右前下座標を取得
 	tnl::Vector3 aabb_max = { m_mediator->MGetPlayerPos() + tnl::Vector3(-m_mediator->MGetPlayerSize().x / 2,m_mediator->MGetPlayerSize().y / 2,m_mediator->MGetPlayerSize().z / 2) };
 	tnl::Vector3 aabb_min = { m_mediator->MGetPlayerPos() + tnl::Vector3(m_mediator->MGetPlayerSize().x / 2,-m_mediator->MGetPlayerSize().y / 2,-m_mediator->MGetPlayerSize().z / 2) };
@@ -159,7 +160,7 @@ bool Enemy::seqMovement(const float delta_time) {
 bool Enemy::seqUpdatePoint(const float delta_time) {
 	m_index--;
 
-	if (WithinView()) {
+	if (WithinSight()) {
 		sequence_.change(&Enemy::seqTrack); 
 		chase_state = true;
 		return true;
@@ -172,7 +173,7 @@ bool Enemy::seqUpdatePoint(const float delta_time) {
 	if (m_index < 0) {
 		if (chase_state)sequence_.change(&Enemy::seqTrack);
 		else sequence_.change(&Enemy::seqPatrol);
-		if (!WithinView() && !Hearing())chase_state = false;
+		if (!WithinSight() && !Hearing())chase_state = false;
 		return true;
 	}
 	m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);

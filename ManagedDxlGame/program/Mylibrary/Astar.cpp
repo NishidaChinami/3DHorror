@@ -3,7 +3,7 @@
 #include"maze.h"
 
 namespace astar {
-
+	//------------------------------------------------------------------------------------------------------------
 	// 指定座標がOPEN可能なマップステートかどうか判定
 	bool Path::IsEnableMapPosition(tnl::Vector2i pos, Node** _nodes, int row, int col) {
 		if (pos.x < 0) return false;
@@ -15,7 +15,7 @@ namespace astar {
 		if (TrackState::END == _nodes[pos.y][pos.x].status) return true;
 		return false;
 	}
-
+	//------------------------------------------------------------------------------------------------------------
 	// 現在オープンになっているノードで一番スコアの小さいものを取得
 	Node* Path::GetSmallScoreNodeFromOpenNodes(Node** _nodes, int row, int col) {
 		Node* p = nullptr;
@@ -31,7 +31,7 @@ namespace astar {
 		}
 		return p;
 	}
-
+	//------------------------------------------------------------------------------------------------------------
 	// 経路探索 Aスター
 	bool Path::Aster(Node** _nodes, Node* _now, std::vector<Node*>* _route, int row, int col) {
 		// スタート地点のスコア計算

@@ -1,9 +1,12 @@
 #include "../dxlib_ext/dxlib_ext.h"
-#include"StageWall.h"
-#include"../Camera/GameCamera.h"
+//-------------------Manager file------------------------//
 #include"../../Manager/Manager.h"
 #include"../../Manager/Mediator.h"
+//-------------------Scene file------------------------//
 #include"../../Scene/ResultScene.h"
+//-------------------GameObject file------------------------//
+#include"StageWall.h"
+#include"../Camera/GameCamera.h"
 
 const tnl::Vector3 StageWall::START_BLOCK_POS = { -300,0,-300 };
 

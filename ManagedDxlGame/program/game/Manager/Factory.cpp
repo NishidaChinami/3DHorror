@@ -23,13 +23,13 @@
 Factory::Factory()
 {
 	//オブジェクトの生成
-	mediator = std::make_shared<Mediator>();
-	gamecamera = std::make_shared<GameCamera>();
-	player = std::make_shared<Player>(gamecamera,mediator);
-	stage = std::make_shared<Stage>();
-	inventory = std::make_shared<Inventory>();
-	message = std::make_shared<Message>();
-	background = std::make_shared<BackGroundStage>(stage,mediator);
+	m_mediator = std::make_shared<Mediator>();
+	m_gamecamera = std::make_shared<GameCamera>();
+	m_player = std::make_shared<Player>(m_gamecamera,m_mediator);
+	m_stage = std::make_shared<Stage>();
+	m_inventory = std::make_shared<Inventory>();
+	m_message = std::make_shared<Message>();
+	m_background = std::make_shared<BackGroundStage>(m_stage,m_mediator);
 
 
 	//チュートリアルで使うクラスのインスタンス生成
@@ -40,8 +40,8 @@ Factory::Factory()
 	SetMediator();
 
 	//プレイヤーをオブジェクトリストに代入
-	object.emplace_back(player);
-	object_tutorial.emplace_back(player);
+	m_object_list.emplace_back(m_player);
+	m_object_tutorial_list.emplace_back(m_player);
 }
 
 Factory::~Factory()
@@ -51,14 +51,14 @@ Factory::~Factory()
 //------------------------------------------------------------------------------------------------------------
 //メディエターにオブジェクトを渡す
 void Factory::SetMediator() {
-	mediator->SetPlayerClass(player);
-	mediator->SetStageClass(stage);
-	mediator->SetEnemyClass(enemy);
-	mediator->SetItemClass(item);
-	mediator->SetTutorialItemClass(item_tutorial);
-	mediator->SetInventoryClass(inventory);
-	mediator->SetMessageClass(message);
-	mediator->SetBackGroundClass(background);
+	m_mediator->SetPlayerClass(m_player);
+	m_mediator->SetStageClass(m_stage);
+	m_mediator->SetEnemyClass(m_enemy);
+	m_mediator->SetItemClass(m_item_list);
+	m_mediator->SetTutorialItemClass(m_item_tutorial_list);
+	m_mediator->SetInventoryClass(m_inventory);
+	m_mediator->SetMessageClass(m_message);
+	m_mediator->SetBackGroundClass(m_background);
 }
 //------------------------------------------------------------------------------------------------------------
 //メインゲームで使うクラスのインスタンス生成
@@ -71,13 +71,13 @@ void Factory::CreatMainGame() {
 			pos.y = StageWall::BLOCKHIGHT / 2;
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
 			//Emptyだったら壁を配置
-			if (stage->getStgaeState(r, c) == maze::StageState::Wall)
+			if (m_stage->getStgaeState(r, c) == maze::StageState::Wall)
 			{
-				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->getStgaeState(r, c),mediator));
+				m_stagewall_list.emplace_back(std::make_shared<StageWall>(pos, m_stage->getStgaeState(r, c),m_mediator));
 			}
 			//ゴールだったら、ゴールマスを配置
-			else if (stage->getStgaeState(r, c) == maze::StageState::Goal) {
-				stagewall.emplace_back(std::make_shared<StageWall>(pos, stage->getStgaeState(r, c),mediator));
+			else if (m_stage->getStgaeState(r, c) == maze::StageState::Goal) {
+				m_stagewall_list.emplace_back(std::make_shared<StageWall>(pos, m_stage->getStgaeState(r, c),m_mediator));
 			}
 		}
 	}
@@ -94,8 +94,8 @@ void Factory::CreatMainGame() {
 		tnl::Vector2i random;
 		random.x = rand() % (Stage::STAGE_COL/ 2) + Stage::STAGE_COL / 2;
 		random.y = rand() % (Stage::STAGE_ROW / 2) + Stage::STAGE_ROW / 2;
-		if (stage->getStgaeState(random.y,random.x) == maze::StageState::Empty) {
-			enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), mediator);
+		if (m_stage->getStgaeState(random.y,random.x) == maze::StageState::Empty) {
+			m_enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), m_mediator);
 			break;
 		}
 	}
@@ -121,8 +121,8 @@ void Factory::CreatMainGame() {
 			tnl::Vector2i random;
 			random.x = rand() % (Stage::STAGE_COL / 3);
 			random.y = rand() % (Stage::STAGE_ROW / 2);
-			if (stage->getStgaeState(random.y + vec.y, random.x + vec.x) == maze::StageState::Empty) {
-				item.emplace_back(std::make_shared<Item>(cf::Coordinate(random + vec, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), Item::ItemType::Floppy, mediator));
+			if (m_stage->getStgaeState(random.y + vec.y, random.x + vec.x) == maze::StageState::Empty) {
+				m_item_list.emplace_back(std::make_shared<Item>(cf::Coordinate(random + vec, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), Item::ItemType::Floppy, m_mediator));
 				count++;
 				break;
 			}
@@ -138,59 +138,59 @@ void Factory::CreatMainGame() {
 			pos.y = 500;
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
 			//通路だったらライトを配置
-			if(stage->getStgaeState(r, c) == maze::StageState::Empty)
-				fluorescent.emplace_back(std::make_shared<Fluorescent>(pos,mediator));
+			if(m_stage->getStgaeState(r, c) == maze::StageState::Empty)
+				m_fluorescent.emplace_back(std::make_shared<Fluorescent>(pos,m_mediator));
 		}
 	}
 	//懐中電灯を追加
-	item.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(0, 0), StageWall::START_BLOCK_POS, 0), Item::ItemType::FrashLight, mediator));
+	m_item_list.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(0, 0), StageWall::START_BLOCK_POS, 0), Item::ItemType::FrashLight, m_mediator));
 
 }
 //------------------------------------------------------------------------------------------------------------
 //チュートリアルで使うクラスのインスタンス生成
 void Factory::CreatTutorial() {
-	tutorial_csv = tnl::LoadCsv<int>("csv/TutorialStage.csv");
+	m_tutorial_csv = tnl::LoadCsv<int>("csv/TutorialStage.csv");
 	//チュートリアルマップの配置
-	for (int i = 0; i < tutorial_csv.size(); i++) {
-		for (int k = 0; k < tutorial_csv[i].size(); k++) {
+	for (int i = 0; i < m_tutorial_csv.size(); i++) {
+		for (int k = 0; k < m_tutorial_csv[i].size(); k++) {
 
 			tnl::Vector3 pos;
 			pos.x = { -300.0f + k * StageWall::BLOCKSIZE };
 			pos.y = StageWall::BLOCKSIZE / 2;
 			pos.z = { -300.0f + i * StageWall::BLOCKSIZE };
-			if (tutorial_csv[i][k] != 0) {
-				tutorialstage.emplace_back(std::make_shared<StageWall>(pos));
+			if (m_tutorial_csv[i][k] != 0) {
+				m_stage_tutorial_list.emplace_back(std::make_shared<StageWall>(pos));
 			}
 		}
 	}
 	//懐中電灯
-	item_tutorial.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(6,6), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),Item::ItemType::FrashLight, mediator));
+	m_item_tutorial_list.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(6,6), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),Item::ItemType::FrashLight, m_mediator));
 	//あらすじの説明アイテムの生成
-	item_tutorial.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(4, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE,400), 0, mediator));
+	m_item_tutorial_list.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(4, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE,400), 0, m_mediator));
 
 }
 //------------------------------------------------------------------------------------------------------------
 //メインゲームに使うオブジェクトクラスをオブジェクトリストに入れる
 void Factory::AddMainObject() {
 	//壁クラス
-	auto mazes = stagewall.begin();
-	while (mazes != stagewall.end()) {
-		object.emplace_back(*mazes);
+	auto mazes = m_stagewall_list.begin();
+	while (mazes != m_stagewall_list.end()) {
+		m_object_list.emplace_back(*mazes);
 		mazes++;
 	}
 	//照明クラス
-	auto light = fluorescent.begin();
-	while (light != fluorescent.end()) {
-		object.emplace_back(*light);
+	auto light = m_fluorescent.begin();
+	while (light != m_fluorescent.end()) {
+		m_object_list.emplace_back(*light);
 		light++;
 	}
 	//敵クラス
-	object.emplace_back(enemy);
+	m_object_list.emplace_back(m_enemy);
 	//アイテムクラス
-	auto items = item.begin();
-	while (items != item.end())
+	auto items = m_item_list.begin();
+	while (items != m_item_list.end())
 	{
-		object.emplace_back(*items);
+		m_object_list.emplace_back(*items);
 		items++;
 	}
 }
@@ -198,16 +198,16 @@ void Factory::AddMainObject() {
 //チュートリアルゲームに使うオブジェクトクラスをオブジェクトリストに入れる
 void Factory::AddTutorialObject() {
 	//チュートリアルステージのクラス
-	auto mazes = tutorialstage.begin();
-	while (mazes != tutorialstage.end()) {
-		object_tutorial.emplace_back(*mazes);
+	auto mazes = m_stage_tutorial_list.begin();
+	while (mazes != m_stage_tutorial_list.end()) {
+		m_object_tutorial_list.emplace_back(*mazes);
 		mazes++;
 	}
 	//アイテムクラス
-	auto items = item_tutorial.begin();
-	while (items != item_tutorial.end())
+	auto items = m_item_tutorial_list.begin();
+	while (items != m_item_tutorial_list.end())
 	{
-		object_tutorial.emplace_back(*items);
+		m_object_tutorial_list.emplace_back(*items);
 		items++;
 	}
 }

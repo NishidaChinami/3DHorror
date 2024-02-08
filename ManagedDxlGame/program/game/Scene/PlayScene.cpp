@@ -88,9 +88,9 @@ void PlayScene::Update(float delta_time) {
 		child->Update(delta_time);
 	}
 	//全当たり判定を検知
-	for (auto li : m_collision->intersect_list_) {
+	for (auto li : m_collision->m_intersect_list) {
 		if (tnl::IsIntersectAABB(li.a_->mesh->pos_, li.a_->GetObjectSize(), li.b_->mesh->pos_, li.b_->GetObjectSize())) {
-			li.intersected_call_(li.a_, li.b_);
+			li.m_intersected_call(li.a_, li.b_);
 		}
 	}
 	
@@ -200,9 +200,9 @@ void PlayScene::CollisionFuc() {
 	//ペアを代入
 	m_enemy = m_factory->GetClassEnemy();
 	m_collision->registPairObject<Player, Enemy>(m_player, m_enemy);
-	m_stagewall = m_factory->GetClassStageWall();
-	auto w = m_stagewall.begin();
-	while (w != m_stagewall.end()) {
+	m_stagewall_list = m_factory->GetClassStageWall();
+	auto w = m_stagewall_list.begin();
+	while (w != m_stagewall_list.end()) {
 		m_collision->registPairObject<Player, StageWall>(m_player, *w);
 		w++;
 	}

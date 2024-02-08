@@ -304,7 +304,7 @@
     <ClInclude Include="program\game\Scene\ResultScene.h" />
     <ClInclude Include="program\game\Scene\SubScene.h" />
     <ClInclude Include="program\game\Scene\TitleScene.h" />
-    <ClInclude Include="program\game\Scene\TurorialScene.h" />
+    <ClInclude Include="program\game\Scene\TutorialScene.h" />
     <ClInclude Include="program\game\UI\Inventory\Inventory.h" />
     <ClInclude Include="program\game\UI\Inventory\Slot.h" />
     <ClInclude Include="program\game\UI\Message.h" />

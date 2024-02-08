@@ -1,9 +1,11 @@
 #include "../dxlib_ext/dxlib_ext.h"
+//-------------------Manager file------------------------//
+#include"../../Manager/Mediator.h"
+//-------------------GameObject file------------------------//
 #include"BackGroundStage.h"
 #include"Stage.h"
 #include"StageWall.h"
 #include"../Camera/GameCamera.h"
-#include"../../Manager/Mediator.h"
 
 BackGroundStage::BackGroundStage(const std::shared_ptr<Stage>& stage, const std::shared_ptr<Mediator>& mediator)
 {

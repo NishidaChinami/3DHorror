@@ -28,7 +28,7 @@ public:
 	void Draw(std::shared_ptr<GameCamera>gamecamera)override;
 
 	//‹–ì“à‚©‚ğ”»’è‚·‚éŠÖ”
-	bool WithinView();
+	bool WithinSight();
 	//ƒvƒŒƒCƒ„[‚Ì‰¹‚ª–Â‚Á‚½‚©‚ğ”»•Ê
 	bool Hearing();
 	//•Ç‚Æ‚Ì“–‚½‚è”»’è

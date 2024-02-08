@@ -1,7 +1,7 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
-#include"Flashlight.h"
 #include"../../Manager/Mediator.h"
+#include"Flashlight.h"
 #include"../../Effect/Sound/Sound.h"
 
 Flashlight::Flashlight()

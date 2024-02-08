@@ -37,55 +37,55 @@ public:
 
 	//--------------------------Getter/Setter------------------------//
 	//Factoryで生成したクラス
-	std::list<std::shared_ptr<GameObject>> GetClassObj() { return object; }
-	std::list<std::shared_ptr<GameObject>> GetClassObj_Tutorial() { return object_tutorial; }
-	std::shared_ptr<GameCamera>GetClassCamera() { return gamecamera; }
-	std::shared_ptr<Mediator>GetClassMediator() { return mediator; }
-	std::shared_ptr<Player>GetClassPlayer() { return player; }
-	std::shared_ptr<Stage>GetClassStage() { return stage; }
-	std::shared_ptr<Enemy>GetClassEnemy() { return enemy; }
-	std::list<std::shared_ptr<Item>>GetClassItemList(){ return item; }
-	std::list<std::shared_ptr<Item>>GetClassTutorialItemList() { return item_tutorial; }
-	std::list<std::shared_ptr<StageWall>>GetClassStageWall() { return stagewall; }
-	std::list<std::shared_ptr<StageWall>>GetClassStageTutorial() { return tutorialstage; }
-	std::shared_ptr<BackGroundStage>GetClassBackGroundStage() { return background; }
-	std::shared_ptr<Inventory>GetClassInventory() { return inventory; }
-	std::shared_ptr<Message>GetClassMessage() { return message; }
+	std::list<std::shared_ptr<GameObject>> GetClassObj() { return m_object_list; }
+	std::list<std::shared_ptr<GameObject>> GetClassObj_Tutorial() { return m_object_tutorial_list; }
+	std::shared_ptr<GameCamera>GetClassCamera() { return m_gamecamera; }
+	std::shared_ptr<Mediator>GetClassMediator() { return m_mediator; }
+	std::shared_ptr<Player>GetClassPlayer() { return m_player; }
+	std::shared_ptr<Stage>GetClassStage() { return m_stage; }
+	std::shared_ptr<Enemy>GetClassEnemy() { return m_enemy; }
+	std::list<std::shared_ptr<Item>>GetClassItemList(){ return m_item_list; }
+	std::list<std::shared_ptr<Item>>GetClassTutorialItemList() { return m_item_tutorial_list; }
+	std::list<std::shared_ptr<StageWall>>GetClassStageWall() { return m_stagewall_list; }
+	std::list<std::shared_ptr<StageWall>>GetClassStageTutorial() { return m_stage_tutorial_list; }
+	std::shared_ptr<BackGroundStage>GetClassBackGroundStage() { return m_background; }
+	std::shared_ptr<Inventory>GetClassInventory() { return m_inventory; }
+	std::shared_ptr<Message>GetClassMessage() { return m_message; }
 	
 private:
 	//チュートリアルマップのcsvハンドル
-	std::vector<std::vector<int>> tutorial_csv;
+	std::vector<std::vector<int>> m_tutorial_csv;
 
 	//------------生成するクラスのポインタ------------------------//
 	//インターフェース的役割をもつメディエーターポインタ
-	std::shared_ptr<Mediator>mediator = nullptr;
+	std::shared_ptr<Mediator>m_mediator = nullptr;
 	//オブジェクトのリスト
-	std::list<std::shared_ptr<GameObject>>object;
+	std::list<std::shared_ptr<GameObject>>m_object_list;
 	//オブジェクトチュートリアルのリスト
-	std::list<std::shared_ptr<GameObject>>object_tutorial;
+	std::list<std::shared_ptr<GameObject>>m_object_tutorial_list;
 	//カメラクラスのスマートポインタ
-	std::shared_ptr<GameCamera>gamecamera = nullptr;
+	std::shared_ptr<GameCamera>m_gamecamera = nullptr;
 	//プレイヤーのスマートポインタ
-	std::shared_ptr<Player>player = nullptr;
+	std::shared_ptr<Player>m_player = nullptr;
 	//Enemyのスマートポインタ
-	std::shared_ptr<Enemy>enemy = nullptr;
+	std::shared_ptr<Enemy>m_enemy = nullptr;
 	//Itemのスマートポインタ
-	std::list<std::shared_ptr<Item>>item;
+	std::list<std::shared_ptr<Item>>m_item_list;
 	//チュートリアルでのみ使うItemのリスト
-	std::list<std::shared_ptr<Item>>item_tutorial;
+	std::list<std::shared_ptr<Item>>m_item_tutorial_list;
 	//ステージ計算のクラス
-	std::shared_ptr<Stage>stage = nullptr;
+	std::shared_ptr<Stage>m_stage = nullptr;
 	//ステージの壁クラスリスト
-	std::list<std::shared_ptr<StageWall>>stagewall;
-	std::list<std::shared_ptr<StageWall>>tutorialstage;
+	std::list<std::shared_ptr<StageWall>>m_stagewall_list;
+	std::list<std::shared_ptr<StageWall>>m_stage_tutorial_list;
 	//ステージの描画クラス
-	std::shared_ptr<BackGroundStage>background = nullptr;
+	std::shared_ptr<BackGroundStage>m_background = nullptr;
 	//照明クラスリスト
-	std::list<std::shared_ptr<Fluorescent>>fluorescent;
+	std::list<std::shared_ptr<Fluorescent>>m_fluorescent;
 	//文章のデータクラスポインタ
-	std::shared_ptr<Message>message = nullptr;
+	std::shared_ptr<Message>m_message = nullptr;
 	//インベントリー
-	std::shared_ptr<Inventory>inventory = nullptr;
+	std::shared_ptr<Inventory>m_inventory = nullptr;
 
 
 };

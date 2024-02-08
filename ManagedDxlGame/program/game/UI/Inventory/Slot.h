@@ -30,7 +30,7 @@ private:
 	//説明文
 	std::string m_explanation;
 	//物が入っているかどうか
-	bool m_is_valid = false;
+	bool m_isvalid = false;
 	//アイテムタイプ
 	Item::ItemType m_itemtype;
 	//取得したアイテムのUI画像の２D座標

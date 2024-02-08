@@ -5,13 +5,16 @@
 #include <functional>
 #include "../dxlib_ext/dxlib_ext.h"
 #include "gm_main.h"
+//-------------------Manager file------------------------//
 #include"Manager/Manager.h"
+//-------------------Scene file------------------------//
 #include"Scene/PlayScene.h"
 #include"Scene/TitleScene.h"
-#include"Scene/TurorialScene.h"
+#include"Scene/TutorialScene.h"
 #include"Scene/ResultScene.h"
+//-------------------UI file------------------------//
 #include"UI/OptionParam.h"
-#include"GameObject/Stage/BackGroundStage.h"
+//-------------------Effect file------------------------//
 #include"Effect/Sound/Sound.h"
 
 

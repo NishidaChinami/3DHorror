@@ -1,10 +1,14 @@
 #include "../dxlib_ext/dxlib_ext.h"
 #include"../Mylibrary/Conversion.h"
+//-------------------Manager file------------------------//
 #include"../../Manager/Mediator.h"
 #include"../../Manager/Manager.h"
+//-------------------GameObject file------------------------//
 #include"Item.h"
 #include"../Camera/GameCamera.h"
+//-------------------Effect file------------------------//
 #include"../../Effect/Sound/Sound.h"
+//-------------------UI file------------------------//
 #include"../../UI/OptionParam.h"
 
 Item::Item(tnl::Vector3 pos, int articletype,const std::shared_ptr<Mediator> &mediator)

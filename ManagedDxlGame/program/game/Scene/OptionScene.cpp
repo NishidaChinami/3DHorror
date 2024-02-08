@@ -28,7 +28,8 @@ void OptionScene::Update(float delta_time) {
 	auto sound = Sound::GetInstance();
 	for (int i = 0; i < MENU_NUM; i++) {
 		tnl::Vector3 pos = { MENU_POS.x, MENU_POS.y + i * 50, 0 };
-		color_index[i] = cf::IntersectMouse(pos, MENU_SIZE) ? -1 : 0x88888888;
+		color_index[i] = cf::IntersectMouse(pos, MENU_SIZE) ? -1 : 0;
+		//0x88888888
 		if (cf::IntersectMouse(pos, MENU_SIZE)) {
 			if (tnl::Input::IsMouseTrigger(eMouseTrigger::IN_LEFT)) {
 				sound->Sound2DPlay("SELECT", DX_PLAYTYPE_BACK);

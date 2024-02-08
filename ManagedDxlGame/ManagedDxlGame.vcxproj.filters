@@ -626,7 +626,7 @@
     <ClInclude Include="program\game\GameObject\GameObject.h">
       <Filter>program\[003] game\[3]GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="program\game\Scene\TurorialScene.h">
+    <ClInclude Include="program\game\Scene\TutorialScene.h">
       <Filter>program\[003] game\[2]Scene</Filter>
     </ClInclude>
     <ClInclude Include="program\game\Effect\Particle\GameParticle.h">

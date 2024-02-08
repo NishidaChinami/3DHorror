@@ -47,20 +47,23 @@ namespace astar {
 		Path() {};
 		~Path() {};
 
-		// 指定座標が有効な( OPEN 可能な )マップ位置かどうか判定
+		// 指定座標がOPEN可能なマップ位置かどうか判定
 		//第1引数 調べたい座標
 		//第２引数　Nodeクラスの２次元配列ポインタ
 		//第3・4引数　最短経路を求めたいマップの横と縦列の数
 		bool IsEnableMapPosition(tnl::Vector2i pos, Node** _nodes,int row,int col);
-
-		// [ 現在オープンになっているノードで一番スコアの小さいものを取得 ]
-		// サンプルの分かり易さ優先なので全ノードを調べる形にしているが、
-		// 効率は良くないのでライブラリ化する時にでも 既にオープンしている
-		// ノードだけ調べるように効率化を図った方がよい
+		//第1引数　Nodeクラスの２次元配列ポインタ
+		//第2・3引数　最短経路を求めたいマップの横と縦列の数
+		// 現在オープンになっているノードで一番スコアの小さいものを取得 
 		Node* GetSmallScoreNodeFromOpenNodes(Node** _nodes, int row, int col);
 
 
 		// 経路探索 Astarアルゴリズム
+		//第1引数　Nodeクラスの２次元配列ポインタ
+		//第2引数　Nodeのクラスの2次元配列ポインタを扱うための列ポインタ
+		//第3引数　最短経路を保存するNodeクラスのstd::vectorポインタ
+		//第4・5引数　最短経路を求めたいマップの横と縦列の数
+		//ret　最短経路をstd::vetorに返す
 		bool Aster(Node** _nodes, Node* _now, std::vector<Node*>* _route,int row ,int col);
 
 

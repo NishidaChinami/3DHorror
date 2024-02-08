@@ -55,6 +55,6 @@ private:
 	std::shared_ptr<Collision>m_collision = nullptr;
 	std::shared_ptr<Player> m_player = nullptr;
 	std::shared_ptr<Enemy>m_enemy = nullptr;
-	std::list<std::shared_ptr<StageWall>> m_stagewall;
+	std::list<std::shared_ptr<StageWall>> m_stagewall_list;
 
 };
