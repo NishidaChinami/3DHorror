@@ -19,7 +19,7 @@ public:
 	TNL_PROPERTY(int, SlotHandle, m_ui_hdl);
 	TNL_PROPERTY(int, SlotNum, m_number);
 	TNL_PROPERTY(std::string, SlotExlanation, m_explanation);
-	TNL_PROPERTY(bool, SlotValid, m_is_valid);
+	TNL_PROPERTY(bool, SlotValid, m_isvalid);
 	TNL_PROPERTY(Item::ItemType, SlotItemType, m_itemtype);
 
 private:
