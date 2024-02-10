@@ -84,7 +84,8 @@ private:
 	tnl::Vector3 m_next_target;
 	//チェイス状態かどうかのフラグ
 	bool chase_state = false;
-
+	//視野のRayとプレイヤーの交点の座標ポインタ
+	tnl::Vector3* m_intersect_pos = nullptr;
 	//------------他クラスの参照用ポインタ------------------------//
 	//メディエーターの参照ポインタ
 	std::shared_ptr<Mediator>m_mediator = nullptr;

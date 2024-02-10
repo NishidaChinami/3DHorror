@@ -27,6 +27,7 @@ Enemy::Enemy(tnl::Vector3 pos, const std::shared_ptr<Mediator>&mediator)
 	size = { 400,400,400 };
 	//メディエーターが使えるようにコンストラクタでメディエーターのアドレスを受け取る
 	if (mediator)m_mediator = mediator;
+	m_intersect_pos = new tnl::Vector3();
 }
 
 Enemy::~Enemy()
@@ -34,6 +35,7 @@ Enemy::~Enemy()
 	Sound::GetInstance()->SoundStop("ENEMYAPPROACHING");
 	MV1DeleteModel(m_model_enemy);
 	DeleteGraph(m_texture_enmey);
+	delete m_intersect_pos;
 }
 //------------------------------------------------------------------------------------------------------------
 //更新処理
@@ -51,14 +53,17 @@ void Enemy::Draw(std::shared_ptr<GameCamera>gamecamera) {
 	MV1SetPosition(m_model_enemy, cf::ConvertToV3(mesh->pos_));
 	//modelの描画
 	MV1DrawModel(m_model_enemy);
+	//if (WithinSight()) { DrawStringEx(100, 100, -1, "見える"); }
 }
 
 //------------------------------------------------------------------------------------------------------------
 //視野に入っているかどうか
 bool Enemy::WithinSight() {
 	//プレイヤーとEnemyの視野角のRayの当たり判定をとるために左奥上座標と右前下座標を取得
-	tnl::Vector3 aabb_max = { m_mediator->MGetPlayerPos() + tnl::Vector3(-m_mediator->MGetPlayerSize().x / 2,m_mediator->MGetPlayerSize().y / 2,m_mediator->MGetPlayerSize().z / 2) };
-	tnl::Vector3 aabb_min = { m_mediator->MGetPlayerPos() + tnl::Vector3(m_mediator->MGetPlayerSize().x / 2,-m_mediator->MGetPlayerSize().y / 2,-m_mediator->MGetPlayerSize().z / 2) };
+	tnl::Vector3 aabb_max = { tnl::Vector3(m_mediator->MGetPlayerPos().x,GameCamera::HEAD_HEIGHT,m_mediator->MGetPlayerPos().z)
+		+ tnl::Vector3(-m_mediator->MGetPlayerSize().x / 2,m_mediator->MGetPlayerSize().y / 2,m_mediator->MGetPlayerSize().z / 2) };
+	tnl::Vector3 aabb_min = { tnl::Vector3(m_mediator->MGetPlayerPos().x,GameCamera::HEAD_HEIGHT,m_mediator->MGetPlayerPos().z)
+		+ tnl::Vector3(m_mediator->MGetPlayerSize().x / 2,-m_mediator->MGetPlayerSize().y / 2,-m_mediator->MGetPlayerSize().z / 2) };
 	
 	//すべてのRayと当たり判定を求める
 	float fov = DX_PI_F / 2;
@@ -67,29 +72,18 @@ bool Enemy::WithinSight() {
 	tnl::Vector3 vision = mesh->rot_.getEuler();
 	float center = vision.y;
 	//正面からπ/4だけ範囲をとる
-	float left = center - fov / 2;
-	float right = center + fov / 2;
+	float left = center - fov;
+	float right = center + fov;
 
+	if ((m_mediator->MGetPlayerPos() - mesh->pos_).length() > HEAR_RANGE)return false;
 	//扇形のRayを作成　これを視野角とする
-	for (angle = left; angle < right; angle += fov / 10) {
+	for (angle = left; angle < right; angle += fov / 15) {
 		tnl::Vector3 ray = { sin(angle), 0, cos(angle) };
 		ray.normalize();
 		//プレイヤーにあたっているか判定
-		if (!IsIntersectRayAABB(mesh->pos_, ray, aabb_max, aabb_min))continue;
-		ray *= 6000;
-		//ブレセンハムでRayが通るマップのステート情報を取得
-		std::vector<tnl::Vector2i> ray_intersection;
-		ray_intersection = GetBresenhamsLine(cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), cf::GridPos(mesh->pos_ + ray, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE));
-		int index = 0;
-		//ブレセンハムで取得したステートが、壁がさきだったらだったら偽を返し、プレイヤーの場合真を返す
-		while (index < ray_intersection.size()) {
-			if (m_mediator->MGetStageState(ray_intersection[index].y, ray_intersection[index].x) == maze::StageState::Wall) break;
-			else if (cf::GridPos(m_mediator->MGetPlayerPos(), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE) == ray_intersection[index]) {
-				return true;
-			}
-			index++;
-		}
-		ray_intersection.clear();
+		if (!tnl::IsIntersectRayAABB(mesh->pos_, ray, aabb_max, aabb_min, m_intersect_pos))continue;
+		//壁より手前か
+		if (m_mediator->MGetIntersectStage(mesh->pos_, ray, m_intersect_pos))return true;
 	}
 	return false;
 
@@ -105,21 +99,6 @@ bool Enemy::Hearing() {
 	}
 	else return false;
 }
-
-//void Enemy::StageCorrection(const std::shared_ptr<StageWall>& stagewall) {
-
-	/*tnl::CorrectPositionAABB(
-		m_prev_pos
-		, stagewall->GetStageWallPos()
-		, size
-		, tnl::Vector3(StageWall::BLOCKSIZE, StageWall::BLOCKHIGHT, StageWall::BLOCKSIZE)
-		, mesh->pos_
-		, stagewall->mesh->pos_
-		, tnl::eCorrTypeAABB::PWRFL_B
-		, tnl::eCorrTypeAABB::PWRFL_B
-		, tnl::eCorrTypeAABB::PWRFL_B, 0.1f);*/
-
-//}
 
 
 //------------------------------------------------------------------------------------------------------------
@@ -267,3 +246,18 @@ bool Enemy::seqPlayerDeath(const float delta_time)
 	mesh->pos_ = tnl::Vector3( m_mediator->MGetPlayerPos().x,200,m_mediator->MGetPlayerPos().y ) + tnl::Vector3::TransformCoord({ 0,0,50 }, m_mediator->MGetPlayerRot());
 	return true;
 }
+
+//ray *= 8000;
+////ブレセンハムでRayが通るマップのステート情報を取得
+//std::vector<tnl::Vector2i> ray_intersection;
+//ray_intersection = GetBresenhamsLine(cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE), cf::GridPos(mesh->pos_ + ray, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE));
+//int index = 0;
+////ブレセンハムで取得したステートが、壁がさきだったらだったら偽を返し、プレイヤーの場合真を返す
+//while (index < ray_intersection.size()) {
+//	if (m_mediator->MGetStageState(ray_intersection[index].y, ray_intersection[index].x) == maze::StageState::Wall) break;
+//	else if (cf::GridPos(m_mediator->MGetPlayerPos(), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE) == ray_intersection[index]) {
+//		return true;
+//	}
+//	index++;
+//}
+//ray_intersection.clear();

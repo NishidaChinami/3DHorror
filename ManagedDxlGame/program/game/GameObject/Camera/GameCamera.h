@@ -40,6 +40,8 @@ public:
 
 	TNL_PROPERTY(tnl::Quaternion, CameraRot, m_camera_rot);
 	TNL_PROPERTY(bool, CameraActive, m_camera_inactive);
+	//----------------------’è”------------------------//
+	static constexpr float HEAD_HEIGHT = 400;
 private:
 	//ƒJƒƒ‰‚Ì‰ñ“]
 	tnl::Quaternion m_camera_rot;
@@ -53,7 +55,5 @@ private:
 	bool m_camera_inactive = true;
 	//‚µ‚á‚ª‚İƒtƒ‰ƒO
 	bool m_is_sneek = false;
-	//----------------------’è”------------------------//
-	const float HEAD_HEIGHT = 400;
 };
 

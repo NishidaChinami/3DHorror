@@ -59,6 +59,7 @@ void Factory::SetMediator() {
 	m_mediator->SetInventoryClass(m_inventory);
 	m_mediator->SetMessageClass(m_message);
 	m_mediator->SetBackGroundClass(m_background);
+	m_mediator->SetStageWallClass(m_stagewall_list);
 }
 //------------------------------------------------------------------------------------------------------------
 //メインゲームで使うクラスのインスタンス生成
@@ -68,7 +69,7 @@ void Factory::CreatMainGame() {
 		for (int c = 0; c < Stage::STAGE_COL; c++) {
 			tnl::Vector3 pos;
 			pos.x = { -300.0f + c * StageWall::BLOCKSIZE };
-			pos.y = StageWall::BLOCKHIGHT / 2;
+			pos.y = StageWall::BLOCKHEIGHT / 2;
 			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
 			//Emptyだったら壁を配置
 			if (m_stage->getStgaeState(r, c) == maze::StageState::Wall)
@@ -83,10 +84,10 @@ void Factory::CreatMainGame() {
 	}
 	//Enemy生成
 	/*tnl::Vector2i a;
-	if (stage->getStgaeState(1, 2) == maze::StageState::Empty) a = { 2,1 };
-	else if (stage->getStgaeState(2, 1) == maze::StageState::Empty) a = { 1,2 };*/
+	if (m_stage->getStgaeState(1, 2) == maze::StageState::Empty) a = { 2,1 };
+	else if (m_stage->getStgaeState(2, 1) == maze::StageState::Empty) a = { 1,2 };
 
-	//enemy = std::make_shared<Enemy>(cf::Coordinate(a, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), mediator);
+	m_enemy = std::make_shared<Enemy>(cf::Coordinate(a, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), m_mediator);*/
 	
 	//Enemy生成 プレイヤーがスポーンする位置と対角のエリアにライダムな場所にスポーン
 	while (true)

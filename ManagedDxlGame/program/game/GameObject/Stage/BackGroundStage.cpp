@@ -86,7 +86,7 @@ void BackGroundStage::MeshCreate()
 			Shared<dxe::Mesh>copy_mesh_a = nullptr;
 			Shared<dxe::Mesh>copy_mesh_b = nullptr;
 		//座標を決める
-			groudpos = { 0.0f + BackGroundStage::SIZE * col,StageWall::BLOCKHIGHT,0.0f+BackGroundStage::SIZE * row };
+			groudpos = { 0.0f + BackGroundStage::SIZE * col,StageWall::BLOCKHEIGHT,0.0f+BackGroundStage::SIZE * row };
 		
 			//クローンの作成
 			copy_mesh_a = m_main_original_mesh[0]->createClone();
@@ -104,7 +104,7 @@ void BackGroundStage::MeshCreate()
 	//メインステージのBoxメッシュの座標を決定
 	for (int r = 0; r < Stage::STAGE_ROW; r++) {
 		for (int c = 0; c < Stage::STAGE_COL; c++) {
-			tnl::Vector3 pos = { -300.0f + c * StageWall::BLOCKSIZE, StageWall::BLOCKHIGHT/ 2 ,-300.0f + r * StageWall::BLOCKSIZE };
+			tnl::Vector3 pos = { -300.0f + c * StageWall::BLOCKSIZE, StageWall::BLOCKHEIGHT/ 2 ,-300.0f + r * StageWall::BLOCKSIZE };
 			Shared<dxe::Mesh>copy_mesh = nullptr;
 			//壁
 			if (m_stage->getStgaeState(r, c) == maze::StageState::Wall)

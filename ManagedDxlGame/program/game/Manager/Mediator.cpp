@@ -49,6 +49,25 @@ maze::StageState Mediator::MGetStageState(int r, int c) {
 	auto stage = m_stage.lock();
 	if (stage)return stage->getStgaeState(r, c);}
 
+bool Mediator::MGetIntersectStage(const tnl::Vector3& pos, const tnl::Vector3& ray,tnl::Vector3* intersect_point)
+{
+	auto st = m_stagewall_list.begin();
+	while (st != m_stagewall_list.end()) {
+		auto stagewall = (*st).lock();
+		tnl::Vector3 aabb_max = { stagewall->mesh->pos_ + tnl::Vector3(-StageWall::BLOCKSIZE / 2,StageWall::BLOCKHEIGHT / 2,StageWall::BLOCKSIZE / 2) };
+		tnl::Vector3 aabb_min = { stagewall->mesh->pos_ + tnl::Vector3(StageWall::BLOCKSIZE / 2,-StageWall::BLOCKHEIGHT / 2,-StageWall::BLOCKSIZE / 2) };
+		//•Ç‚ÆRay‚ª“–‚½‚Á‚Ä‚é‚©‚Ç‚¤‚©
+		if (tnl::IsIntersectRayAABB(pos, ray, aabb_max, aabb_min, m_intersect_stage)) {
+			if (m_intersect_stage && intersect_point) {
+				//”äŠr‚·‚éŒğ“_‚æ‚è‚à’Z‚¢‹——£‚Å‚ ‚ê‚Î‹U‚ğ•Ô‚·
+				if ((*intersect_point - pos).length() > (*m_intersect_stage - pos).length())return false;
+			}
+		}
+		st++;
+	}
+	return true;
+}
+
 //--------------------ƒAƒCƒeƒ€‚ÌGetter‚ÆSetter------------------------------------------------//
 std::vector<tnl::Vector2i> Mediator::MGetItemPos() {
 	std::vector<tnl::Vector2i> itempos;

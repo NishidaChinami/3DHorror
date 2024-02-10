@@ -34,7 +34,7 @@ public:
 	//壁の幅
 	static const int BLOCKSIZE = 400;
 	//壁の高さ
-	static const int BLOCKHIGHT = 800;
+	static const int BLOCKHEIGHT = 800;
 private:
 	//ステージのステート
 	maze::StageState m_state;

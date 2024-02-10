@@ -12,7 +12,7 @@ const tnl::Vector3 StageWall::START_BLOCK_POS = { -300,0,-300 };
 
 StageWall::StageWall(const tnl::Vector3 &pos, maze::StageState state,const std::shared_ptr<Mediator>&mediator)
 {
-	size = { BLOCKSIZE,BLOCKHIGHT,BLOCKSIZE };
+	size = { BLOCKSIZE,BLOCKHEIGHT,BLOCKSIZE };
 	mesh = dxe::Mesh::CreateCubeMV(30);
 	mesh->pos_ = pos;
 	m_state = state;
@@ -22,7 +22,7 @@ StageWall::StageWall(const tnl::Vector3 &pos, maze::StageState state,const std::
 
 StageWall::StageWall(const tnl::Vector3 &pos)
 {
-	size = { BLOCKSIZE,BLOCKHIGHT,BLOCKSIZE };
+	size = { BLOCKSIZE,BLOCKHEIGHT,BLOCKSIZE };
 	mesh = dxe::Mesh::CreateCubeMV(30);
 	mesh->pos_ = pos;
 }

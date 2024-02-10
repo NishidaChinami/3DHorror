@@ -65,7 +65,7 @@ void Player::StageCorrection(const std::shared_ptr<StageWall>&stagewall) {
 		m_gamecamera->getPrevPos()
 		, stagewall->GetStageWallPos()
 		, size
-		, tnl::Vector3(StageWall::BLOCKSIZE,StageWall::BLOCKHIGHT,StageWall::BLOCKSIZE)
+		, tnl::Vector3(StageWall::BLOCKSIZE,StageWall::BLOCKHEIGHT,StageWall::BLOCKSIZE)
 		, m_gamecamera->pos_
 		, stagewall->mesh->pos_
 		, tnl::eCorrTypeAABB::PWRFL_B

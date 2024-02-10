@@ -23,7 +23,7 @@ SubScene::SubScene(std::shared_ptr<Factory> factory, std::shared_ptr<Mediator> m
 	m_tutorial_date.emplace_back("Shiftで走る", eKeys::KB_LSHIFT, false);
 	m_tutorial_date.emplace_back("Ctrlでしゃがみ", eKeys::KB_LCONTROL, true);
 	m_tutorial_date.emplace_back("TABで持ち物をみる", eKeys::KB_TAB, true);
-	m_tutorial_date.emplace_back("SPACEでライトをつける", eKeys::KB_SPACE, true);
+	m_tutorial_date.emplace_back("SPACEで懐中電灯をつける", eKeys::KB_SPACE, true);
 
 }
 
@@ -92,10 +92,11 @@ bool SubScene::seqTutorialUI(float delta_time) {
 		m_active_tutorial = false;
 		return true;
 	}
-	m_time_count++;
+	m_time_count+= 2;
 	//操作説明の情報をコルーチンで一つづつ描画
 	auto  date_index = m_tutorial_date.begin();
 	while (date_index != m_tutorial_date.end()) {
+		TNL_SEQ_CO_TIM_YIELD_RETURN(2, delta_time, [&]() {});
 		TNL_SEQ_CO_TIM_YIELD_RETURN(20, delta_time, [&]() {
 			//20秒間指示を表示
 			m_tutorial_message = date_index->s_mess.c_str();
@@ -110,7 +111,7 @@ bool SubScene::seqTutorialUI(float delta_time) {
 		});
 		TNL_SEQ_CO_TIM_YIELD_RETURN(2, delta_time, [&]() {
 			//文字のフェードアウト
-			m_alpha = 255 - m_time_count * 3;
+			m_alpha = 255 - m_time_count * 2;
 			if (m_time_count >= 255)m_time_count = 255;
 		});
 		TNL_SEQ_CO_TIM_YIELD_RETURN(30, delta_time, [&]() {

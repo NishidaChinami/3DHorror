@@ -21,8 +21,8 @@ class BackGroundStage;
 class Mediator
 {
 public:
-	Mediator() {};
-	~Mediator() {};
+	Mediator() {m_intersect_stage = new tnl::Vector3();}
+	~Mediator() {delete m_intersect_stage;}
 
 	//--------------------playerのGetterとSetter------------------------------------------------//
 	
@@ -54,6 +54,12 @@ public:
 	//第2引数 行数
 	//ret そのマスの迷路ステートを返す
 	maze::StageState MGetStageState(int r, int c);
+	//Rayがステージの壁にぶつかる交点と比較対象の交点のどちらが近いかを判定する
+	//第1引数　Rayを出すものの座標
+	//第2引数　Rayの向き
+	//第3引数　比較対象の交点座標
+	//ret 壁が近い場合true 比較対象が近い場合falseを返す
+	bool MGetIntersectStage(const tnl::Vector3 &pos, const tnl::Vector3 &ray, tnl::Vector3 *intersect_point );
 
 	//-------------------アイテムのGetterとSetter------------------------------------------------//
 	
@@ -88,6 +94,8 @@ public:
 	void SetMessageClass(std::shared_ptr<Message>& message) { m_message = message; }
 	void SetInventoryClass(std::shared_ptr<Inventory>& inventory) { m_inventory = inventory; }
 	void SetBackGroundClass(std::shared_ptr<BackGroundStage>& background) { m_backgroundstage = background; }
+	void SetStageWallClass(std::list<std::shared_ptr<StageWall>>& stagewall) { for (auto list : stagewall) { m_stagewall_list.emplace_back(list); } }
+
 
 	void MSetLightParam(bool light) { m_getlight = light; }
 	bool MGetLightParam() { return m_getlight; }
@@ -103,8 +111,10 @@ private:
 	std::weak_ptr<Message>m_message;
 	std::weak_ptr<Inventory>m_inventory;
 	std::weak_ptr<BackGroundStage>m_backgroundstage;
+	std::list<std::weak_ptr<StageWall>>m_stagewall_list;
 	//ライトをゲットしたかどうか
 	bool m_getlight = false;
 
-	
+	//交点のポインタ
+	tnl::Vector3* m_intersect_stage = nullptr;
 };
