@@ -25,7 +25,7 @@ TitleScene::TitleScene()
 	//動画と同サイズのスクリーンを作成(透明なピクセルを扱うため三つ目の引数はTRUE)
 	m_title_screen_hdl = MakeScreen(size.x, size.y, TRUE);
 	//ムービーの再生
-	PlayMovieToGraph(m_title_movie_hdl, DX_MOVIEPLAYTYPE_NORMAL);
+	PlayMovieToGraph(m_title_movie_hdl, DX_PLAYTYPE_LOOP);
 	//スクリーンエフェクトの生成
 	screen_efct = std::make_shared<dxe::ScreenEffect>(DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT);
 	//画面の明るさの調整するエフェクトのフラグをオン
@@ -54,7 +54,7 @@ TitleScene::~TitleScene()
 //更新処理
 void TitleScene::Update(float delta_time) {
 	sequence_.Update(delta_time);
-	
+	m_time_count += delta_time;
 	auto manager = GameManager::GetInstance();
 	auto sound = Sound::GetInstance();
 	//選択したとき
@@ -103,9 +103,11 @@ void TitleScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //描画処理
 void TitleScene::Draw() {
+	//動画再生
+	GraphFilterBlt(m_title_movie_hdl, m_title_screen_hdl, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, 50, true, GetColor(0, 0, 0), 0);
+	DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_WIDTH, m_title_screen_hdl, TRUE);
 	//透過の値を時間経過で変化
-	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	SetFontSize(TITLE_FONT_SIZE);
 	ChangeFont("g_コミックホラー恐怖-教漢", DX_CHARSET_DEFAULT);
 	//タイトル文字の描画
@@ -114,7 +116,7 @@ void TitleScene::Draw() {
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	//タイトルの文字が描画されたらタイトルの選択項目の表示
-	if (alpha >= 200) {
+	if (m_time_count >= 5) {
 		SetFontSize(MENU_FONT_SIZE);
 		ChangeFont("Shippori Mincho B1", DX_CHARSET_DEFAULT);
 		for (int i = 0; i < BUTTON_NUM; i++) {
@@ -128,22 +130,39 @@ void TitleScene::Draw() {
 }
 //------------------------------------------------------------------------------------------------------------
 //動画再生
-bool TitleScene::seqTitle(float delta_time) {
+bool TitleScene::seqMax(float delta_time) {
 	//背景の描画
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
+	//背景描画
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - alpha);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200 - alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-	GraphFilterBlt(m_title_movie_hdl, m_title_screen_hdl, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, 50, true, GetColor(0, 0, 0), 0);
-	DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_WIDTH, m_title_screen_hdl, TRUE);
-	// 動画再生　コルーチンで無限再生
-	TNL_SEQ_CO_FRM_YIELD_RETURN(-1, delta_time, [&]() {
-		//PlayMovieToGraph(m_title_movie_hdl, DX_MOVIEPLAYTYPE_NORMAL);
-		
-	});
-	TNL_SEQ_CO_END;
+	if (alpha >= 255) sequence_.change(&TitleScene::seqIdle);
 	
+	return true;
+}
+
+bool TitleScene::seqMin(float delta_time)
+{
+	//背景の描画
+	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
+	//背景描画
+	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	if (alpha >= 200) sequence_.change(&TitleScene::seqMax);
+
+	return true;
+}
+
+bool TitleScene::seqIdle(float delta_time)
+{
+	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
+	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
+	int rand_time = rand() % IDLE_TIME + IDLE_TIME;
+	if(alpha >= rand_time)sequence_.change(&TitleScene::seqMin);
 	return true;
 }
 

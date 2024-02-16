@@ -72,6 +72,8 @@ private:
 	const tnl::Vector3 MENU_POS = { 250,360,0 };
 	//音量や明るさ等の選択項目の先頭座標
 	const tnl::Vector3 SELECT_POS = { 490,220,0 };
+	//背景座標
+	const tnl::Vector3 BACK_POS = {740,360,0}; 
 	//各項目のスライダーの座標
 	const tnl::Vector2i PROGRESS_BAR_VOLUME = { 640,220 };
 	const tnl::Vector2i PROGRESS_BAR_BRIGHT = { 640,320 };
@@ -81,5 +83,8 @@ private:
 	const tnl::Vector3 MENU_SIZE = { 200,50,0 };
 	//フォントサイズ
 	const int MENU_FONT = 18;
+	//背景の倍率
+	const float DIANETER = 0.5;
+
 };
 

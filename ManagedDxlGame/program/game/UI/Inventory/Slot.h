@@ -40,5 +40,7 @@ private:
 	const float SLOTSIZE = 100;
 	//フォントサイズ
 	const int SLIOT_FONT = 16;
+	//UIの描画倍率
+	const float DIANETER = 0.6;
 };
 

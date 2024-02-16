@@ -82,7 +82,7 @@ public:
 	bool MSetPassInventory(const std::shared_ptr<Item>& item);
 
 	//skyboxのパラメーターの設定
-	void MSetSkyEmissive(tnl::Vector3 param);
+	void MSetSkyEmissive(tnl::Vector3 &param);
 	tnl::Vector3 MGetSkyEmissive();
 
 	//-------------------メディエータークラスに必要なクラスのポインタ------------------------------------------------//

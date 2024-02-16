@@ -19,8 +19,8 @@ void Slot::Draw() {
 	DrawBoxEx(m_pos, SLOTSIZE, SLOTSIZE, true, 0);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	if (m_isvalid) {
-		DrawRotaGraph(m_pos.x, m_pos.y, 0.6, 1, m_ui_hdl, true);
-		if(m_number >=2)DrawStringEx(m_pos.x + 25, m_pos.y + 25, -1, "%d", m_number);
+		DrawRotaGraph(m_pos.x, m_pos.y, DIANETER, 1, m_ui_hdl, true);
+		if(m_number >=2)DrawStringEx(m_pos.x + SLOTSIZE/4, m_pos.y + SLOTSIZE / 4, -1, "%d", m_number);
 	}
 }
 
@@ -30,7 +30,7 @@ void Slot::Explanation() {
 	if (m_isvalid) {
 		if (cf::IntersectMouse(m_pos, tnl::Vector3(SLOTSIZE, SLOTSIZE, 0))) {
 			SetFontSize(SLIOT_FONT);
-			cf::DrawCenterString(m_explanation.c_str(),tnl::Vector3(m_pos.x,m_pos.y+50,0));
+			cf::DrawCenterString(m_explanation.c_str(),tnl::Vector3(m_pos.x,m_pos.y+ SLOTSIZE/2,0));
 		}
 	}
 }

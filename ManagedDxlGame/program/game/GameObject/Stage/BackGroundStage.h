@@ -21,12 +21,14 @@ public:
 	void MainStageDraw(std::shared_ptr<GameCamera>gamecamera);
 	//チュートリアルステージの描画
 	void TutorialStageDraw(std::shared_ptr<GameCamera>gamecamera);
-	//チュートリアルステージの壁の高さ
-	static const int SIZE = 1600;
 	//------------Getter/Setter------------------------//
 	tnl::Vector3 getSkyEmissive() {return m_skybox->getMtrlEmissive();}
 	void setSkyEmissive(tnl::Vector3 param) { m_skybox->setMtrlEmissive({ param.x,param.y,param.z }); }
 	const std::vector<Shared<dxe::Mesh>>& getMesh()const { return m_tutorial_mesh_vector; }
+
+	//-----------------静的定数--------------------------------//
+	//チュートリアルステージの壁の高さ
+	static const int SIZE = 1600;
 private:
 
 	//メッシュを保存するベクター

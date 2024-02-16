@@ -82,24 +82,24 @@ void Factory::CreatMainGame() {
 			}
 		}
 	}
+	
 	//Enemy生成
-	/*tnl::Vector2i a;
+	tnl::Vector2i a;
 	if (m_stage->getStgaeState(1, 2) == maze::StageState::Empty) a = { 2,1 };
 	else if (m_stage->getStgaeState(2, 1) == maze::StageState::Empty) a = { 1,2 };
 
-	m_enemy = std::make_shared<Enemy>(cf::Coordinate(a, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), m_mediator);*/
-	
+	m_enemy = std::make_shared<Enemy>(cf::Coordinate(a, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), m_mediator);
 	//Enemy生成 プレイヤーがスポーンする位置と対角のエリアにライダムな場所にスポーン
-	while (true)
+	/*while (true)
 	{
 		tnl::Vector2i random;
 		random.x = rand() % (Stage::STAGE_COL/ 2) + Stage::STAGE_COL / 2;
 		random.y = rand() % (Stage::STAGE_ROW / 2) + Stage::STAGE_ROW / 2;
 		if (m_stage->getStgaeState(random.y,random.x) == maze::StageState::Empty) {
-			m_enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), m_mediator);
+			m_enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, Enemy::HEAD_HEIGHT), m_mediator);
 			break;
 		}
-	}
+	}*/
 
 	int count = 0;
 	//Itemの生成
@@ -135,9 +135,9 @@ void Factory::CreatMainGame() {
 	for (int r = 1; r < Stage::STAGE_ROW; r+= 2) {
 		for (int c = 1; c < Stage::STAGE_COL; c+=2) {
 			tnl::Vector3 pos;
-			pos.x = { -300.0f + c * StageWall::BLOCKSIZE };
-			pos.y = 500;
-			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
+			pos.x = { StageWall::START_BLOCK_POS.x + c * StageWall::BLOCKSIZE };
+			pos.y = GameCamera::HEAD_HEIGHT;
+			pos.z = { StageWall::START_BLOCK_POS.z + r * StageWall::BLOCKSIZE };
 			//通路だったらライトを配置
 			if(m_stage->getStgaeState(r, c) == maze::StageState::Empty)
 				m_fluorescent_list.emplace_back(std::make_shared<Fluorescent>(pos,m_mediator));
@@ -156,9 +156,9 @@ void Factory::CreatTutorial() {
 		for (int k = 0; k < m_tutorial_csv[i].size(); k++) {
 
 			tnl::Vector3 pos;
-			pos.x = { -300.0f + k * StageWall::BLOCKSIZE };
+			pos.x = { StageWall::START_BLOCK_POS.x + k * StageWall::BLOCKSIZE };
 			pos.y = StageWall::BLOCKSIZE / 2;
-			pos.z = { -300.0f + i * StageWall::BLOCKSIZE };
+			pos.z = { StageWall::START_BLOCK_POS.z + i * StageWall::BLOCKSIZE };
 			if (m_tutorial_csv[i][k] != 0) {
 				m_stage_tutorial_list.emplace_back(std::make_shared<StageWall>(pos));
 			}
@@ -167,7 +167,7 @@ void Factory::CreatTutorial() {
 	//懐中電灯
 	m_item_tutorial_list.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(6,6), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),Item::ItemType::FrashLight, m_mediator));
 	//あらすじの説明アイテムの生成
-	m_item_tutorial_list.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(4, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE,400), 0, m_mediator));
+	m_item_tutorial_list.emplace_back(std::make_shared<Item>(cf::Coordinate(tnl::Vector2i(4, 1), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE,GameCamera::HEAD_HEIGHT), 0, m_mediator));
 
 }
 //------------------------------------------------------------------------------------------------------------

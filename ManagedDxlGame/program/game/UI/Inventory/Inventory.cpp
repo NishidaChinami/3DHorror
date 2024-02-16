@@ -7,7 +7,7 @@ Inventory::Inventory()
 {
 	//インベントリーのスロットの生成
 	for (int i = 0; i < 4; ++i) {
-		tnl::Vector3 s_pos = { 415 + i * 150.0f,DXE_WINDOW_HEIGHT/2,0 };
+		tnl::Vector3 s_pos = { SLOT_POS.x + i * 150.0f,SLOT_POS.y,SLOT_POS.z };
 		m_slot_vector.emplace_back(std::make_shared<Slot>(s_pos));
 	}
 }

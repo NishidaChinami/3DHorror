@@ -53,7 +53,6 @@ void Enemy::Draw(std::shared_ptr<GameCamera>gamecamera) {
 	MV1SetPosition(m_model_enemy, cf::ConvertToV3(mesh->pos_));
 	//model‚Ì•`‰æ
 	MV1DrawModel(m_model_enemy);
-	//if (WithinSight()) { DrawStringEx(100, 100, -1, "Œ©‚¦‚é"); }
 }
 
 //------------------------------------------------------------------------------------------------------------

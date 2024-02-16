@@ -29,6 +29,7 @@ public:
 	//-----------------------------------------Getter/Setter-----------------------------------------------------//
 	const tnl::Vector3 GetStageWallPos() { return mesh->pos_; }
 
+	//-----------------静的定数--------------------------------//
 	//ステージの一マス目の位置
 	static const tnl::Vector3 START_BLOCK_POS;
 	//壁の幅

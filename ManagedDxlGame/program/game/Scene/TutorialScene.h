@@ -51,5 +51,6 @@ private:
 	std::shared_ptr<Collision>m_collision = nullptr;
 	std::shared_ptr<Player> m_player = nullptr;
 	std::list<std::shared_ptr<StageWall>> m_stagewall;
-
+	//--------------’è”--------------------------//
+	const int FONT_SIZE = 18;
 };

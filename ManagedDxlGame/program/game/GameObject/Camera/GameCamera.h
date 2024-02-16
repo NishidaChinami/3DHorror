@@ -40,7 +40,7 @@ public:
 
 	TNL_PROPERTY(tnl::Quaternion, CameraRot, m_camera_rot);
 	TNL_PROPERTY(bool, CameraActive, m_camera_inactive);
-	//----------------------’è”------------------------//
+	//-----------------Ã“I’è”--------------------------------//
 	static constexpr float HEAD_HEIGHT = 400;
 private:
 	//ƒJƒƒ‰‚Ì‰ñ“]

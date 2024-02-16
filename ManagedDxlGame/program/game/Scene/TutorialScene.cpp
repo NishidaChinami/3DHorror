@@ -90,7 +90,7 @@ void TutorialScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //描画処理
 void TutorialScene::Draw() {
-	SetFontSize(18);
+	SetFontSize(FONT_SIZE);
 	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	//シャドウマップの準備
 	m_shadow->reserveBegin();

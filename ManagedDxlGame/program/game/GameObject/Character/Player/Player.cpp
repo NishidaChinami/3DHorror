@@ -85,14 +85,14 @@ bool Player::seqWalk(const float delta_time) {
 	mesh->rot_ = m_gamecamera->getCameraRot();
 
 	//スタミナ管理
-	if (m_stamina < MAXSTAMINA) m_stamina += 2;
+	if (m_stamina < MAXSTAMINA) m_stamina += RECOVERY;
 	if (m_stamina >= MAXSTAMINA/2)m_can_dash = true;
 
 	//サウンド再生と停止
 	auto sound = Sound::GetInstance();
 	sound->SoundStop(m_run_sound.c_str());
-	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), (mesh->pos_ - tnl::Vector3(0, 200, 0)), "WALK");
-	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ + tnl::Vector3(0, 200, 0), "BREATHLESSNESS");
+	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), (mesh->pos_ - tnl::Vector3(0, GameCamera::HEAD_HEIGHT/2, 0)), "WALK");
+	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ + tnl::Vector3(0, GameCamera::HEAD_HEIGHT / 2, 0), "BREATHLESSNESS");
 	if (!sound->SoundPlaying(m_walk_sound.c_str()))sound->SoundPlay(m_walk_sound.c_str());
 	if(m_can_dash)sound->SoundStop("BREATHLESSNESS");
 	
@@ -115,7 +115,7 @@ bool Player::seqRun(const float delta_time) {
 	//速度を走る設定
 	m_speed = DASH_SPEED;
 	//スタミナの減少
-	m_stamina -= 3;
+	m_stamina -= DIMINUTION;
 	//カメラから移動と回転を取得
 	mesh->pos_ = m_gamecamera->pos_;
 	mesh->rot_ = m_gamecamera->getCameraRot();
@@ -145,8 +145,8 @@ bool Player::seqSneek(const float delta_time) {
 	//速度をしゃがみ設定
 	m_speed = WALK_SNEEK;
 	//頭の高さを変更
-	if (mesh->pos_.y >= 200) {
-		mesh->pos_.y -= 10;
+	if (mesh->pos_.y >= GameCamera::HEAD_HEIGHT/2) {
+		mesh->pos_.y -= SNEEK_SPEED;
 		m_gamecamera->pos_ = mesh->pos_;
 	}
 	//カメラから移動と回転を取得

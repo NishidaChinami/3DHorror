@@ -35,7 +35,7 @@ private:
 	float m_atten2 = 0.0000f;		//ライトの距離の二乗に比例して減衰する率
 
 	//点滅の速度変数
-	float m_trans_time = 4.0f;
+	float m_trans_time =0;
 	//点滅のカウント
 	float m_blink_count = 0;
 
@@ -49,5 +49,9 @@ private:
 	const int LIGHT_SIZE = 10;
 	//敵との近さを判定する範囲
 	const int RANGE = 800;
+	//蛍光灯の光の通常速度
+	const float TRANS_TIME = 2.0f;
+	//速度の変化の範囲
+	const int TRANS_RANGE = 6;
 };
 

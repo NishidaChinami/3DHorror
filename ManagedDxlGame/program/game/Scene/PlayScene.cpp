@@ -99,7 +99,7 @@ void PlayScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //描画処理
 void PlayScene::Draw() {
-	SetFontSize(18);
+	SetFontSize(FONT_SIZE);
 	ChangeFont("Hina Mincho", DX_CHARSET_DEFAULT);
 	//メインゲームの描画
 	screen_efct->renderBegin();
@@ -188,16 +188,16 @@ void PlayScene::CollisionFuc() {
 			auto manager = GameManager::GetInstance();
 			auto sound = Sound::GetInstance();
 			//ゲームクリアのフラグをオフ
-			//manager->can_clear = false;
-			//if (!manager->is_switch) {
-			//	//各ゲームオーバーの処理へ
-			//	pl->GameoverEvent();
-			//	enm->GameoverEvent();
-			//	sound->Sound2DPlay("DEATH", DX_PLAYTYPE_BACK);
-			//	//リザルトシーンに切り替える
-			//	manager->ChangeScene(std::make_shared<ResultScene>());
-			//}
-			//manager->is_switch = true;
+			manager->can_clear = false;
+			if (!manager->is_switch) {
+				//各ゲームオーバーの処理へ
+				pl->GameoverEvent();
+				enm->GameoverEvent();
+				sound->Sound2DPlay("DEATH", DX_PLAYTYPE_BACK);
+				//リザルトシーンに切り替える
+				manager->ChangeScene(std::make_shared<ResultScene>());
+			}
+			manager->is_switch = true;
 		});
 
 	//ペアを代入

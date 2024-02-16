@@ -27,7 +27,6 @@ Fluorescent::~Fluorescent()
 //------------------------------------------------------------------------------------------------------------
 //更新処理
 void Fluorescent::Update(float delta_time) {
-	//SetLightPositionHandle(m_fluorescent_hdl, cf::ConvertToV3( tnl::Vector3(m_mediator->MGetEnemyPos().x,500, m_mediator->MGetEnemyPos().z)));
 	//敵との距離によって有効にするライトハンドルを決める
 	if (tnl::IsIntersectSphere(mesh->pos_ - tnl::Vector3(0,250,0), LIGHT_SIZE, m_mediator->MGetEnemyPos(), RANGE)) {
 		is_valid = true;
@@ -60,7 +59,9 @@ void Fluorescent::Blink(const float delta_time) {
 	float bright = 0;
 	m_blink_count += delta_time;
 	//0～１の間を行ったり来たりする
-	bright = fabs(sin(DX_PI_F / 180 * m_blink_count));
+	bright = fabs(sin(DX_PI_F / 180 * m_blink_count * TRANS_TIME));
+	//点滅速度を不規則に決める
+	if (fabs(tnl::ToDegree(DX_PI_F) - m_blink_count) < FLT_EPSILON)m_trans_time = rand() % TRANS_RANGE + TRANS_TIME;
 	//半周期立つと点滅速度を変更
 	if (m_blink_count >= tnl::ToDegree(DX_PI_F)) {
 		bright = fabs(sin(DX_PI_F / 180 * m_blink_count * m_trans_time));

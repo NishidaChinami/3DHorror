@@ -142,7 +142,7 @@ bool Mediator::MSetPassInventory(const std::shared_ptr<Item>& item) {
 
 //--------------------スカイボックスのGetterとSetter------------------------------------------------//
 
-void Mediator::MSetSkyEmissive(tnl::Vector3 param){
+void Mediator::MSetSkyEmissive(tnl::Vector3 &param){
 	auto background = m_backgroundstage.lock();
 	if(background)background->setSkyEmissive(param);}
 tnl::Vector3 Mediator::MGetSkyEmissive(){

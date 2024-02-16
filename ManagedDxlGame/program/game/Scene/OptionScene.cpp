@@ -71,9 +71,9 @@ void OptionScene::Update(float delta_time) {
 void OptionScene::Draw() {
 	if (!m_active_option)return;
 	//オプション画面の背景
-	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, 0.5, 0, m_option_back_gpc, true);
+	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, DIANETER, 0, m_option_back_gpc, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawBoxEx(tnl::Vector3(DXE_WINDOW_WIDTH	/2+100, DXE_WINDOW_HEIGHT / 2, 0), OPTION_WIDTH, OPTION_HEIGHT, true, 0);
+	DrawBoxEx(BACK_POS, OPTION_WIDTH, OPTION_HEIGHT, true, 0);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	//メニュー項目の文字の描画
 	SetFontSize(MENU_FONT);
@@ -131,8 +131,8 @@ void OptionScene::BarDraw()
 				, &OptionScene::getSensitive
 				, &OptionScene::setSensitive
 				, PROGRESS_BAR_SENSITIVITY
-				, 0.05f
-				, 0.2f
+				, 0.01f
+				, 0.5f
 				, ""
 				, 300));
 	}

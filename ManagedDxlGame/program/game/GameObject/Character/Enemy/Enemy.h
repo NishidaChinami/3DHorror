@@ -52,6 +52,8 @@ public:
 	bool getChaseState() const{ return chase_state; }
 	tnl::Vector3 getEnemyPos() const{ return mesh->pos_; }
 	tnl::Vector3 getEnemySize() const{ return size; }
+	//-----------------静的定数--------------------------------//
+	static constexpr float HEAD_HEIGHT = 100;
 
 private:
 	//Enemyの移動状態を管理するシークエンス
@@ -100,5 +102,5 @@ private:
 	//プレイヤーを追いかけるときの速度
 	const float CHASE_SPEED = 10.0f;
 	//巡回中の速度
-	const float PATROL_SPEED = 5.0;
+	const float PATROL_SPEED = 4.0;
 };

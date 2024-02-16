@@ -129,7 +129,7 @@ void BackGroundStage::MeshCreate()
 	for (int i = 0; i < m_tutorial_csv.size(); i++) {
 		for (int k = 0; k < m_tutorial_csv[i].size(); k++) {
 			Shared<dxe::Mesh>copy_mesh = nullptr;
-			tnl::Vector3 pos= { -300.0f + k * StageWall::BLOCKSIZE,SIZE / 2,-300.0f + i * StageWall::BLOCKSIZE };
+			tnl::Vector3 pos= { StageWall::START_BLOCK_POS.x + k * StageWall::BLOCKSIZE,SIZE / 2,StageWall::START_BLOCK_POS.z + i * StageWall::BLOCKSIZE };
 			
 			if (m_tutorial_csv[i][k] == -1)continue;
 			//è∞
@@ -196,10 +196,3 @@ void BackGroundStage::TutorialStageDraw(std::shared_ptr<GameCamera> gamecamera)
 	}
 	
 }
-
-
-//tnl::DebugTrace("----------------------------------------------------------\n");
-
-/*auto c = tnl::BeginClock();
-float time = tnl::EndClock(c);
-tnl::DebugTrace("create group mesh %f\n", time);*/

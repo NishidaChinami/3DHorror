@@ -16,16 +16,17 @@ public:
 	void Update(float delta_time)override;
 	//プレイシーンの描画関数
 	void Draw()override;	
-	//動画再生コルーチン
-	TNL_CO_SEQUENCE(TitleScene, &TitleScene::seqTitle);
+	
 	//子クラス追加
 	void AddChild(std::shared_ptr<BaseScene>child) {
 		m_child_list.emplace_back(child);
 	}
 private:
 	//シーン遷移用のシーケンス
-	tnl::Sequence<TitleScene> sequence_ = tnl::Sequence<TitleScene>(this, &TitleScene::seqTitle);
-	bool seqTitle(float delta_time);//動画再生のコルーチンを回すシーケンス
+	tnl::Sequence<TitleScene> sequence_ = tnl::Sequence<TitleScene>(this, &TitleScene::seqMax);
+	bool seqMax(float delta_time);//背景変化のシーケンス 透過率が徐々に高くなる
+	bool seqMin(float delta_time);//背景変化のシーケンス 透過率が徐々に小さくなる
+	bool seqIdle(float delta_time);//待機状態
 
 	//タイトルの背景のグラフィックハンドル
 	int m_title_gpc_hdl = 0;
@@ -33,6 +34,8 @@ private:
 	int m_title_movie_hdl= 0;
 	//動画再生用の画像ハンドル
 	int m_title_screen_hdl = 0;	
+	//タイトルの時間経過
+	float m_time_count = 0;
 
 	//------------他クラスの参照用ポインタ------------------------//
 	//親クラスのリストを用意
@@ -63,6 +66,8 @@ private:
 	const int FULLWIGHT = 2;
 	//フェードの速度変数
 	const float TRANS_TIME = 5.0f;
+	//待機時間
+	const int IDLE_TIME = 100;
 
 };
 

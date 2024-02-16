@@ -70,10 +70,16 @@ private:
 	const float DASH_SPEED = 10;
 	//歩く速度
 	const float WALK_SPEED = 4;
-	//しゃがみ速度
+	//しゃがみ歩き速度
 	const float WALK_SNEEK = 2;
+	//しゃがむ速度（頭が下に下がる速さ）
+	const float SNEEK_SPEED = 10;
 	//疲労状態のスタミナ数値
-	const float TIREDNESS = 10;
+	const int TIREDNESS = 10;
+	//スタミナの減少量
+	const int DIMINUTION = 3;
+	//スタミナの回復量
+	const int RECOVERY = 2;
 	
 };
 
