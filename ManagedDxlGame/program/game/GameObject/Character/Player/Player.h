@@ -37,7 +37,7 @@ public:
 	float getPlayerStamina() const { return m_stamina; }
 	bool getPlayerDash()const { return m_can_dash; }
 
-	static const int MAXSTAMINA = 1000;
+	static const int MAXSTAMINA = 1200;
 private:
 	//プレイヤーの移動状態を管理するシークエンス
 	tnl::Sequence<Player> sequence_ = tnl::Sequence<Player>(this, &Player::seqWalk);
@@ -67,7 +67,7 @@ private:
 	std::shared_ptr<Mediator>m_mediator = nullptr;
 	//----------------------定数------------------------//
 	//走る速度
-	const float DASH_SPEED = 10;
+	const float DASH_SPEED = 12;
 	//歩く速度
 	const float WALK_SPEED = 4;
 	//しゃがみ歩き速度

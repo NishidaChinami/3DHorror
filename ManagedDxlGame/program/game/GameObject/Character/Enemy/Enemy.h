@@ -97,8 +97,10 @@ private:
 	//----------------------定数------------------------//
 	//音の聞こえる半径
 	const float HEAR_RANGE = 3000;
-	//音の聞かれる範囲
-	const float HEARED_RANGE = 1000;
+	//走る音の聞かれる範囲
+	const float RUN_RANGE = 1200;
+	//歩く音の聞かれる範囲
+	const float WALK_RANGE = 400;
 	//プレイヤーを追いかけるときの速度
 	const float CHASE_SPEED = 10.0f;
 	//巡回中の速度

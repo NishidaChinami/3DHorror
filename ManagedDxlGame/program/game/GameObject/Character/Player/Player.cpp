@@ -161,10 +161,9 @@ bool Player::seqSneek(const float delta_time) {
 //死んだときのシーケンス
 bool Player::seqDeath(const float delta_time)
 {	//視点をEnemy方向へ
-	m_gamecamera->setCameraRot(tnl::Quaternion::LookAt(mesh->pos_, m_mediator->MGetEnemyPos(), { 0,1,0 }));
+	m_gamecamera->setCameraRot(tnl::Quaternion::LookAt(mesh->pos_, tnl::Vector3(m_mediator->MGetEnemyPos().x, m_mediator->MGetEnemyPos().y + GameCamera::HEAD_HEIGHT, m_mediator->MGetEnemyPos().z), { 0,1,0 }));
 	//カメラ振動をさせる
 	m_gamecamera->CameraVibration();
 	return true;
 }
-
 

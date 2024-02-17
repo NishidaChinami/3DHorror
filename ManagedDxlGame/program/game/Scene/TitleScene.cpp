@@ -106,8 +106,6 @@ void TitleScene::Draw() {
 	//“®‰æÄ¶
 	GraphFilterBlt(m_title_movie_hdl, m_title_screen_hdl, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, 50, true, GetColor(0, 0, 0), 0);
 	DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_WIDTH, m_title_screen_hdl, TRUE);
-	//“§‰ß‚Ì’l‚ðŽžŠÔŒo‰ß‚Å•Ï‰»
-	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	SetFontSize(TITLE_FONT_SIZE);
 	ChangeFont("g_ƒRƒ~ƒbƒNƒzƒ‰[‹°•|-‹³Š¿", DX_CHARSET_DEFAULT);
 	//ƒ^ƒCƒgƒ‹•¶Žš‚Ì•`‰æ
@@ -129,12 +127,13 @@ void TitleScene::Draw() {
 	}
 }
 //------------------------------------------------------------------------------------------------------------
-//“®‰æÄ¶
+//”wŒi‚Ì“§‰ß‚Ì•Ï‰»@“§‰ß—¦‚ª‚‚­‚È‚é
 bool TitleScene::seqMax(float delta_time) {
 	//”wŒi‚Ì•`‰æ
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
 	//”wŒi•`‰æ
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
+	//™X‚É”–‚­•`‰æ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200 - alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
@@ -143,12 +142,15 @@ bool TitleScene::seqMax(float delta_time) {
 	return true;
 }
 
+//------------------------------------------------------------------------------------------------------------
+//”wŒi‚Ì“§‰ß‚Ì•Ï‰»@“§‰ß—¦‚ª¬‚³‚­‚È‚é
 bool TitleScene::seqMin(float delta_time)
 {
 	//”wŒi‚Ì•`‰æ
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
 	//”wŒi•`‰æ
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
+	//™X‚É”Z‚­•`‰æ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
@@ -156,11 +158,13 @@ bool TitleScene::seqMin(float delta_time)
 
 	return true;
 }
-
+//------------------------------------------------------------------------------------------------------------
+//”wŒi‚Ì“§‰ß‚Ì•Ï‰»@‘Ò‹@ó‘Ô
 bool TitleScene::seqIdle(float delta_time)
 {
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 0.8, 0, m_title_gpc_hdl, true);
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
+	//‘Ò‹@ŽžŠÔ‚ðƒ‰ƒ“ƒ_ƒ€‚ÉÝ’è
 	int rand_time = rand() % IDLE_TIME + IDLE_TIME;
 	if(alpha >= rand_time)sequence_.change(&TitleScene::seqMin);
 	return true;

@@ -93,8 +93,11 @@ bool Enemy::WithinSight() {
 bool Enemy::Hearing() {
 	auto sound = Sound::GetInstance();
 	//Enemyから一定の範囲のところで走ると聞こえた判定になる
-	if (tnl::IsIntersectSphere(mesh->pos_, HEARED_RANGE, m_mediator->MGetPlayerPos(), m_mediator->MGetPlayerSize().x)) {
+	if (tnl::IsIntersectSphere(mesh->pos_, RUN_RANGE, m_mediator->MGetPlayerPos(), m_mediator->MGetPlayerSize().x)) {
 		if (sound->SoundPlaying("RUN"))return true;
+	}
+	else if (tnl::IsIntersectSphere(mesh->pos_, WALK_RANGE, m_mediator->MGetPlayerPos(), m_mediator->MGetPlayerSize().x)) {
+		if (sound->SoundPlaying("WALK"))return true;
 	}
 	else return false;
 }
@@ -138,24 +141,29 @@ bool Enemy::seqMovement(const float delta_time) {
 bool Enemy::seqUpdatePoint(const float delta_time) {
 	m_index--;
 	if (!chase_state) {
+		//視野に入ったら
 		if (WithinSight()) {
 			sequence_.change(&Enemy::seqTrack);
 			chase_state = true;
 			return true;
 		}
+		//足音が聞こえたら
 		if (Hearing()) {
 			sequence_.change(&Enemy::seqTrack);
 			chase_state = true;
 			return true;
 		}
 	}
+	//ルートのインデックスが０になったら最短経路組みなおし
 	if (m_index < 0) {
 		if (chase_state)sequence_.change(&Enemy::seqTrack);
 		else sequence_.change(&Enemy::seqPatrol);
 		if (!WithinSight() && !Hearing())chase_state = false;
 		return true;
 	}
+	//次の地点を登録
 	m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);
+	//回転状態
 	sequence_.change(&Enemy::seqRotate);
 	return true;
 }
@@ -165,6 +173,7 @@ bool Enemy::seqTrack(const float delta_time) {
 //プレイヤーを終点として最短経路を求める
 	m_speed = CHASE_SPEED;
 	route.clear();
+	//プレイヤーとの最短経路を調べる
 	Routing(cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),
 		cf::GridPos(m_mediator->MGetPlayerPos(), StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),
 		&route, 
@@ -172,7 +181,9 @@ bool Enemy::seqTrack(const float delta_time) {
 		Stage::STAGE_COL);
 	m_index = route.size()-1;
 	if (m_index <= 0)return true;
+	//最初の目的地を登録
 	m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);
+	//回転状態
 	sequence_.change(&Enemy::seqRotate);
 	return true;
 }
@@ -183,6 +194,7 @@ bool Enemy::seqPatrol(const float delta_time) {
 	m_speed = PATROL_SPEED;
 	route.clear();
 	int random = rand() % 5;
+	//ランダムにアイテムを選んで最短経路を調べる
 	Routing(cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE),
 		m_mediator->MGetItemPos()[random],
 		&route, 
@@ -190,7 +202,9 @@ bool Enemy::seqPatrol(const float delta_time) {
 		Stage::STAGE_COL);
 		m_index = route.size()-2;
 		if (m_index <= 0)return true;
+		//最初の目的地を登録
 		m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);
+		//回転状態
 		sequence_.change(&Enemy::seqRotate);
 	return true;
 };
