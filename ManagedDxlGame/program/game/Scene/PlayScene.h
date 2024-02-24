@@ -32,7 +32,9 @@ public:
 
 	//ŽqƒNƒ‰ƒX‚Ì’Ç‰Á
 	void AddChild(std::shared_ptr<BaseScene>child) {
-		m_child_list.emplace_back(child);
+		if (child) {
+			m_child_list.emplace_back(child);
+		}
 	}
 
 private:

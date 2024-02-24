@@ -19,9 +19,9 @@ BackGroundStage::BackGroundStage(const std::shared_ptr<Stage>& stage, const std:
 		std::shared_ptr<dxe::Mesh>stagemesh;
 		tnl::Vector3 mesh_size = { m_mesh_csv[i][2].getFloat(),m_mesh_csv[i][3].getFloat(),m_mesh_csv[i][4].getFloat() };
 		//メインステージの場合
-		if (0 == m_mesh_csv[i][0].getInt()) {
+		if (m_mesh_csv[i][0].getInt() == 0) {
 			//Boxメッシュ場合
-			if (0 == m_mesh_csv[i][0].getInt()) {
+			if (m_mesh_csv[i][0].getInt()== 0) {
 				stagemesh = dxe::Mesh::CreateBoxMV(mesh_size,
 					dxe::Texture::CreateFromFile(m_mesh_csv[i][5].getString().c_str()),
 					dxe::Texture::CreateFromFile(m_mesh_csv[i][5].getString().c_str()),
@@ -40,7 +40,7 @@ BackGroundStage::BackGroundStage(const std::shared_ptr<Stage>& stage, const std:
 		//チュートリアルステージの場合
 		else {
 			//Boxメッシュ場合
-			if (0 == m_mesh_csv[i][1].getInt()) {
+			if (m_mesh_csv[i][1].getInt()== 0) {
 				stagemesh = dxe::Mesh::CreateBoxMV(mesh_size,
 					dxe::Texture::CreateFromFile(m_mesh_csv[i][5].getString().c_str()),
 					dxe::Texture::CreateFromFile(m_mesh_csv[i][5].getString().c_str()),

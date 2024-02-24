@@ -15,7 +15,7 @@ public:
 	~Stage();
 
 	//-----------------------------------------Getter/Setter-----------------------------------------------------//
-	const maze::StageState getStgaeState(int r,int c) { return m_state[r][c]; }
+	const maze::StageState &getStgaeState(int r,int c) const{ return m_state[r][c]; }
 
 	//-----------------静的定数--------------------------------//
 	//自動生成マップの列数・行数

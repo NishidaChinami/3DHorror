@@ -7,6 +7,8 @@ class Mediator;
 //-------------------------------------------------------------------------------------------------//
 //ステージの描画クラス
 //ステージのメッシュを描画する
+// グループメッシュ・インスタンシングメッシュで一括描画したかったが、ロードが重くなってしまったため
+// ステージのみ描画クラスが分かれてしまった
 //-------------------------------------------------------------------------------------------------//
 class BackGroundStage
 {
@@ -22,8 +24,8 @@ public:
 	//チュートリアルステージの描画
 	void TutorialStageDraw(std::shared_ptr<GameCamera>gamecamera);
 	//------------Getter/Setter------------------------//
-	tnl::Vector3 getSkyEmissive() {return m_skybox->getMtrlEmissive();}
-	void setSkyEmissive(tnl::Vector3 param) { m_skybox->setMtrlEmissive({ param.x,param.y,param.z }); }
+	const tnl::Vector3 &getSkyEmissive() const{return m_skybox->getMtrlEmissive();}
+	void setSkyEmissive(const tnl::Vector3 &param) { m_skybox->setMtrlEmissive({ param.x,param.y,param.z }); }
 	const std::vector<Shared<dxe::Mesh>>& getMesh()const { return m_tutorial_mesh_vector; }
 
 	//-----------------静的定数--------------------------------//
@@ -47,8 +49,8 @@ private:
 	tnl::Vector3 m_skybox_emmisive = { 0.36,0.42,0.42 };
 
 	//------------他クラスの参照用ポインタ------------------------//
-	std::shared_ptr<Stage>m_stage;
-	std::shared_ptr<Mediator>m_mediator;
+	std::shared_ptr<Stage>m_stage = nullptr;
+	std::shared_ptr<Mediator>m_mediator = nullptr;
 	//スカイボックスのポインタ
 	Shared<dxe::Mesh> m_skybox = nullptr;
 };

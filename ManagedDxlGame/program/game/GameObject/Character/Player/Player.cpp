@@ -12,7 +12,7 @@
 //-------------------Effect file------------------------//
 #include"../../../Effect/Sound/Sound.h"
 
-Player::Player(std::shared_ptr<GameCamera>gamecamera, const std::shared_ptr<Mediator>&mediator)
+Player::Player(std::shared_ptr<GameCamera>&gamecamera, const std::shared_ptr<Mediator>&mediator)
 {
 	//見えないメッシュを生成
 	mesh = dxe::Mesh::CreateCubeMV(50);
@@ -45,7 +45,9 @@ void Player::Update(float delta_time) {
 	//一フレーム前の座標を保存
 	m_prev_pos = mesh->pos_;
 	//懐中電灯が有効になったら更新を入れる
-	if(m_mediator->MGetLightParam())m_flashlight->Update(mesh->pos_, m_gamecamera->getCameraRot());
+	if (m_mediator->MGetLightParam()) {
+		m_flashlight->Update(mesh->pos_, m_gamecamera->getCameraRot());
+	}
 	//チュートリアルとメインゲームで足音を変える
 	GameManager::GetInstance()->is_tutorial == true ? (m_walk_sound = { "GROUNDWALK" }, m_run_sound = { "GROUNDRUN" }) : (m_walk_sound = { "WALK" }, m_run_sound = { "RUN" });
 	sequence_.Update(delta_time);
@@ -62,15 +64,15 @@ void Player::GameoverEvent()
 void Player::StageCorrection(const std::shared_ptr<StageWall>&stagewall) {
 
 	tnl::CorrectPositionAABB(
-		m_gamecamera->getPrevPos()
-		, stagewall->GetStageWallPos()
-		, size
-		, tnl::Vector3(StageWall::BLOCKSIZE,StageWall::BLOCKHEIGHT,StageWall::BLOCKSIZE)
-		, m_gamecamera->pos_
-		, stagewall->mesh->pos_
-		, tnl::eCorrTypeAABB::PWRFL_B
-		, tnl::eCorrTypeAABB::PWRFL_B
-		, tnl::eCorrTypeAABB::PWRFL_B, 0.1f);
+		m_gamecamera->getPrevPos(),
+		stagewall->GetStageWallPos(),
+		size,
+		tnl::Vector3(StageWall::BLOCKSIZE,StageWall::BLOCKHEIGHT,StageWall::BLOCKSIZE),
+		m_gamecamera->pos_,
+		stagewall->mesh->pos_,
+		tnl::eCorrTypeAABB::PWRFL_B,
+		tnl::eCorrTypeAABB::PWRFL_B,
+		tnl::eCorrTypeAABB::PWRFL_B, 0.1f);
 	
 }
 
@@ -85,16 +87,20 @@ bool Player::seqWalk(const float delta_time) {
 	mesh->rot_ = m_gamecamera->getCameraRot();
 
 	//スタミナ管理
-	if (m_stamina < MAXSTAMINA) m_stamina += RECOVERY;
-	if (m_stamina >= MAXSTAMINA/2)m_can_dash = true;
+	if (m_stamina < MAXSTAMINA) { m_stamina += RECOVERY; }
+	if (m_stamina >= MAXSTAMINA / 2) { m_can_dash = true; }
 
 	//サウンド再生と停止
 	auto sound = Sound::GetInstance();
 	sound->SoundStop(m_run_sound.c_str());
 	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), (mesh->pos_ - tnl::Vector3(0, GameCamera::HEAD_HEIGHT/2, 0)), "WALK");
 	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ + tnl::Vector3(0, GameCamera::HEAD_HEIGHT / 2, 0), "BREATHLESSNESS");
-	if (!sound->SoundPlaying(m_walk_sound.c_str()))sound->SoundPlay(m_walk_sound.c_str());
-	if(m_can_dash)sound->SoundStop("BREATHLESSNESS");
+	if (!sound->SoundPlaying(m_walk_sound.c_str())) {
+		sound->SoundPlay(m_walk_sound.c_str());
+	}
+	if (m_can_dash) {
+		sound->SoundStop("BREATHLESSNESS");
+	}
 	
 	if (!tnl::Input::IsKeyDown(eKeys::KB_D) &&
 		!tnl::Input::IsKeyDown(eKeys::KB_A) &&
@@ -104,8 +110,12 @@ bool Player::seqWalk(const float delta_time) {
 		sound->SoundStop(m_walk_sound.c_str());
 	}
 	//シーケンスの切り替え処理
-	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) sequence_.change(&Player::seqSneek);
-	if(m_can_dash &&tnl::Input::IsKeyDown(eKeys::KB_LSHIFT))sequence_.change(&Player::seqRun);
+	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) { 
+		sequence_.change(&Player::seqSneek);
+	}
+	if (m_can_dash && tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) { 
+		sequence_.change(&Player::seqRun); 
+	}
 	return true;
 }
 
@@ -130,11 +140,19 @@ bool Player::seqRun(const float delta_time) {
 	sound->SoundStop(m_walk_sound.c_str());
 	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_- tnl::Vector3(0,200,0), "RUN");
 	sound->Sound3DUpdate(mesh->pos_, tnl::Quaternion(0, 0, 1, 0), mesh->pos_ + tnl::Vector3(0, 200, 0), "BREATHLESSNESS");
-	if (!sound->SoundPlaying(m_run_sound.c_str())) sound->SoundPlay(m_run_sound.c_str());
-	if(!m_can_dash)sound->SoundPlay("BREATHLESSNESS");
+	if (!sound->SoundPlaying(m_run_sound.c_str())) {
+		sound->SoundPlay(m_run_sound.c_str());
+	}
+	if (!m_can_dash) {
+		sound->SoundPlay("BREATHLESSNESS");
+	}
 	//シーケンスの切り替え処理
-	if (!tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) sequence_.change(&Player::seqWalk);
-	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) sequence_.change(&Player::seqSneek);
+	if (!tnl::Input::IsKeyDown(eKeys::KB_LSHIFT)) {
+		sequence_.change(&Player::seqWalk);
+	}
+	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) {
+		sequence_.change(&Player::seqSneek);
+	}
 
 	return true;
 }
@@ -153,7 +171,9 @@ bool Player::seqSneek(const float delta_time) {
 	mesh->pos_ = m_gamecamera->pos_;
 	mesh->rot_ = m_gamecamera->getCameraRot();
 	//しゃがみから歩きに切り替え
-	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) sequence_.change(&Player::seqWalk);
+	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) {
+		sequence_.change(&Player::seqWalk);
+	}
 	return true;
 }
 

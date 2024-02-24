@@ -117,8 +117,12 @@ void TutorialScene::Draw() {
 		child->Draw();
 	}
 	//カーソル表示
-	if (m_subscene->getBoolEvent() || m_subscene->getBoolInventory() || m_option->getShowOption())	SetMouseDispFlag(true);
-	else SetMouseDispFlag(false);
+	if (m_subscene->getBoolEvent() || m_subscene->getBoolInventory() || m_option->getShowOption()) {
+		SetMouseDispFlag(true);
+	}
+	else {
+		SetMouseDispFlag(false);
+	}
 	screen_efct->renderEnd();
 
 }

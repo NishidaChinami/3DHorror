@@ -42,8 +42,10 @@ void GameCamera::GameCameraUpdate(const std::shared_ptr<Mediator>& mediator) {
 	dxe::Camera::Update();
 	//カメラ画面の中央の法線ベクトル
 	m_ray = tnl::Vector3::CreateScreenRay(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT, view_, proj_);
-
-	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) m_is_sneek == false ? m_is_sneek = true : m_is_sneek = false;
+	//しゃがみ状態か
+	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_LCONTROL)) {
+		m_is_sneek == false ? m_is_sneek = true : m_is_sneek = false;
+	}
 	if(!m_is_sneek) {
 		//走る時の振動・・・shift,Wキーと走るフラグがたっているか
 		float pit = 0;
@@ -56,14 +58,14 @@ void GameCamera::GameCameraUpdate(const std::shared_ptr<Mediator>& mediator) {
 }
 //------------------------------------------------------------------------------------------------------------
 //カメラに写っているのか
-bool GameCamera::OnCameraView(tnl::Vector3 target_pos) {
+bool GameCamera::OnCameraView(const tnl::Vector3 &target_pos) {
 	//フラスタムの6平面より内側に存在するか判定
-	for (int i = 0; i < static_cast<int>(dxe::Camera::eFlustum::Near); i++) {
-		if( - 1 == tnl::GetSidesPointAndPlane(target_pos, getFlustumNormal(static_cast<dxe::Camera::eFlustum>(i)), pos_))return false;
-	}
-	//Near面とFar面はカメラ座標から少し座標を変化させた
-	if (-1 == tnl::GetSidesPointAndPlane(target_pos, getFlustumNormal(dxe::Camera::eFlustum::Far), pos_ + forward()*3000))return false;
-	if (-1 == tnl::GetSidesPointAndPlane(target_pos, getFlustumNormal(dxe::Camera::eFlustum::Near), pos_ - forward() * 1000))return false;
+	//for (int i = 0; i < static_cast<int>(dxe::Camera::eFlustum::Near); i++) {
+	//	if( - 1 == tnl::GetSidesPointAndPlane(target_pos, getFlustumNormal(static_cast<dxe::Camera::eFlustum>(i)), pos_))return false;
+	//}
+	////Near面とFar面はカメラ座標から少し座標を変化させた
+	//if (-1 == tnl::GetSidesPointAndPlane(target_pos, getFlustumNormal(dxe::Camera::eFlustum::Far), pos_ + forward()*3000))return false;
+	//if (-1 == tnl::GetSidesPointAndPlane(target_pos, getFlustumNormal(dxe::Camera::eFlustum::Near), pos_ - forward() * 1000))return false;
 
 	return true;
 }

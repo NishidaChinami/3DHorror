@@ -50,8 +50,8 @@ public:
 	
 	//--------------------------Getter/Setter------------------------//
 	bool getChaseState() const{ return chase_state; }
-	tnl::Vector3 getEnemyPos() const{ return mesh->pos_; }
-	tnl::Vector3 getEnemySize() const{ return size; }
+	const tnl::Vector3 &getEnemyPos() const{ return mesh->pos_; }
+	const tnl::Vector3 &getEnemySize() const{ return size; }
 	//-----------------静的定数--------------------------------//
 	static constexpr float HEAD_HEIGHT = 100;
 
@@ -98,9 +98,9 @@ private:
 	//音の聞こえる半径
 	const float HEAR_RANGE = 3000;
 	//走る音の聞かれる範囲
-	const float RUN_RANGE = 1200;
+	const float RUN_RANGE = 1000;
 	//歩く音の聞かれる範囲
-	const float WALK_RANGE = 400;
+	const float WALK_RANGE = 600;
 	//プレイヤーを追いかけるときの速度
 	const float CHASE_SPEED = 10.0f;
 	//巡回中の速度

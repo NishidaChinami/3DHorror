@@ -62,8 +62,8 @@ private:
 	std::vector<TutorialDate>m_tutorial_date;
 
 	//------------他クラスの参照用ポインタ------------------------//
-	std::shared_ptr<Factory>m_factory;
-	std::shared_ptr<Mediator>m_mediator;
+	std::shared_ptr<Factory>m_factory = nullptr;
+	std::shared_ptr<Mediator>m_mediator = nullptr;
 	//----------------------定数------------------------//
 	//イベントUI発生時の背景画面のサイズ
 	const float EVENTUI_WIGHT = 800;

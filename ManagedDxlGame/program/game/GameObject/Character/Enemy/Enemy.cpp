@@ -26,7 +26,7 @@ Enemy::Enemy(tnl::Vector3 pos, const std::shared_ptr<Mediator>&mediator)
 	mesh->pos_ = pos;
 	size = { 400,400,400 };
 	//メディエーターが使えるようにコンストラクタでメディエーターのアドレスを受け取る
-	if (mediator)m_mediator = mediator;
+	if (mediator) { m_mediator = mediator; }
 	m_intersect_pos = new tnl::Vector3();
 }
 
@@ -43,7 +43,9 @@ void Enemy::Update(float delta_time) {
 	m_prev_pos = mesh->pos_;
 	auto sound = Sound::GetInstance();
 	sound->Sound3DUpdate(m_mediator->MGetPlayerPos(), tnl::Quaternion{ 0,0,1,0 }, mesh->pos_, "ENEMYAPPROACHING", HEAR_RANGE);
-	if (!sound->SoundPlaying("ENEMYAPPROACHING"))sound->SoundPlay("ENEMYAPPROACHING");
+	if (!sound->SoundPlaying("ENEMYAPPROACHING")) {
+		sound->SoundPlay("ENEMYAPPROACHING");
+	}
 	sequence_.Update(delta_time);
 }
 //------------------------------------------------------------------------------------------------------------
@@ -74,15 +76,15 @@ bool Enemy::WithinSight() {
 	float left = center - fov;
 	float right = center + fov;
 
-	if ((m_mediator->MGetPlayerPos() - mesh->pos_).length() > HEAR_RANGE)return false;
+	if ((m_mediator->MGetPlayerPos() - mesh->pos_).length() > HEAR_RANGE) { return false; }
 	//扇形のRayを作成　これを視野角とする
 	for (angle = left; angle < right; angle += fov / 15) {
 		tnl::Vector3 ray = { sin(angle), 0, cos(angle) };
 		ray.normalize();
 		//プレイヤーにあたっているか判定
-		if (!tnl::IsIntersectRayAABB(mesh->pos_, ray, aabb_max, aabb_min, m_intersect_pos))continue;
+		if (!tnl::IsIntersectRayAABB(mesh->pos_, ray, aabb_max, aabb_min, m_intersect_pos)) { continue; }
 		//壁より手前か
-		if (m_mediator->MGetIntersectStage(mesh->pos_, ray, m_intersect_pos))return true;
+		if (m_mediator->MGetIntersectStage(mesh->pos_, ray, m_intersect_pos)) { return true; }
 	}
 	return false;
 
@@ -94,10 +96,10 @@ bool Enemy::Hearing() {
 	auto sound = Sound::GetInstance();
 	//Enemyから一定の範囲のところで走ると聞こえた判定になる
 	if (tnl::IsIntersectSphere(mesh->pos_, RUN_RANGE, m_mediator->MGetPlayerPos(), m_mediator->MGetPlayerSize().x)) {
-		if (sound->SoundPlaying("RUN"))return true;
+		if (sound->SoundPlaying("RUN")) { return true; }
 	}
 	else if (tnl::IsIntersectSphere(mesh->pos_, WALK_RANGE, m_mediator->MGetPlayerPos(), m_mediator->MGetPlayerSize().x)) {
-		if (sound->SoundPlaying("WALK"))return true;
+		if (sound->SoundPlaying("WALK")) { return true; }
 	}
 	else return false;
 }
@@ -156,9 +158,12 @@ bool Enemy::seqUpdatePoint(const float delta_time) {
 	}
 	//ルートのインデックスが０になったら最短経路組みなおし
 	if (m_index < 0) {
-		if (chase_state)sequence_.change(&Enemy::seqTrack);
-		else sequence_.change(&Enemy::seqPatrol);
-		if (!WithinSight() && !Hearing())chase_state = false;
+		if (chase_state) { sequence_.change(&Enemy::seqTrack); }
+		else { sequence_.change(&Enemy::seqPatrol); }
+		//視野と聴覚で認識できない場合
+		if (!WithinSight() && !Hearing()) {
+			chase_state = false;
+		}
 		return true;
 	}
 	//次の地点を登録
@@ -180,7 +185,7 @@ bool Enemy::seqTrack(const float delta_time) {
 		Stage::STAGE_ROW, 
 		Stage::STAGE_COL);
 	m_index = route.size()-1;
-	if (m_index <= 0)return true;
+	if (m_index <= 0) { return true; }
 	//最初の目的地を登録
 	m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);
 	//回転状態
@@ -201,7 +206,7 @@ bool Enemy::seqPatrol(const float delta_time) {
 		Stage::STAGE_ROW, 
 		Stage::STAGE_COL);
 		m_index = route.size()-2;
-		if (m_index <= 0)return true;
+		if (m_index <= 0) { return true; }
 		//最初の目的地を登録
 		m_next_target = cf::Coordinate(route[m_index]->pos, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE);
 		//回転状態

@@ -18,7 +18,7 @@ class Player : public GameObject
 public:
 	Player() {};
 	//描画用のカメラクラスとオブジェクトの参照先をもつメディエータークラスを引数にもつ
-	Player(std::shared_ptr<GameCamera>gamecamera, const std::shared_ptr<Mediator>&mediator);
+	Player(std::shared_ptr<GameCamera>&gamecamera, const std::shared_ptr<Mediator>&mediator);
 	~Player();
 	//更新処理
 	void Update(float delta_time)override;
@@ -31,13 +31,13 @@ public:
 
 	//--------------------------Getter/Setter------------------------//
 	TNL_PROPERTY(tnl::Vector3, PlayerPos, mesh->pos_);
-	tnl::Quaternion getPlayerRot()const{ return mesh->rot_; }
-	tnl::Vector3 getPlayerSize() const { return size; }
+	const tnl::Quaternion &getPlayerRot()const{ return mesh->rot_; }
+	const tnl::Vector3 &getPlayerSize() const { return size; }
 	float getPlayerSpeed()const { return m_speed; }
 	float getPlayerStamina() const { return m_stamina; }
 	bool getPlayerDash()const { return m_can_dash; }
 
-	static const int MAXSTAMINA = 1200;
+	static const int MAXSTAMINA = 1000;
 private:
 	//プレイヤーの移動状態を管理するシークエンス
 	tnl::Sequence<Player> sequence_ = tnl::Sequence<Player>(this, &Player::seqWalk);

@@ -14,7 +14,7 @@ public:
 	~GameCamera();
 	void GameCameraUpdate(const std::shared_ptr<Mediator>& mediator);
 	//ÉJÉÅÉâÇ…é Ç¡ÇƒÇ¢ÇÈÇÃÇ©
-	bool OnCameraView(tnl::Vector3 target_pos);
+	bool OnCameraView(const tnl::Vector3 &target_pos);
 	//ÉJÉÅÉâÇÃêUìÆ
 	void CameraVibration();
 
@@ -34,9 +34,9 @@ public:
 	inline tnl::Vector3 right() override { return tnl::Vector3::Cross(Up(), forward()); }
 
 	//-----------------------------------------Getter/Setter-----------------------------------------------------//
-	tnl::Vector3 getRay() { return m_ray; }
-	tnl::Vector3 GetScreenPos(tnl::Vector3 pos) {return tnl::Vector3::ConvertToScreen({ pos.x, pos.y, pos.z }, DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT, view_, proj_); }
-	tnl::Vector3 getPrevPos() { return m_prev_pos; }
+	const tnl::Vector3 &getRay() const{ return m_ray; }
+	const tnl::Vector3 &GetScreenPos(tnl::Vector3 pos) const{return tnl::Vector3::ConvertToScreen({ pos.x, pos.y, pos.z }, DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT, view_, proj_); }
+	const tnl::Vector3 &getPrevPos() const{ return m_prev_pos; }
 
 	TNL_PROPERTY(tnl::Quaternion, CameraRot, m_camera_rot);
 	TNL_PROPERTY(bool, CameraActive, m_camera_inactive);

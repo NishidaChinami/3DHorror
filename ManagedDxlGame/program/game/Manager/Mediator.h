@@ -21,61 +21,65 @@ class BackGroundStage;
 class Mediator
 {
 public:
-	Mediator() {m_intersect_stage = new tnl::Vector3();}
-	~Mediator() {delete m_intersect_stage;}
+	Mediator() {
+		m_intersect_stage = new tnl::Vector3();
+	}
+	~Mediator() {
+		delete m_intersect_stage;
+	}
 
 	//--------------------playerのGetterとSetter------------------------------------------------//
 	
 	//プレイヤーの座標
-	tnl::Vector3 MGetPlayerPos();
+	const tnl::Vector3 &MGetPlayerPos()const;
 	//プレイヤーの回転
-	tnl::Quaternion MGetPlayerRot();
+	const tnl::Quaternion &MGetPlayerRot()const;
 	//プレイヤーのサイズ
-	tnl::Vector3 MGetPlayerSize();
+	const tnl::Vector3 &MGetPlayerSize()const;
 	//プレイヤーのスピード
-	float MGetPlayerSpeed();
+	float MGetPlayerSpeed()const;
 	//プレイヤーのスタミナ
-	float MGetPlayerStamina();
+	float MGetPlayerStamina()const;
 	//走れるかどうかのフラグ
-	bool MGetPlayerDash();
+	bool MGetPlayerDash()const;
 
 	//--------------------EnemyのGetterとSetter------------------------------------------------//
 
 	//Enemyの座標
-	tnl::Vector3 MGetEnemyPos();
+	const tnl::Vector3 &MGetEnemyPos()const;
 	//Enemyのサイズ
-	tnl::Vector3 MGetEnemySize();
+	const tnl::Vector3 &MGetEnemySize()const;
 	//プレイヤーを見つけているかどうかのフラフ
-	bool MGetChaseState();
+	bool MGetChaseState()const;
 
 	//--------------------ステージのGetterとSetter------------------------------------------------//
 	//stageのstagestate２次元配列の取得
 	//第1引数 列数
 	//第2引数 行数
 	//ret そのマスの迷路ステートを返す
-	maze::StageState MGetStageState(int r, int c);
+	const maze::StageState &MGetStageState(int r, int c)const;
 	//Rayがステージの壁にぶつかる交点と比較対象の交点のどちらが近いかを判定する
 	//第1引数　Rayを出すものの座標
 	//第2引数　Rayの向き
 	//第3引数　比較対象の交点座標
 	//ret 壁が近い場合true 比較対象が近い場合falseを返す
-	bool MGetIntersectStage(const tnl::Vector3 &pos, const tnl::Vector3 &ray, tnl::Vector3 *intersect_point );
+	bool MGetIntersectStage(const tnl::Vector3 &pos, const tnl::Vector3 &ray, tnl::Vector3 *intersect_point )const;
 
 	//-------------------アイテムのGetterとSetter------------------------------------------------//
 	
 	//Itemの位置を取得
-	std::vector<tnl::Vector2i> MGetItemPos();
+	const std::vector<tnl::Vector2i> &MGetItemPos();
 	//フロッピーディスクが5枚集まったかどうかのフラグ
-	bool MGetItemFloopy();
+	bool MGetItemFloopy()const;
 	//記事を読んでいるかのフラグ
-	bool MGetReadArticle ();
+	bool MGetReadArticle ()const;
 	void MSetReadArticle(bool read);
 
 	//-------------------メッセージのGetterとSetter------------------------------------------------//
 	//表示するメッセージの情報を登録する
 	void MSetMessage(int title);
 	//何のストーリーか取得する
-	int MGetTitleType();
+	int MGetTitleType()const;
 
 	//-------------------インベントリーのGetterとSetter------------------------------------------------//
 	//アイテムの情報をインベントリーの渡す
@@ -83,7 +87,7 @@ public:
 
 	//skyboxのパラメーターの設定
 	void MSetSkyEmissive(tnl::Vector3 &param);
-	tnl::Vector3 MGetSkyEmissive();
+	const tnl::Vector3 &MGetSkyEmissive()const;
 
 	//-------------------メディエータークラスに必要なクラスのポインタ------------------------------------------------//
 	void SetPlayerClass(std::shared_ptr<Player>&player) { m_player = player; }
@@ -98,7 +102,7 @@ public:
 
 
 	void MSetLightParam(bool light) { m_getlight = light; }
-	bool MGetLightParam() { return m_getlight; }
+	bool MGetLightParam()const { return m_getlight; }
 private:
 	//------------他クラスの参照用ポインタ------------------------//
 	//相互参照を防ぐためにweak_ptrを使用

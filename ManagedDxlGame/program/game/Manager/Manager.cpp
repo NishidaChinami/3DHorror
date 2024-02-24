@@ -43,27 +43,27 @@ void GameManager::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //フェードアウト
 bool GameManager::seqTransOut(const float delta_time) {
-	int alpha = (sequence_.getProgressTime() / trans_time_ * 255.0f * 0.6);//フェードアウトのみ遅延
-	if (alpha >= 255) {
+	int alpha = (sequence_.getProgressTime() / trans_time_ * BLEND_MAX * SPEED);//フェードアウトのみ遅延
+	if (alpha >= BLEND_MAX) {
 		sequence_.change(&GameManager::seqTransIn);
 		now_scene_ = nullptr;
-		now_scene_ = next_scene_;
+		if(next_scene_)now_scene_ = next_scene_;
 	}
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT, tansition_graph_hdl, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, BLEND_MAX);
 	return true;
 }
 //------------------------------------------------------------------------------------------------------------
 //フェードイン
 bool GameManager::seqTransIn(const float delta_time) {
-	int alpha = 255 - (sequence_.getProgressTime() / trans_time_ * 255.0f);
+	int alpha = BLEND_MAX - (sequence_.getProgressTime() / trans_time_ * BLEND_MAX);
 	if (alpha <= 0) {
 		sequence_.change(&GameManager::seqRunScene);
 	}
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawExtendGraph(0, 0, DXE_WINDOW_WIDTH, DXE_WINDOW_HEIGHT, tansition_graph_hdl, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, BLEND_MAX);
 	return true;
 }
 

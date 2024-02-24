@@ -112,8 +112,10 @@ void PlayScene::Draw() {
 		child->Draw();
 	}
 	//カーソル表示
-	if(m_subscene->getBoolEvent()||m_subscene->getBoolInventory()||m_option->getShowOption())SetMouseDispFlag(true);
-	else SetMouseDispFlag(false);
+	if (m_subscene->getBoolEvent() || m_subscene->getBoolInventory() || m_option->getShowOption()) {
+		SetMouseDispFlag(true);
+	}
+	else { SetMouseDispFlag(false); }
 	auto manager = GameManager::GetInstance();
 	if (manager->is_switch) {
 		//ゲームオーバーの描画

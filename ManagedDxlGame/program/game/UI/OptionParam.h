@@ -14,13 +14,6 @@ public:
 	//デストラクタ関数
 	static void Destroy();
 
-	//フォントの種類
-	enum class FontName {
-		NORMAL,
-		HORROR,
-		OPTION,
-		NONE
-	};
 	//画面の明るさ
 	float screen_bright = 255;
 	//音の大きさ

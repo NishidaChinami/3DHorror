@@ -10,7 +10,7 @@ Fluorescent::Fluorescent(const tnl::Vector3 &pos, const std::shared_ptr<Mediator
 	mesh = dxe::Mesh::CreateCubeMV(LIGHT_SIZE);
 	//座標を受け取る
 	mesh->pos_ = { pos.x,500,pos.z };
-	m_mediator = mediator;
+	if (mediator) { m_mediator = mediator; }
 	//ライトハンドルの生成と初期設定
 	m_fluorescent_hdl = CreatePointLightHandle(cf::ConvertToV3(mesh->pos_), m_range, m_atten0, m_atten1, m_atten2);
 	SetLightDifColorHandle(m_fluorescent_hdl, GetColorF(0.2f, 0.2f, 0.2f, 0));
@@ -61,12 +61,16 @@ void Fluorescent::Blink(const float delta_time) {
 	//0～１の間を行ったり来たりする
 	bright = fabs(sin(DX_PI_F / 180 * m_blink_count * TRANS_TIME));
 	//点滅速度を不規則に決める
-	if (fabs(tnl::ToDegree(DX_PI_F) - m_blink_count) < FLT_EPSILON)m_trans_time = rand() % TRANS_RANGE + TRANS_TIME;
+	if (fabs(tnl::ToDegree(DX_PI_F) - m_blink_count) < FLT_EPSILON) {
+		m_trans_time = rand() % TRANS_RANGE + TRANS_TIME;
+	}
 	//半周期立つと点滅速度を変更
 	if (m_blink_count >= tnl::ToDegree(DX_PI_F)) {
 		bright = fabs(sin(DX_PI_F / 180 * m_blink_count * m_trans_time));
 		//一回点滅すると速度が戻る
-		if (m_blink_count >= (tnl::ToDegree(DX_PI_F)+ SECONDS))m_blink_count = 0;
+		if (m_blink_count >= (tnl::ToDegree(DX_PI_F) + SECONDS)) {
+			m_blink_count = 0;
+		}
 	}
 	//Difカラーで赤い点滅に指定
 	SetLightDifColorHandle(m_fluorescent_hdl,GetColorF(bright, 0, 0, 0));

@@ -68,9 +68,9 @@ void Factory::CreatMainGame() {
 	for (int r = 0; r < Stage::STAGE_ROW; r++) {
 		for (int c = 0; c < Stage::STAGE_COL; c++) {
 			tnl::Vector3 pos;
-			pos.x = { -300.0f + c * StageWall::BLOCKSIZE };
+			pos.x = { StageWall::START_BLOCK_POS.x + c * StageWall::BLOCKSIZE };
 			pos.y = StageWall::BLOCKHEIGHT / 2;
-			pos.z = { -300.0f + r * StageWall::BLOCKSIZE };
+			pos.z = { StageWall::START_BLOCK_POS.z + r * StageWall::BLOCKSIZE };
 			//Emptyだったら壁を配置
 			if (m_stage->getStgaeState(r, c) == maze::StageState::Wall)
 			{
@@ -83,14 +83,8 @@ void Factory::CreatMainGame() {
 		}
 	}
 	
-	//Enemy生成
-	tnl::Vector2i a;
-	if (m_stage->getStgaeState(1, 2) == maze::StageState::Empty) a = { 2,1 };
-	else if (m_stage->getStgaeState(2, 1) == maze::StageState::Empty) a = { 1,2 };
-
-	m_enemy = std::make_shared<Enemy>(cf::Coordinate(a, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, 100), m_mediator);
 	//Enemy生成 プレイヤーがスポーンする位置と対角のエリアにライダムな場所にスポーン
-	/*while (true)
+	while (true)
 	{
 		tnl::Vector2i random;
 		random.x = rand() % (Stage::STAGE_COL/ 2) + Stage::STAGE_COL / 2;
@@ -99,7 +93,7 @@ void Factory::CreatMainGame() {
 			m_enemy = std::make_shared<Enemy>(cf::Coordinate(random, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE, Enemy::HEAD_HEIGHT), m_mediator);
 			break;
 		}
-	}*/
+	}
 
 	int count = 0;
 	//Itemの生成

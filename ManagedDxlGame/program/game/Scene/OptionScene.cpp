@@ -11,6 +11,11 @@ OptionScene::OptionScene(Shared<dxe::ScreenEffect> m_screen_efct)
 	//âÊëúÇÃì«Ç›çûÇ›
 	m_option_back_gpc = LoadGraph("graphics/PanelFrame.png");
 	m_keybind_hdl = LoadGraph("graphics/keybind.png");
+	//èâä˙âª
+	auto param = OptionParam::GetInstance();
+	m_volume = param->sound_volume;
+	m_bright = param->screen_bright;
+	m_sensitivity = param->mouse_sensitive;
 
 	screen_efct = m_screen_efct;
 }
@@ -69,7 +74,7 @@ void OptionScene::Update(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //ï`âÊèàóù
 void OptionScene::Draw() {
-	if (!m_active_option)return;
+	if (!m_active_option) { return; }
 	//ÉIÉvÉVÉáÉìâÊñ ÇÃîwåi
 	DrawRotaGraph(DXE_WINDOW_WIDTH / 2, DXE_WINDOW_HEIGHT / 2, DIANETER, 0, m_option_back_gpc, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
@@ -103,38 +108,38 @@ void OptionScene::BarDraw()
 	if (!gui_volume) {
 		gui_volume = Shared<dxe::GuiValueSlider< OptionScene, float >>(
 			new dxe::GuiValueSlider< OptionScene, float >
-			(this
-				, &OptionScene::getVolume
-				, &OptionScene::setVolume
-				, PROGRESS_BAR_VOLUME
-				, 0.0f
-				, 255.0f
-				, ""
-				,300));
+			(this,
+				&OptionScene::getVolume,
+				&OptionScene::setVolume,
+				PROGRESS_BAR_VOLUME,
+				MIN_VOLUME,
+				MAX_VOLUME,
+				BAR_STRING.c_str(),
+				MAX_BAR));
 	}
 	if (!gui_bright) {
 		gui_bright = Shared<dxe::GuiValueSlider< OptionScene, float >>(
 			new dxe::GuiValueSlider< OptionScene, float >
-			(this
-				, &OptionScene::getBright
-				, &OptionScene::setBright
-				, PROGRESS_BAR_BRIGHT
-				, 0.0f
-				, 255.0f
-				, ""
-				, 300));
+			(this,
+				&OptionScene::getBright,
+				&OptionScene::setBright,
+				PROGRESS_BAR_BRIGHT,
+				MIN_VOLUME,
+				MAX_VOLUME,
+				BAR_STRING.c_str(),
+				MAX_BAR));
 	}
 	if (!gui_sensitive) {
 		gui_sensitive = Shared<dxe::GuiValueSlider< OptionScene, float >>(
 			new dxe::GuiValueSlider< OptionScene, float >
-			(this
-				, &OptionScene::getSensitive
-				, &OptionScene::setSensitive
-				, PROGRESS_BAR_SENSITIVITY
-				, 0.01f
-				, 0.5f
-				, ""
-				, 300));
+			(this,
+				&OptionScene::getSensitive,
+				&OptionScene::setSensitive,
+				PROGRESS_BAR_SENSITIVITY,
+				MIN_SENSITIVITY,
+				MAX_SENSITIVITY,
+				BAR_STRING.c_str(),
+				MAX_BAR));
 	}
 	gui_bright->Update();
 	gui_volume->Update();

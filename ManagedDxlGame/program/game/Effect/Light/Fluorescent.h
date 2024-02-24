@@ -40,7 +40,7 @@ private:
 	float m_blink_count = 0;
 
 	//------------他クラスの参照用ポインタ------------------------//
-	std::shared_ptr<Mediator>m_mediator;
+	std::shared_ptr<Mediator>m_mediator = nullptr;
 
 	//----------------------定数------------------------//
 	//点滅の間隔

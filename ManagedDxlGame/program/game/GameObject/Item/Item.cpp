@@ -121,12 +121,14 @@ void Item::Draw(std::shared_ptr<GameCamera>gamecamera) {
 		if (!tnl::IsIntersectSphere(mesh->pos_, ITEM_RANGE, m_mediator->MGetPlayerPos(), m_mediator->MGetPlayerSize().x))return;
 		//アイテムが一定範囲内かつ画面中央のRayがアイテムと当たっていたら、
 		if (tnl::IsIntersectRayAABB(
-			gamecamera->pos_
-			, gamecamera->getRay()
-			, tnl::ToMaxAABB(mesh->pos_ + tnl::Vector3(-size.x / 2, size.y / 2, size.z / 2), size)
-			, tnl::ToMinAABB(mesh->pos_ + tnl::Vector3(size.x / 2, -size.y / 2, -size.z / 2), size))) {
+			gamecamera->pos_,
+			gamecamera->getRay(),
+			tnl::ToMaxAABB(mesh->pos_ + tnl::Vector3(-size.x / 2, size.y / 2, size.z / 2), size),
+			tnl::ToMinAABB(mesh->pos_ + tnl::Vector3(size.x / 2, -size.y / 2, -size.z / 2), size))) {
 			DrawStringEx(mess_pos.x + ITEM_MESS_POS.x, mess_pos.y + ITEM_MESS_POS.y, -1, "E で取る");
-			if (tnl::Input::IsKeyDownTrigger(eKeys::KB_E)) PassInventory();
+			if (tnl::Input::IsKeyDownTrigger(eKeys::KB_E)) {
+				PassInventory();
+			}
 		}
 	}
 }

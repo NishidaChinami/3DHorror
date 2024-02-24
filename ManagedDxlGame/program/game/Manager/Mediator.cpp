@@ -14,42 +14,42 @@
 #include"../UI/Inventory/Inventory.h"
 
 //--------------------playerのGetterとSetter------------------------------------------------//
-tnl::Vector3 Mediator::MGetPlayerPos() {
+const tnl::Vector3 &Mediator::MGetPlayerPos() const{
 	auto player = m_player.lock();
 	if (player)return player->getPlayerPos();}
-tnl::Quaternion Mediator::MGetPlayerRot() {
+const tnl::Quaternion &Mediator::MGetPlayerRot()const {
 	auto player = m_player.lock();
 	if (player)return player->getPlayerRot();}
-tnl::Vector3 Mediator::MGetPlayerSize() {
+const tnl::Vector3 &Mediator::MGetPlayerSize() const{
 	auto player = m_player.lock();
 	if (player)return player->getPlayerSize();}
-float Mediator::MGetPlayerSpeed() {
+float Mediator::MGetPlayerSpeed() const{
 	auto player = m_player.lock();
 	if (player)return player->getPlayerSpeed();}
-float Mediator::MGetPlayerStamina() {
+float Mediator::MGetPlayerStamina()const {
 	auto player = m_player.lock();
 	if (player)return player->getPlayerStamina();}
-bool Mediator::MGetPlayerDash(){
+bool Mediator::MGetPlayerDash()const{
 	auto player = m_player.lock();
 	if (player)return player->getPlayerDash();}
 
 //--------------------EnemyのGetterとSetter------------------------------------------------//
-tnl::Vector3 Mediator::MGetEnemyPos() {
+const tnl::Vector3 &Mediator::MGetEnemyPos() const{
 	auto enemy = m_enemy.lock();
 	if(enemy)return enemy->getEnemyPos();}
-tnl::Vector3 Mediator::MGetEnemySize() {
+const tnl::Vector3 &Mediator::MGetEnemySize()const {
 	auto enemy = m_enemy.lock();
 	if (enemy)return enemy->getEnemySize();}
-bool Mediator::MGetChaseState() {
+bool Mediator::MGetChaseState() const {
 	auto enemy = m_enemy.lock();
 	if (enemy)return enemy->getChaseState();}
 
 //--------------------ステージのGetterとSetter------------------------------------------------//
-maze::StageState Mediator::MGetStageState(int r, int c) {
+const maze::StageState &Mediator::MGetStageState(int r, int c)const {
 	auto stage = m_stage.lock();
 	if (stage)return stage->getStgaeState(r, c);}
 
-bool Mediator::MGetIntersectStage(const tnl::Vector3& pos, const tnl::Vector3& ray,tnl::Vector3* intersect_point)
+bool Mediator::MGetIntersectStage(const tnl::Vector3& pos, const tnl::Vector3& ray,tnl::Vector3* intersect_point)const
 {
 	auto st = m_stagewall_list.begin();
 	while (st != m_stagewall_list.end()) {
@@ -69,7 +69,7 @@ bool Mediator::MGetIntersectStage(const tnl::Vector3& pos, const tnl::Vector3& r
 }
 
 //--------------------アイテムのGetterとSetter------------------------------------------------//
-std::vector<tnl::Vector2i> Mediator::MGetItemPos() {
+const std::vector<tnl::Vector2i> &Mediator::MGetItemPos(){
 	std::vector<tnl::Vector2i> itempos;
 	for (auto it : m_item_list) {
 		auto item = it.lock();
@@ -78,7 +78,7 @@ std::vector<tnl::Vector2i> Mediator::MGetItemPos() {
 	return itempos;
 }
 
-bool Mediator::MGetItemFloopy()
+bool Mediator::MGetItemFloopy()const
 {
 	auto it = m_item_list.begin();
 	while (it != m_item_list.end()) {
@@ -92,7 +92,7 @@ bool Mediator::MGetItemFloopy()
 	return true;
 }
 
-bool Mediator::MGetReadArticle()
+bool Mediator::MGetReadArticle()const
 {
 	auto it = m_item_list.begin();
 	while (it != m_item_list.end()) {
@@ -129,7 +129,7 @@ void Mediator::MSetMessage(int title) {
 	if(message)message->ChangeStory(title);
 }
 
-int Mediator::MGetTitleType(){
+int Mediator::MGetTitleType()const{
 	auto message = m_message.lock();
 	if (message)return static_cast<int>(message->getTitleType());}
 
@@ -145,7 +145,7 @@ bool Mediator::MSetPassInventory(const std::shared_ptr<Item>& item) {
 void Mediator::MSetSkyEmissive(tnl::Vector3 &param){
 	auto background = m_backgroundstage.lock();
 	if(background)background->setSkyEmissive(param);}
-tnl::Vector3 Mediator::MGetSkyEmissive(){
+const tnl::Vector3 &Mediator::MGetSkyEmissive()const{
 	auto background = m_backgroundstage.lock();
 	if (background)return background->getSkyEmissive();}
 

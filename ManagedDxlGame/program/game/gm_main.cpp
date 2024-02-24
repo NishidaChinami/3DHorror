@@ -42,7 +42,6 @@ void gameMain(float delta_time) {
 	GameManager::GetInstance()->Update(delta_time);
 	//‰¹—Ê’²®
 	Sound::GetInstance()->ChangeVolume();
-	//DrawFpsIndicator({ 10, DXE_WINDOW_HEIGHT - 10, 0 }, delta_time);
 }
 
 //------------------------------------------------------------------------------------------------------------

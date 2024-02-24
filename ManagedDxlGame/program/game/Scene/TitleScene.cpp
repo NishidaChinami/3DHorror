@@ -137,7 +137,9 @@ bool TitleScene::seqMax(float delta_time) {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200 - alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-	if (alpha >= 255) sequence_.change(&TitleScene::seqIdle);
+	if (alpha >= 255) {
+		sequence_.change(&TitleScene::seqIdle);
+	}
 	
 	return true;
 }
@@ -154,7 +156,9 @@ bool TitleScene::seqMin(float delta_time)
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRotaGraph(DXE_WINDOW_WIDTH >> 1, DXE_WINDOW_HEIGHT >> 1, 1, 0, m_title_gpc_hdl, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-	if (alpha >= 200) sequence_.change(&TitleScene::seqMax);
+	if (alpha >= 200) {
+		sequence_.change(&TitleScene::seqMax);
+	}
 
 	return true;
 }
@@ -166,7 +170,9 @@ bool TitleScene::seqIdle(float delta_time)
 	int alpha = (sequence_.getProgressTime() / TRANS_TIME * 255.0f);
 	//‘Ò‹@ŽžŠÔ‚ðƒ‰ƒ“ƒ_ƒ€‚ÉÝ’è
 	int rand_time = rand() % IDLE_TIME + IDLE_TIME;
-	if(alpha >= rand_time)sequence_.change(&TitleScene::seqMin);
+	if (alpha >= rand_time) {
+		sequence_.change(&TitleScene::seqMin);
+	}
 	return true;
 }
 

@@ -27,7 +27,7 @@ public:
 	void Goal();
 
 	//-----------------------------------------Getter/Setter-----------------------------------------------------//
-	const tnl::Vector3 GetStageWallPos() { return mesh->pos_; }
+	const tnl::Vector3 &GetStageWallPos() const{ return mesh->pos_; }
 
 	//-----------------静的定数--------------------------------//
 	//ステージの一マス目の位置
@@ -39,8 +39,6 @@ public:
 private:
 	//ステージのステート
 	maze::StageState m_state;
-	//一フレーム前の座標
-	//tnl::Vector3 m_prev_pos;
 
 	//------------他クラスの参照用ポインタ------------------------//
 	std::shared_ptr<Mediator>m_mediator = nullptr;

@@ -47,13 +47,13 @@ public:
 	void PassInventory();
 
 	//--------------------------Getter/Setter------------------------//
-	tnl::Vector3 getPos()const { return mesh->pos_; }
-	tnl::Vector2i getGridPos() const { return cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE); }
-	ItemType getType() const { return m_itemtype; }
-	bool getIsValid() { return m_isvalid; }
-	std::string getExplanation() { return m_item_explanation; }
-	int getUIHdl() { return m_item_hdl; }
-	bool getItem() { return m_getitem; }
+	const tnl::Vector3 &getPos()const { return mesh->pos_; }
+	const tnl::Vector2i &getGridPos() const { return cf::GridPos(mesh->pos_, StageWall::START_BLOCK_POS, StageWall::BLOCKSIZE); }
+	const ItemType &getType() const { return m_itemtype; }
+	bool getIsValid()const { return m_isvalid; }
+	const std::string &getExplanation() const{ return m_item_explanation; }
+	int getUIHdl() const{ return m_item_hdl; }
+	bool getItem() const{ return m_getitem; }
 
 	TNL_PROPERTY(bool, ReadArticle, m_readarticle);
 private:

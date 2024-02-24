@@ -77,9 +77,15 @@ void SubScene::Draw() {
 //------------------------------------------------------------------------------------------------------------
 //UIの待機状態
 bool SubScene::seqIdle(float delta_time) {
-	if (m_active_event)sequence_.change(&SubScene::seqEventUI); 
-	if (m_active_inventory)sequence_.change(&SubScene::seqInventoryUI);
-	if (GameManager::GetInstance()->is_tutorial && m_active_tutorial)sequence_.change(&SubScene::seqTutorialUI);
+	if (m_active_event) {
+		sequence_.change(&SubScene::seqEventUI);
+	}
+	if (m_active_inventory) {
+		sequence_.change(&SubScene::seqInventoryUI);
+	}
+	if (GameManager::GetInstance()->is_tutorial && m_active_tutorial) {
+		sequence_.change(&SubScene::seqTutorialUI);
+	}
 	return true;
 
 }
@@ -147,7 +153,9 @@ bool SubScene::seqEventUI(float delta_time) {
 //------------------------------------------------------------------------------------------------------------
 //インベントリーの更新
 bool SubScene::seqInventoryUI(float delta_time) {
-	if (!m_active_inventory)sequence_.change(&SubScene::seqIdle);
+	if (!m_active_inventory) {
+		sequence_.change(&SubScene::seqIdle);
+	}
 	return true;
 }
 

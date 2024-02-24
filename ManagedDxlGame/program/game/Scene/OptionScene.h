@@ -44,9 +44,9 @@ private:
 	int m_keybind_hdl = 0;
 
 	//各設定の変数（ｘ座標）
-	float m_volume = 255;
-	float m_bright = 255;
-	float m_sensitivity = 0.1;
+	float m_volume;
+	float m_bright;
+	float m_sensitivity;
 	
 	//文字の色の配列
 	int color_index[MENU_NUM] = { 0 };
@@ -85,6 +85,15 @@ private:
 	const int MENU_FONT = 18;
 	//背景の倍率
 	const float DIANETER = 0.5;
-
+	//明るさと音量の最大値と最小値
+	const float MAX_VOLUME = 255.0f;
+	const float MIN_VOLUME = 0.0f;
+	//マウス感度の最大値と最小値
+	const float MAX_SENSITIVITY = 0.5f;
+	const float MIN_SENSITIVITY = 0.01f;
+	//スレンダーバーの長さ
+	const int MAX_BAR = 300;
+	//スレンダーに表示する文字
+	const std::string BAR_STRING = { "" };
 };
 

@@ -37,20 +37,20 @@ public:
 
 	//--------------------------Getter/Setter------------------------//
 	//Factoryで生成したクラス
-	std::list<std::shared_ptr<GameObject>> GetClassObj() { return m_object_list; }
-	std::list<std::shared_ptr<GameObject>> GetClassObj_Tutorial() { return m_object_tutorial_list; }
-	std::shared_ptr<GameCamera>GetClassCamera() { return m_gamecamera; }
-	std::shared_ptr<Mediator>GetClassMediator() { return m_mediator; }
-	std::shared_ptr<Player>GetClassPlayer() { return m_player; }
-	std::shared_ptr<Stage>GetClassStage() { return m_stage; }
-	std::shared_ptr<Enemy>GetClassEnemy() { return m_enemy; }
-	std::list<std::shared_ptr<Item>>GetClassItemList(){ return m_item_list; }
-	std::list<std::shared_ptr<Item>>GetClassTutorialItemList() { return m_item_tutorial_list; }
-	std::list<std::shared_ptr<StageWall>>GetClassStageWall() { return m_stagewall_list; }
-	std::list<std::shared_ptr<StageWall>>GetClassStageTutorial() { return m_stage_tutorial_list; }
-	std::shared_ptr<BackGroundStage>GetClassBackGroundStage() { return m_background; }
-	std::shared_ptr<Inventory>GetClassInventory() { return m_inventory; }
-	std::shared_ptr<Message>GetClassMessage() { return m_message; }
+	const std::list<std::shared_ptr<GameObject>> &GetClassObj() { return m_object_list; }
+	const std::list<std::shared_ptr<GameObject>> &GetClassObj_Tutorial() { return m_object_tutorial_list; }
+	const std::shared_ptr<GameCamera>&GetClassCamera() { return m_gamecamera; }
+	const std::shared_ptr<Mediator>&GetClassMediator() { return m_mediator; }
+	const std::shared_ptr<Player>&GetClassPlayer() { return m_player; }
+	const std::shared_ptr<Stage>&GetClassStage() { return m_stage; }
+	const std::shared_ptr<Enemy>&GetClassEnemy() { return m_enemy; }
+	const std::list<std::shared_ptr<Item>>&GetClassItemList(){ return m_item_list; }
+	const std::list<std::shared_ptr<Item>>&GetClassTutorialItemList() { return m_item_tutorial_list; }
+	const std::list<std::shared_ptr<StageWall>>&GetClassStageWall() { return m_stagewall_list; }
+	const std::list<std::shared_ptr<StageWall>>&GetClassStageTutorial() { return m_stage_tutorial_list; }
+	const std::shared_ptr<BackGroundStage>&GetClassBackGroundStage() { return m_background; }
+	const std::shared_ptr<Inventory>&GetClassInventory() { return m_inventory; }
+	const std::shared_ptr<Message>&GetClassMessage() { return m_message; }
 	
 private:
 	//チュートリアルマップのcsvハンドル

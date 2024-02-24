@@ -38,5 +38,10 @@ private:
 	int tansition_graph_hdl = 0;
 	//フェードの速度変数
 	float trans_time_ = 0.5f;
+	//----------------------定数------------------------//
+	//画面の明るさの最大値
+	const int BLEND_MAX = 255;
+	//トランスインの遅延タイム
+	const float SPEED = 0.6f;
 
 };
