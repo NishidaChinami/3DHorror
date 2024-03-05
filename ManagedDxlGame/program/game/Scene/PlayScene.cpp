@@ -67,7 +67,7 @@ PlayScene::~PlayScene() {
 //XVˆ—
 void PlayScene::Update(float delta_time) {
 	//‰æ–Ê‚Ì–¾‚é‚³‚ð•ÏX
-	screen_efct->setLevelAfterMax(OptionParam::GetInstance()->screen_bright);
+	screen_efct->setLevelAfterMax(OptionParam::GetInstance()->getParamBright());
 	PlayBGM();
 	sequence_.Update(delta_time);
 	

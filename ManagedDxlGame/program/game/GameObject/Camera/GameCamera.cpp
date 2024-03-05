@@ -29,7 +29,7 @@ void GameCamera::GameCameraUpdate(const std::shared_ptr<Mediator>& mediator) {
 
 		}, eKeys::KB_A, eKeys::KB_D, eKeys::KB_W, eKeys::KB_S);
 	//マウス感度を設定で受け取る
-	m_sensitive = OptionParam::GetInstance()->mouse_sensitive;
+	m_sensitive = OptionParam::GetInstance()->getParamSensitive();
 	//カメラが非アクティブでなかった場合マウスでカメラの回転をさせる
 	if (!m_camera_inactive) {
 		tnl::Vector3 mvel = tnl::Input::GetMouseVelocity();

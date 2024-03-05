@@ -69,7 +69,7 @@ bool Mediator::MGetIntersectStage(const tnl::Vector3& pos, const tnl::Vector3& r
 }
 
 //--------------------ƒAƒCƒeƒ€‚ÌGetter‚ÆSetter------------------------------------------------//
-const std::vector<tnl::Vector2i> &Mediator::MGetItemPos(){
+std::vector<tnl::Vector2i> Mediator::MGetItemPos(){
 	std::vector<tnl::Vector2i> itempos;
 	for (auto it : m_item_list) {
 		auto item = it.lock();

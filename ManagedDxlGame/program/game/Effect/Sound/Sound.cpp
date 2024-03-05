@@ -138,10 +138,10 @@ void Sound::ChangeVolume()
 {
 	auto param = OptionParam::GetInstance();
 	for (auto bgmhdl : m_bgm_namelist) {
-		ChangeVolumeSoundMem(param->sound_volume, m_bgm_hdl[bgmhdl.c_str()]);
+		ChangeVolumeSoundMem(param->getParamVolume(), m_bgm_hdl[bgmhdl.c_str()]);
 	}
 	for (auto sshdl : m_ss_namelist) {
-		ChangeVolumeSoundMem(param->sound_volume, m_bgm_hdl[sshdl.c_str()]);
+		ChangeVolumeSoundMem(param->getParamVolume(), m_bgm_hdl[sshdl.c_str()]);
 	}
 	
 }

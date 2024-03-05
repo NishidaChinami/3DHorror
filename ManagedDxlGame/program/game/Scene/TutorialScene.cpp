@@ -63,7 +63,7 @@ TutorialScene::~TutorialScene()
 //更新処理
 void TutorialScene::Update(float delta_time) {
 	//画面の明るさを変更
-	screen_efct->setLevelAfterMax(OptionParam::GetInstance()->screen_bright);
+	screen_efct->setLevelAfterMax(OptionParam::GetInstance()->getParamBright());
 	sequence_.Update(delta_time);
 	//設定画面開いたとき
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_ESCAPE)) {

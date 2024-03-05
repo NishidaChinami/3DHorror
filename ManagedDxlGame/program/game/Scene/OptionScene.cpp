@@ -13,9 +13,9 @@ OptionScene::OptionScene(Shared<dxe::ScreenEffect> m_screen_efct)
 	m_keybind_hdl = LoadGraph("graphics/keybind.png");
 	//初期化
 	auto param = OptionParam::GetInstance();
-	m_volume = param->sound_volume;
-	m_bright = param->screen_bright;
-	m_sensitivity = param->mouse_sensitive;
+	m_volume = param->getParamVolume();
+	m_bright = param->getParamBright();
+	m_sensitivity = param->getParamSensitive();
 
 	screen_efct = m_screen_efct;
 }
@@ -65,10 +65,9 @@ void OptionScene::Update(float delta_time) {
 
 	if (!m_menu) {
 	//オプションパラメーターに代入
-		param->sound_volume = m_volume;
-		param->screen_bright = m_bright;
-		param->mouse_sensitive = m_sensitivity;
-
+		param->setParamVolume(m_volume);
+		param->setParamBright(m_bright);
+		param->setParamSensitive(m_sensitivity);
 	}
 }
 //------------------------------------------------------------------------------------------------------------

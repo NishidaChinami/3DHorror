@@ -68,7 +68,7 @@ public:
 	//-------------------アイテムのGetterとSetter------------------------------------------------//
 	
 	//Itemの位置を取得
-	const std::vector<tnl::Vector2i> &MGetItemPos();
+	std::vector<tnl::Vector2i> MGetItemPos();
 	//フロッピーディスクが5枚集まったかどうかのフラグ
 	bool MGetItemFloopy()const;
 	//記事を読んでいるかのフラグ
